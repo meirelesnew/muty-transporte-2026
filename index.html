@@ -617,26 +617,30 @@ async function saveData(chave, valor) {
 }
 
 async function loadAllData() {
+  let fromCloud = false;
   try {
     if(window.fbReady) {
-      const pg = await Promise.race([window.fbLoad('muty2026','pagamentos'), new Promise(r=>setTimeout(()=>r(null),5000))]);
-      const de = await Promise.race([window.fbLoad('muty2026','despesas'),   new Promise(r=>setTimeout(()=>r(null),5000))]);
-      const cl = await Promise.race([window.fbLoad('muty2026','clientes'),   new Promise(r=>setTimeout(()=>r(null),5000))]);
+      const t = ms => new Promise(r=>setTimeout(()=>r(null),ms));
+      const pg = await Promise.race([window.fbLoad('muty2026','pagamentos'), t(6000)]);
+      const de = await Promise.race([window.fbLoad('muty2026','despesas'),   t(6000)]);
+      const cl = await Promise.race([window.fbLoad('muty2026','clientes'),   t(6000)]);
       pagamentos = pg ?? loadLS('muty_pagamentos', {});
       despesas   = de ?? loadLS('muty_despesas', []);
       clientes   = cl ?? loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
-      console.log('✅ Dados carregados do Supabase');
+      fromCloud = true;
+      console.log('✅ JSONBin OK! pg:', !!pg, 'de:', !!de, 'cl:', !!cl);
     } else {
-      throw new Error('Supabase não pronto');
+      throw new Error('JSONBin não pronto');
     }
   } catch(e) {
-    console.warn('Supabase indisponível, usando localStorage:', e);
+    console.warn('Erro ao carregar, usando localStorage:', e.message);
     pagamentos = loadLS('muty_pagamentos', {});
     despesas   = loadLS('muty_despesas', []);
     clientes   = loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
   }
   dbPronto = true;
-  document.getElementById('loadingScreen').style.display='none';
+  updateSyncBadge(fromCloud);
+  document.getElementById('loadingScreen').style.display = 'none';
   refresh();
 }
 
