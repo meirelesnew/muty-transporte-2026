@@ -226,17 +226,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 </style>
 </head>
 <body>
-<div id="loadingScreen" style="position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-  <div style="font-size:3rem;">🚌</div>
-  <div style="font-family:var(--font-display);font-size:1.8rem;letter-spacing:3px;color:var(--accent);">MUTY TRANSPORTE</div>
-  <div style="display:flex;gap:6px;margin-top:8px;">
-    <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:pulse 1s ease-in-out infinite;"></div>
-    <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:pulse 1s ease-in-out 0.2s infinite;"></div>
-    <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:pulse 1s ease-in-out 0.4s infinite;"></div>
-  </div>
-  <p style="color:var(--muted);font-size:0.82rem;font-family:var(--font-mono);">Conectando ao banco de dados...</p>
-</div>
-<style>@keyframes pulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}</style>
+<div id="loadingScreen" style="display:none"></div>
 
 <div class="container">
   <header>
@@ -617,31 +607,30 @@ async function saveData(chave, valor) {
 }
 
 async function loadAllData() {
-  let fromCloud = false;
-  try {
-    if(window.fbReady) {
-      const t = ms => new Promise(r=>setTimeout(()=>r(null),ms));
-      const pg = await Promise.race([window.fbLoad('muty2026','pagamentos'), t(6000)]);
-      const de = await Promise.race([window.fbLoad('muty2026','despesas'),   t(6000)]);
-      const cl = await Promise.race([window.fbLoad('muty2026','clientes'),   t(6000)]);
-      pagamentos = pg ?? loadLS('muty_pagamentos', {});
-      despesas   = de ?? loadLS('muty_despesas', []);
-      clientes   = cl ?? loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
-      fromCloud = true;
-      console.log('✅ JSONBin OK! pg:', !!pg, 'de:', !!de, 'cl:', !!cl);
-    } else {
-      throw new Error('JSONBin não pronto');
-    }
-  } catch(e) {
-    console.warn('Erro ao carregar, usando localStorage:', e.message);
-    pagamentos = loadLS('muty_pagamentos', {});
-    despesas   = loadLS('muty_despesas', []);
-    clientes   = loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
-  }
-  dbPronto = true;
-  updateSyncBadge(fromCloud);
+  // 1. Carregar localStorage IMEDIATAMENTE — sem esperar BD
+  pagamentos = loadLS('muty_pagamentos', {});
+  despesas   = loadLS('muty_despesas', []);
+  clientes   = loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
+  dbPronto   = true;
   document.getElementById('loadingScreen').style.display = 'none';
   refresh();
+  // 2. Tentar sincronizar com JSONBin em background
+  if(window.fbReady) {
+    try {
+      const pg = await window.fbLoad('muty2026','pagamentos');
+      const de = await window.fbLoad('muty2026','despesas');
+      const cl = await window.fbLoad('muty2026','clientes');
+      let changed = false;
+      if(pg !== null){ pagamentos = pg; saveLS('muty_pagamentos', pg); changed=true; }
+      if(de !== null){ despesas   = de; saveLS('muty_despesas',   de); changed=true; }
+      if(cl !== null){ clientes   = cl; saveLS('muty_clientes',   cl); changed=true; }
+      updateSyncBadge(true);
+      if(changed) refresh();
+      console.log('☁ JSONBin sincronizado!');
+    } catch(e) {
+      console.warn('JSONBin sync falhou, usando local:', e.message);
+    }
+  }
 }
 
 function getStatus(cid,mes){return(pagamentos[cid]||{})[mes]||null;}
