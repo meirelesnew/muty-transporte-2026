@@ -495,63 +495,52 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 </div>
 <div class="save-indicator" id="saveIndicator">✓ Salvo</div>
 
-<!-- JSONBin BD -->
+<!-- API Render + MongoDB -->
 <script>
-  const JSONBIN_KEY = '$2a$10$/e9.TjWv3A2LuFiTo4J53eX0BSAi07FokYCnJm87EMqPUWLi9YN82';
-  const JSONBIN_URL = 'https://api.jsonbin.io/v3/b';
-  let binIds = {};
+  const API_URL = 'https://muty-api.onrender.com';
 
-  async function jsonbinSave(chave, dados) {
+  async function apiSave(chave, dados) {
     try {
-      const bid = binIds[chave];
-      if(bid) {
-        const r = await fetch(`${JSONBIN_URL}/${bid}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
-          body: JSON.stringify({ dados })
-        });
-        return r.ok;
-      } else {
-        const r = await fetch(JSONBIN_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': JSONBIN_KEY,
-            'X-Bin-Name': 'muty_' + chave,
-            'X-Bin-Private': 'false'
-          },
-          body: JSON.stringify({ dados })
-        });
-        if(r.ok) {
-          const j = await r.json();
-          binIds[chave] = j.metadata.id;
-          localStorage.setItem('muty_binIds', JSON.stringify(binIds));
-          return true;
-        }
-        return false;
-      }
-    } catch(e) { console.error('JSONBin save erro:', e); return false; }
+      const r = await fetch(`${API_URL}/${chave}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      });
+      return r.ok;
+    } catch(e) {
+      console.error('API save erro:', e);
+      return false;
+    }
   }
 
-  async function jsonbinLoad(chave) {
+  async function apiLoad(chave) {
     try {
-      const bid = binIds[chave];
-      if(!bid) return null;
-      const r = await fetch(`${JSONBIN_URL}/${bid}/latest`, {
-        headers: { 'X-Master-Key': JSONBIN_KEY }
-      });
+      const r = await fetch(`${API_URL}/${chave}`);
       if(!r.ok) return null;
       const j = await r.json();
-      return j.record?.dados ?? null;
-    } catch(e) { console.error('JSONBin load erro:', e); return null; }
+      return j.dados ?? null;
+    } catch(e) {
+      console.error('API load erro:', e);
+      return null;
+    }
   }
 
-  try { binIds = JSON.parse(localStorage.getItem('muty_binIds') || '{}'); } catch(e) { binIds = {}; }
+  async function apiLoadTodos() {
+    try {
+      const r = await fetch(`${API_URL}/todos`);
+      if(!r.ok) return null;
+      return await r.json();
+    } catch(e) {
+      console.error('API todos erro:', e);
+      return null;
+    }
+  }
 
-  window.fbSave = jsonbinSave;
-  window.fbLoad = jsonbinLoad;
+  window.fbSave  = apiSave;
+  window.fbLoad  = apiLoad;
+  window.fbTodos = apiLoadTodos;
   window.fbReady = true;
-  console.log('✅ JSONBin pronto! Bins:', Object.keys(binIds));
+  console.log('✅ API Render pronta:', API_URL);
 </script>
 
 <script>
@@ -608,28 +597,34 @@ async function saveData(chave, valor) {
 }
 
 async function loadAllData() {
-  // 1. Carregar localStorage IMEDIATAMENTE — sem esperar BD
+  // 1. Carregar localStorage IMEDIATAMENTE
   pagamentos = loadLS('muty_pagamentos', {});
   despesas   = loadLS('muty_despesas', []);
   clientes   = loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
   dbPronto   = true;
   document.getElementById('loadingScreen').style.display = 'none';
   refresh();
-  // 2. Tentar sincronizar com JSONBin em background
-  if(window.fbReady) {
+  // 2. Sincronizar com MongoDB em background
+  if(window.fbReady && window.fbTodos) {
     try {
-      const pg = await window.fbLoad('muty2026','pagamentos');
-      const de = await window.fbLoad('muty2026','despesas');
-      const cl = await window.fbLoad('muty2026','clientes');
-      let changed = false;
-      if(pg !== null){ pagamentos = pg; saveLS('muty_pagamentos', pg); changed=true; }
-      if(de !== null){ despesas   = de; saveLS('muty_despesas',   de); changed=true; }
-      if(cl !== null){ clientes   = cl; saveLS('muty_clientes',   cl); changed=true; }
-      updateSyncBadge(true);
-      if(changed) refresh();
-      console.log('☁ JSONBin sincronizado!');
+      const todos = await window.fbTodos();
+      if(todos) {
+        let changed = false;
+        if(todos.pagamentos && Object.keys(todos.pagamentos).length > 0) {
+          pagamentos = todos.pagamentos; saveLS('muty_pagamentos', pagamentos); changed = true;
+        }
+        if(todos.despesas && todos.despesas.length > 0) {
+          despesas = todos.despesas; saveLS('muty_despesas', despesas); changed = true;
+        }
+        if(todos.clientes && todos.clientes.length > 0) {
+          clientes = todos.clientes; saveLS('muty_clientes', clientes); changed = true;
+        }
+        updateSyncBadge(true);
+        if(changed) refresh();
+        console.log('☁ MongoDB sincronizado!');
+      }
     } catch(e) {
-      console.warn('JSONBin sync falhou, usando local:', e.message);
+      console.warn('Sync MongoDB falhou:', e.message);
     }
   }
 }
