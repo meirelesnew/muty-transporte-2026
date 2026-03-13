@@ -588,7 +588,7 @@ let dbPronto=false;
 function loadLS(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
-async async function saveData(chave, valor) {
+async function saveData(chave, valor) {
   saveLS('muty_'+chave, valor); // sempre salva local também
   if(window.fbReady && window.fbSave) {
     try {
