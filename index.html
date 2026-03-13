@@ -639,10 +639,11 @@ async function sincronizarComAPI() {
       if(!r.ok) throw new Error('HTTP ' + r.status);
       const todos = await r.json();
       let changed = false;
-      if(todos.pagamentos && Object.keys(todos.pagamentos).length > 0) {
+      // Sempre usa dados do MongoDB (fonte da verdade)
+      if(todos.pagamentos !== undefined) {
         pagamentos = todos.pagamentos; saveLS('muty_pagamentos', pagamentos); changed = true;
       }
-      if(todos.despesas && todos.despesas.length > 0) {
+      if(todos.despesas !== undefined) {
         despesas = todos.despesas; saveLS('muty_despesas', despesas); changed = true;
       }
       if(todos.clientes && todos.clientes.length > 0) {
