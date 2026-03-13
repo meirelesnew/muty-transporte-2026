@@ -588,45 +588,78 @@ let dbPronto=false;
 function loadLS(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
-async function saveData(chave, valor) {
+async async function saveData(chave, valor) {
   saveLS('muty_'+chave, valor); // sempre salva local também
-  if(window.fbReady) {
-    await window.fbSave('muty2026', chave, valor);
+  if(window.fbReady && window.fbSave) {
+    try {
+      await window.fbSave(chave, valor);
+    } catch(e) {
+      console.warn('Sync save falhou:', e.message);
+    }
   }
   showSaveIndicator();
 }
 
+function updateSyncBadge(ok, msg) {
+  let badge = document.getElementById('syncBadge');
+  if(!badge) {
+    // Criar badge no header se não existir
+    badge = document.createElement('div');
+    badge.id = 'syncBadge';
+    badge.style.cssText = 'position:fixed;bottom:12px;right:12px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;z-index:9999;transition:all 0.3s;';
+    document.body.appendChild(badge);
+  }
+  badge.textContent = msg || (ok ? '☁ Sincronizado' : '📴 Offline');
+  badge.style.background = ok ? '#16a34a' : '#f59e0b';
+  badge.style.color = '#fff';
+  // Auto-esconder após 4s se sincronizado
+  if(ok) setTimeout(() => { badge.style.opacity='0'; }, 4000);
+  else badge.style.opacity = '1';
+}
+
 async function loadAllData() {
-  // 1. Carregar localStorage IMEDIATAMENTE
+  // 1. Carregar localStorage IMEDIATAMENTE para UI responsiva
   pagamentos = loadLS('muty_pagamentos', {});
   despesas   = loadLS('muty_despesas', []);
   clientes   = loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
   dbPronto   = true;
   document.getElementById('loadingScreen').style.display = 'none';
   refresh();
-  // 2. Sincronizar com MongoDB em background
-  if(window.fbReady && window.fbTodos) {
+  // 2. Sincronizar com MongoDB em background (aguarda API acordar se necessário)
+  sincronizarComAPI();
+}
+
+async function sincronizarComAPI() {
+  const API_URL = 'https://muty-api.onrender.com';
+  updateSyncBadge(false, '⏳ Conectando...');
+  // Tenta até 3 vezes com intervalo (Render pode estar dormindo)
+  for(let tentativa = 1; tentativa <= 3; tentativa++) {
     try {
-      const todos = await window.fbTodos();
-      if(todos) {
-        let changed = false;
-        if(todos.pagamentos && Object.keys(todos.pagamentos).length > 0) {
-          pagamentos = todos.pagamentos; saveLS('muty_pagamentos', pagamentos); changed = true;
-        }
-        if(todos.despesas && todos.despesas.length > 0) {
-          despesas = todos.despesas; saveLS('muty_despesas', despesas); changed = true;
-        }
-        if(todos.clientes && todos.clientes.length > 0) {
-          clientes = todos.clientes; saveLS('muty_clientes', clientes); changed = true;
-        }
-        updateSyncBadge(true);
-        if(changed) refresh();
-        console.log('☁ MongoDB sincronizado!');
+      const r = await fetch(`${API_URL}/todos`, {signal: AbortSignal.timeout(15000)});
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      const todos = await r.json();
+      let changed = false;
+      if(todos.pagamentos && Object.keys(todos.pagamentos).length > 0) {
+        pagamentos = todos.pagamentos; saveLS('muty_pagamentos', pagamentos); changed = true;
       }
+      if(todos.despesas && todos.despesas.length > 0) {
+        despesas = todos.despesas; saveLS('muty_despesas', despesas); changed = true;
+      }
+      if(todos.clientes && todos.clientes.length > 0) {
+        clientes = todos.clientes; saveLS('muty_clientes', clientes); changed = true;
+      }
+      updateSyncBadge(true, '☁ Sincronizado');
+      if(changed) refresh();
+      console.log('☁ MongoDB sincronizado! Tentativa:', tentativa);
+      return; // sucesso — sair do loop
     } catch(e) {
-      console.warn('Sync MongoDB falhou:', e.message);
+      console.warn(`Tentativa ${tentativa}/3 falhou:`, e.message);
+      updateSyncBadge(false, `⏳ Aguardando API (${tentativa}/3)...`);
+      if(tentativa < 3) await new Promise(res => setTimeout(res, 8000)); // aguarda 8s
     }
   }
+  updateSyncBadge(false, '⚠️ Offline');
+  console.warn('API indisponível — usando dados locais');
 }
 
 function getStatus(cid,mes){return(pagamentos[cid]||{})[mes]||null;}
