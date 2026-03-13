@@ -1101,29 +1101,26 @@ async function processarFotoCupom(event){
             contents: [{
               parts: [
                 { inline_data: { mime_type: mimeType, data: base64 } },
-                { text: `Você é um leitor de cupons fiscais brasileiros. Analise esta imagem com cuidado.
+                { text: `Você é especialista em leitura de cupons fiscais brasileiros. Mesmo com imagem escura, torta ou borrada, extraia as informações.
 
-TAREFA 1 - Nome do estabelecimento:
-- Procure no TOPO do cupom o nome da loja/empresa
-- Pode ser supermercado, posto de gasolina, farmácia, restaurante, etc.
-- Se ver "GNV", "COMBUSTIVEL", "POSTO" = categoria combustivel
-- Se ver "FARMACIA", "DROGARIA" = categoria outros
-- Se ver "SUPERMERCADO", "MERCADO", "ATACADO" = categoria outros
-- Se ver "MANUTENCAO", "AUTO", "MECANICA", "BORRACHARIA" = categoria manutencao
+REGRA 1 - VALOR (MAIS IMPORTANTE):
+- Procure QUALQUER número que possa ser total: TOTAL, VL TOTAL, VALOR TOTAL, TOTAL A PAGAR, TOTAL GERAL, R$
+- Geralmente é o MAIOR número ou aparece no final do cupom antes do QR code
+- Converta vírgula para ponto: "45,90" vira 45.90
+- NUNCA retorne 0 se houver qualquer número visível
 
-TAREFA 2 - Valor total:
-- Procure as palavras: TOTAL, VL TOTAL, VALOR TOTAL, TOTAL A PAGAR, TOTAL GERAL
-- É geralmente o MAIOR valor numérico no final do cupom
-- Formato brasileiro: use ponto para decimal (ex: 45.90)
+REGRA 2 - ESTABELECIMENTO:
+- Procure no topo o nome da empresa
+- Se ilegível, use o tipo: "Supermercado", "Posto", "Farmácia"
 
-TAREFA 3 - Categoria:
+REGRA 3 - CATEGORIA:
 combustivel = posto, gnv, gasolina, etanol, diesel
-manutencao = mecânica, borracharia, peças, auto center
-impostos = IPVA, IPTU, multa, tributo
-outros = mercado, farmácia, restaurante, qualquer outro
+manutencao = mecânica, borracharia, peças, auto
+impostos = IPVA, IPTU, multa, detran
+outros = qualquer outro
 
-Responda SOMENTE com JSON puro, sem explicação, sem markdown:
-{"estabelecimento":"Nome da loja aqui","valor":0.00,"categoria":"outros"}` }
+Responda SOMENTE JSON puro sem markdown:
+{"estabelecimento":"Nome","valor":0.00,"categoria":"outros"}` }
               ]
             }]
           })
