@@ -618,37 +618,52 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 <script>
   const API_URL = 'https://muty-api.onrender.com';
 
+  // Retorna headers com JWT do usuário logado
+  function authHeaders() {
+    const token = localStorage.getItem('muty_auth_token');
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+    };
+  }
+
+  // Salva dados na v2 (isolado por usuário via JWT)
   async function apiSave(chave, dados) {
     try {
-      const r = await fetch(`${API_URL}/${chave}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dados)
+      const r = await fetch(`${API_URL}/v2/${chave}`, {
+        method:  'PUT',
+        headers: authHeaders(),
+        body:    JSON.stringify(dados)
       });
-      return r.ok;
+      // Se token expirou, redireciona para login
+      if(r.status === 401) { fazerLogout(); return false; }
+      const j = await r.json();
+      return j.status === 'success';
     } catch(e) {
       console.error('API save erro:', e);
       return false;
     }
   }
 
-  async function apiLoad(chave) {
-    try {
-      const r = await fetch(`${API_URL}/${chave}`);
-      if(!r.ok) return null;
-      const j = await r.json();
-      return j.dados ?? null;
-    } catch(e) {
-      console.error('API load erro:', e);
-      return null;
-    }
-  }
-
+  // Carrega todos os dados do usuário de uma vez via v2
   async function apiLoadTodos() {
     try {
-      const r = await fetch(`${API_URL}/todos`);
+      const r = await fetch(`${API_URL}/v2/todos`, {
+        headers: authHeaders()
+      });
+      if(r.status === 401) { fazerLogout(); return null; }
       if(!r.ok) return null;
-      return await r.json();
+      const j = await r.json();
+      // v2 retorna { status, data: { pagamentos, despesas, clientes } }
+      // converter para formato que o dashboard espera
+      if(j.status === 'success' && j.data) {
+        return {
+          pagamentos: j.data.pagamentos,
+          despesas:   j.data.despesas,
+          clientes:   j.data.clientes,
+        };
+      }
+      return null;
     } catch(e) {
       console.error('API todos erro:', e);
       return null;
@@ -656,10 +671,9 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   }
 
   window.fbSave  = apiSave;
-  window.fbLoad  = apiLoad;
   window.fbTodos = apiLoadTodos;
   window.fbReady = true;
-  console.log('✅ API Render pronta:', API_URL);
+  console.log('✅ API Render v2 (JWT) pronta:', API_URL);
 </script>
 
 <script>
@@ -749,33 +763,32 @@ async function loadAllData() {
 }
 
 async function sincronizarComAPI() {
-  const API_URL = 'https://muty-api.onrender.com';
   updateSyncBadge(false, '⏳ Conectando...');
   // Tenta até 3 vezes com intervalo (Render pode estar dormindo)
   for(let tentativa = 1; tentativa <= 3; tentativa++) {
     try {
-      const r = await fetch(`${API_URL}/todos`, {signal: AbortSignal.timeout(15000)});
-      if(!r.ok) throw new Error('HTTP ' + r.status);
-      const todos = await r.json();
+      // USA v2 com JWT — dados isolados por usuário
+      const todos = await apiLoadTodos();
+      if(!todos) throw new Error('Sem resposta da API');
+
       let changed = false;
-      // Sempre usa dados do MongoDB (fonte da verdade)
       if(todos.pagamentos !== undefined) {
         pagamentos = todos.pagamentos; saveLS('muty_pagamentos', pagamentos); changed = true;
       }
       if(todos.despesas !== undefined) {
         despesas = todos.despesas; saveLS('muty_despesas', despesas); changed = true;
       }
-      if(todos.clientes && todos.clientes.length > 0) {
+      if(todos.clientes !== undefined) {
         clientes = todos.clientes; saveLS('muty_clientes', clientes); changed = true;
       }
       updateSyncBadge(true, '☁ Sincronizado');
       if(changed) refresh();
-      console.log('☁ MongoDB sincronizado! Tentativa:', tentativa);
-      return; // sucesso — sair do loop
+      console.log('☁ MongoDB v2 sincronizado! Tentativa:', tentativa);
+      return;
     } catch(e) {
       console.warn(`Tentativa ${tentativa}/3 falhou:`, e.message);
       updateSyncBadge(false, `⏳ Aguardando API (${tentativa}/3)...`);
-      if(tentativa < 3) await new Promise(res => setTimeout(res, 8000)); // aguarda 8s
+      if(tentativa < 3) await new Promise(res => setTimeout(res, 8000));
     }
   }
   updateSyncBadge(false, '⚠️ Offline');
