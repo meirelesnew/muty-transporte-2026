@@ -223,14 +223,132 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 .divider{height:1px;background:var(--border);margin:16px 0;}
 @media(max-width:900px){.header-year{display:none;} thead th:nth-child(n+5){display:none;} td:nth-child(n+5){display:none;}}
 @media(max-width:600px){.brand-text h1{font-size:1.8rem;} .balance-bar{grid-template-columns:1fr;}}
+
+/* ── TELA DE LOGIN ─────────────────────────────────────────── */
+#loginScreen{
+  position:fixed;inset:0;background:var(--bg);z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.login-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:40px 36px;width:100%;max-width:420px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.login-logo{text-align:center;margin-bottom:28px;}
+.login-logo .brand-icon{width:64px;height:64px;background:var(--accent);
+  border-radius:16px;display:inline-flex;align-items:center;
+  justify-content:center;font-size:32px;margin-bottom:12px;}
+.login-logo h2{font-family:var(--font-display);font-size:1.8rem;
+  letter-spacing:2px;color:var(--text);}
+.login-logo p{color:var(--muted);font-size:0.85rem;margin-top:4px;}
+.login-tabs{display:flex;gap:4px;background:var(--bg);
+  border-radius:10px;padding:4px;margin-bottom:24px;}
+.login-tab{flex:1;padding:8px;border:none;background:transparent;
+  color:var(--muted);cursor:pointer;border-radius:7px;
+  font-family:var(--font-display);font-size:0.9rem;letter-spacing:1px;
+  transition:all 0.2s;}
+.login-tab.active{background:var(--accent);color:#000;font-weight:700;}
+.login-field{margin-bottom:16px;}
+.login-field label{display:block;font-size:0.75rem;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;}
+.login-field input{width:100%;padding:10px 14px;background:var(--bg);
+  border:1px solid var(--border);border-radius:10px;color:var(--text);
+  font-size:0.95rem;font-family:var(--font-body);outline:none;
+  transition:border-color 0.2s;}
+.login-field input:focus{border-color:var(--accent);}
+.login-btn{width:100%;padding:12px;background:var(--accent);color:#000;
+  border:none;border-radius:10px;font-family:var(--font-display);
+  font-size:1rem;letter-spacing:1.5px;cursor:pointer;margin-top:8px;
+  transition:opacity 0.2s;font-weight:700;}
+.login-btn:hover{opacity:0.85;}
+.login-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.login-msg{margin-top:12px;padding:10px 14px;border-radius:8px;
+  font-size:0.85rem;text-align:center;display:none;}
+.login-msg.erro{background:rgba(239,68,68,0.15);color:#ef4444;
+  border:1px solid rgba(239,68,68,0.3);display:block;}
+.login-msg.ok{background:rgba(16,185,129,0.15);color:#10b981;
+  border:1px solid rgba(16,185,129,0.3);display:block;}
+.login-user-bar{display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:8px 16px;margin-bottom:0;}
+.login-user-bar span{font-size:0.85rem;color:var(--muted);}
+.login-user-bar strong{color:var(--text);}
+.logout-btn{margin-left:auto;padding:4px 12px;background:transparent;
+  border:1px solid var(--border);border-radius:6px;color:var(--muted);
+  cursor:pointer;font-size:0.8rem;transition:all 0.2s;}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
 </style>
+<!-- html5-qrcode library -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
+<!-- ── TELA DE LOGIN ── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="brand-icon">🚌</div>
+      <h2>MUTY TRANSPORTE</h2>
+      <p>Controle Financeiro 2026</p>
+    </div>
+
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="loginSwitchTab('entrar')" id="tabEntrar">ENTRAR</button>
+      <button class="login-tab" onclick="loginSwitchTab('cadastro')" id="tabCadastro">CADASTRAR</button>
+    </div>
+
+    <!-- Formulário Login -->
+    <div id="formEntrar">
+      <div class="login-field">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email">
+      </div>
+      <div class="login-field">
+        <label>Senha</label>
+        <input type="password" id="loginSenha" placeholder="••••••••" autocomplete="current-password"
+               onkeydown="if(event.key==='Enter') fazerLogin()">
+      </div>
+      <button class="login-btn" onclick="fazerLogin()" id="btnLogin">ENTRAR</button>
+    </div>
+
+    <!-- Formulário Cadastro -->
+    <div id="formCadastro" style="display:none;">
+      <div class="login-field">
+        <label>Nome completo</label>
+        <input type="text" id="cadNome" placeholder="Seu nome">
+      </div>
+      <div class="login-field">
+        <label>Empresa</label>
+        <input type="text" id="cadEmpresa" placeholder="Nome da empresa">
+      </div>
+      <div class="login-field">
+        <label>Email</label>
+        <input type="email" id="cadEmail" placeholder="seu@email.com">
+      </div>
+      <div class="login-field">
+        <label>Senha (mínimo 6 caracteres)</label>
+        <input type="password" id="cadSenha" placeholder="••••••••"
+               onkeydown="if(event.key==='Enter') fazerCadastro()">
+      </div>
+      <button class="login-btn" onclick="fazerCadastro()" id="btnCadastro">CRIAR CONTA</button>
+    </div>
+
+    <div id="loginMsg" class="login-msg"></div>
+  </div>
+</div>
+
 <div id="loadingScreen" style="display:none"></div>
 
 <div class="container">
   <header>
     <div class="header-inner">
+      <!-- Barra usuário logado -->
+      <div class="login-user-bar" id="userBar" style="display:none;">
+        <span>👤 <strong id="userNome"></strong></span>
+        <span id="userEmpresa" style="font-size:0.8rem;"></span>
+        <button class="logout-btn" onclick="fazerLogout()">SAIR</button>
+      </div>
+
       <div class="brand">
         <div class="brand-icon">🚌</div>
         <div class="brand-text">
@@ -285,6 +403,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <h2>LANÇAMENTOS — <span id="despMesLabel">Janeiro</span></h2>
       <div class="desp-header-btns">
         <button class="btn-green" onclick="openCupomModal()">🧾 ESCANEAR CUPOM</button>
+        <button class="btn-card" onclick="openQRModal()">📷 LER QR CODE</button>
         <button class="btn-card" onclick="openCartaoModal()">💳 IMPORTAR CARTÃO</button>
         <button class="btn-add" onclick="openDespModal()">+ MANUAL</button>
       </div>
@@ -1197,9 +1316,340 @@ function salvarCupom(){
   currentTab='despesas'; switchTab('despesas');
 }
 
+
+// ══ QR CODE NFC-e ══════════════════════════════════════════════════════════
+const API_URL_QR = 'https://muty-api.onrender.com';
+let qrScanner = null;
+let qrCatSelecionada = 'outros';
+
+function openQRModal() {
+  // Preencher meses
+  document.getElementById('qrMes').innerHTML =
+    MESES_FULL.map((m,i) => `<option value="${i+1}" ${i+1===currentMonth?'selected':''}>${m}</option>`).join('');
+  // Reset UI
+  document.getElementById('qrResultado').style.display = 'none';
+  document.getElementById('qrLoading').style.display = 'none';
+  document.getElementById('qrSaveBtn').style.display = 'none';
+  document.getElementById('qrStatus').textContent = '📷 Iniciando câmera...';
+  document.getElementById('qrModalOverlay').style.display = 'flex';
+  // Iniciar scanner
+  setTimeout(iniciarQRScanner, 300);
+}
+
+function iniciarQRScanner() {
+  if(qrScanner) { qrScanner.clear(); qrScanner = null; }
+  qrScanner = new Html5Qrcode("qrReader");
+  qrScanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: { width: 250, height: 250 } },
+    (url) => onQRDetectado(url),
+    (err) => {}
+  ).then(() => {
+    document.getElementById('qrStatus').textContent = '✅ Câmera ativa — aponte para o QR Code da nota';
+  }).catch((err) => {
+    document.getElementById('qrStatus').textContent = '❌ Câmera não autorizada. Verifique as permissões.';
+    console.error('QR Scanner erro:', err);
+  });
+}
+
+async function onQRDetectado(url) {
+  // Parar câmera
+  if(qrScanner) { await qrScanner.stop(); qrScanner = null; }
+  document.getElementById('qrCameraArea').style.display = 'none';
+  document.getElementById('qrLoading').style.display = 'block';
+  document.getElementById('qrStatus').textContent = '🔍 QR detectado: ' + url.substring(0, 60) + '...';
+
+  // Validar se é URL de NFC-e
+  if(!url.startsWith('http')) {
+    document.getElementById('qrLoading').style.display = 'none';
+    document.getElementById('qrStatus').textContent = '❌ QR Code inválido — não é uma nota fiscal';
+    document.getElementById('qrCameraArea').style.display = 'block';
+    iniciarQRScanner();
+    return;
+  }
+
+  // Enviar para backend processar
+  try {
+    const r = await fetch(`${API_URL_QR}/v2/nota-fiscal`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+    const data = await r.json();
+    document.getElementById('qrLoading').style.display = 'none';
+
+    if(data.status === 'success' && data.data) {
+      preencherQRResultado(data.data);
+    } else {
+      mostrarQRErro(data.message || 'Não foi possível extrair dados da nota');
+    }
+  } catch(e) {
+    document.getElementById('qrLoading').style.display = 'none';
+    mostrarQRErro('Erro de conexão com a API: ' + e.message);
+  }
+}
+
+function preencherQRResultado(nota) {
+  document.getElementById('qrResultado').style.display = 'block';
+  document.getElementById('qrSaveBtn').style.display = 'flex';
+
+  const estabelecimento = nota.estabelecimento || 'Nota Fiscal';
+  const valor = nota.valor || 0;
+  const categoria = nota.categoria || 'outros';
+  const data = nota.data || '';
+
+  document.getElementById('qrDesc').value = estabelecimento;
+  document.getElementById('qrValor').value = valor > 0 ? valor : '';
+  document.getElementById('qrData').value = data;
+  document.getElementById('qrAiInfo').textContent =
+    `✅ Nota lida: ${estabelecimento}${valor > 0 ? ' — R$ ' + valor.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ''} ${data ? '— '+data : ''}`;
+
+  // Seletor de categoria
+  qrCatSelecionada = categoria;
+  const cs = document.getElementById('qrCatSelector');
+  cs.innerHTML = '';
+  CATEGORIAS.filter(c => c.id !== 'cartao').forEach(cat => {
+    const btn = document.createElement('div');
+    btn.className = 'cat-opt' + (cat.id === qrCatSelecionada ? ' selected' : '');
+    btn.innerHTML = `${cat.icon}${cat.nome}`;
+    btn.onclick = () => {
+      qrCatSelecionada = cat.id;
+      document.querySelectorAll('#qrCatSelector .cat-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    cs.appendChild(btn);
+  });
+}
+
+function mostrarQRErro(msg) {
+  document.getElementById('qrAiInfo') && (document.getElementById('qrResultado').style.display = 'block');
+  document.getElementById('qrAiInfo').textContent = '⚠️ ' + msg + ' — preencha manualmente ou use o OCR.';
+  document.getElementById('qrAiInfo').style.color = '#f59e0b';
+  document.getElementById('qrSaveBtn').style.display = 'flex';
+  document.getElementById('qrDesc').value = '';
+  document.getElementById('qrValor').value = '';
+  document.getElementById('qrData').value = '';
+}
+
+function salvarQR() {
+  const valor = parseFloat(document.getElementById('qrValor').value);
+  const desc = document.getElementById('qrDesc').value.trim() || 'Nota Fiscal';
+  const mes = parseInt(document.getElementById('qrMes').value);
+  if(!valor || valor <= 0) { alert('Informe o valor da despesa.'); return; }
+  despesas.push({ id:Date.now(), cat:qrCatSelecionada, desc, valor, mes, fonte:'qrcode' });
+  saveData('despesas', despesas);
+  closeQRModalBtn();
+  currentTab = 'despesas'; switchTab('despesas');
+}
+
+function closeQRModal(e) {
+  if(e.target === document.getElementById('qrModalOverlay')) closeQRModalBtn();
+}
+
+function closeQRModalBtn() {
+  if(qrScanner) { qrScanner.stop().catch(()=>{}); qrScanner = null; }
+  document.getElementById('qrModalOverlay').style.display = 'none';
+  document.getElementById('qrCameraArea').style.display = 'block';
+}
+// ══ FIM QR CODE ═════════════════════════════════════════════════════════════
+
+
+// ══ AUTENTICAÇÃO ════════════════════════════════════════════════════════════
+const AUTH_KEY  = 'muty_auth_token';
+const USER_KEY  = 'muty_auth_user';
+
+// Recupera token salvo no localStorage
+function getToken()   { return localStorage.getItem(AUTH_KEY) || null; }
+function getUser()    { try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch { return null; } }
+
+function salvarAuth(token, user) {
+  localStorage.setItem(AUTH_KEY, token);
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
+function limparAuth() {
+  localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+// Alterna entre aba "Entrar" e "Cadastrar"
+function loginSwitchTab(tab) {
+  const isEntrar = tab === 'entrar';
+  document.getElementById('formEntrar').style.display   = isEntrar ? 'block' : 'none';
+  document.getElementById('formCadastro').style.display = isEntrar ? 'none'  : 'block';
+  document.getElementById('tabEntrar').classList.toggle('active', isEntrar);
+  document.getElementById('tabCadastro').classList.toggle('active', !isEntrar);
+  document.getElementById('loginMsg').className = 'login-msg';
+}
+
+// Mostra mensagem de erro ou sucesso na tela de login
+function loginMsg(texto, tipo) {
+  const el = document.getElementById('loginMsg');
+  el.textContent = texto;
+  el.className   = 'login-msg ' + tipo;
+}
+
+// Esconde a tela de login e mostra o dashboard
+function mostrarDashboard(user) {
+  document.getElementById('loginScreen').style.display = 'none';
+  // Atualizar barra de usuário no header
+  document.getElementById('userBar').style.display  = 'flex';
+  document.getElementById('userNome').textContent   = user.nome    || user.email;
+  document.getElementById('userEmpresa').textContent = user.empresa ? '— ' + user.empresa : '';
+}
+
+// Logout — limpa token e recarrega a página
+function fazerLogout() {
+  if(!confirm('Deseja sair da sua conta?')) return;
+  limparAuth();
+  location.reload();
+}
+
+// Login
+async function fazerLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const senha = document.getElementById('loginSenha').value;
+  const btn   = document.getElementById('btnLogin');
+
+  if(!email || !senha) { loginMsg('Preencha email e senha.', 'erro'); return; }
+
+  btn.disabled    = true;
+  btn.textContent = 'ENTRANDO...';
+  loginMsg('', '');
+
+  try {
+    const r = await fetch(`${API_URL}/v2/login`, {
+      method:  'POST',
+      headers: {'Content-Type': 'application/json'},
+      body:    JSON.stringify({ email, senha })
+    });
+    const data = await r.json();
+
+    if(data.status === 'success') {
+      salvarAuth(data.data.token, data.data);
+      mostrarDashboard(data.data);
+      loadAllData(); // carrega dados do usuário
+    } else {
+      loginMsg(data.message || 'Erro ao entrar.', 'erro');
+    }
+  } catch(e) {
+    loginMsg('Sem conexão com o servidor.', 'erro');
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'ENTRAR';
+  }
+}
+
+// Cadastro
+async function fazerCadastro() {
+  const nome    = document.getElementById('cadNome').value.trim();
+  const empresa = document.getElementById('cadEmpresa').value.trim();
+  const email   = document.getElementById('cadEmail').value.trim();
+  const senha   = document.getElementById('cadSenha').value;
+  const btn     = document.getElementById('btnCadastro');
+
+  if(!nome || !email || !senha) { loginMsg('Preencha todos os campos obrigatórios.', 'erro'); return; }
+  if(senha.length < 6)          { loginMsg('Senha deve ter no mínimo 6 caracteres.', 'erro'); return; }
+
+  btn.disabled    = true;
+  btn.textContent = 'CRIANDO...';
+  loginMsg('', '');
+
+  try {
+    const r = await fetch(`${API_URL}/v2/register`, {
+      method:  'POST',
+      headers: {'Content-Type': 'application/json'},
+      body:    JSON.stringify({ nome, empresa, email, senha })
+    });
+    const data = await r.json();
+
+    if(data.status === 'success') {
+      loginMsg('✅ Conta criada! Bem-vindo, ' + data.data.nome + '!', 'ok');
+      salvarAuth(data.data.token, data.data);
+      setTimeout(() => { mostrarDashboard(data.data); loadAllData(); }, 1200);
+    } else {
+      loginMsg(data.message || 'Erro ao cadastrar.', 'erro');
+    }
+  } catch(e) {
+    loginMsg('Sem conexão com o servidor.', 'erro');
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'CRIAR CONTA';
+  }
+}
+
+// Verifica se já tem sessão salva ao carregar a página
+function verificarSessao() {
+  const token = getToken();
+  const user  = getUser();
+  if(token && user) {
+    mostrarDashboard(user);
+    return true; // já logado
+  }
+  // Mostrar tela de login
+  document.getElementById('loginScreen').style.display = 'flex';
+  return false;
+}
+// ══ FIM AUTENTICAÇÃO ════════════════════════════════════════════════════════
+
 // ── INIT: aguardar Firebase ou iniciar com localStorage ──
-// Firebase já está pronto (script síncrono) — carregar dados
-loadAllData();
+// Verificar sessão — se logado carrega dados, senão mostra login
+if(verificarSessao()) {
+  loadAllData();
+}
 </script>
+
+<!-- ══ MODAL QR CODE NFC-e ══ -->
+<div id="qrModalOverlay" class="modal-overlay" onclick="closeQRModal(event)" style="display:none;">
+  <div class="modal modal-wide">
+    <h3>📷 LER QR CODE DA NOTA</h3>
+    <div class="modal-sub">Aponte a câmera para o QR Code da NFC-e — o sistema extrai valor, estabelecimento e data</div>
+
+    <div class="form-group">
+      <label>Mês de referência</label>
+      <select class="form-input" id="qrMes"></select>
+    </div>
+
+    <!-- Área câmera -->
+    <div id="qrCameraArea">
+      <div id="qrReader" style="width:100%;border-radius:12px;overflow:hidden;margin-bottom:12px;"></div>
+      <div id="qrStatus" style="text-align:center;padding:12px;background:var(--card-bg);border-radius:8px;font-size:13px;color:var(--text-secondary);">
+        📷 Iniciando câmera...
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <div id="qrResultado" style="display:none;margin-top:16px;">
+      <div id="qrAiInfo" style="padding:10px 14px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;font-size:13px;margin-bottom:12px;color:#4ade80;"></div>
+      <div class="form-group">
+        <label>Estabelecimento</label>
+        <input type="text" class="form-input" id="qrDesc" placeholder="Nome do estabelecimento">
+      </div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <div id="qrCatSelector" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;"></div>
+      </div>
+      <div class="form-group">
+        <label>Valor Total (R$)</label>
+        <input type="number" class="form-input" id="qrValor" placeholder="0,00" step="0.01" min="0">
+      </div>
+      <div class="form-group">
+        <label>Data da Nota</label>
+        <input type="text" class="form-input" id="qrData" placeholder="dd/mm/aaaa" readonly>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="qrLoading" style="display:none;text-align:center;padding:20px;">
+      <div style="font-size:2rem;animation:spin 1s linear infinite;">⏳</div>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-secondary);">Buscando dados da nota fiscal...</p>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-top:20px;justify-content:flex-end;">
+      <button class="btn-secondary" onclick="closeQRModalBtn()">Cancelar</button>
+      <button id="qrSaveBtn" class="btn-primary" onclick="salvarQR()" style="display:none;">✓ SALVAR DESPESA</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
