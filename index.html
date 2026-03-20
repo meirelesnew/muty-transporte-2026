@@ -1246,7 +1246,7 @@ async function processarFotoCupom(event){
     // Chamar Gemini
     try {
       const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1254,26 +1254,21 @@ async function processarFotoCupom(event){
             contents: [{
               parts: [
                 { inline_data: { mime_type: mimeType, data: base64 } },
-                { text: `Você é especialista em leitura de cupons fiscais brasileiros. Mesmo com imagem escura, torta ou borrada, extraia as informações.
+                { text: `Analise este cupom fiscal brasileiro e retorne SOMENTE um JSON válido, sem explicações, sem markdown, sem blocos de código.
 
-REGRA 1 - VALOR (MAIS IMPORTANTE):
-- Procure QUALQUER número que possa ser total: TOTAL, VL TOTAL, VALOR TOTAL, TOTAL A PAGAR, TOTAL GERAL, R$
-- Geralmente é o MAIOR número ou aparece no final do cupom antes do QR code
-- Converta vírgula para ponto: "45,90" vira 45.90
+Extraia:
+1. "estabelecimento": nome da loja/empresa no topo do cupom
+2. "valor": valor total (número decimal com ponto, ex: 45.90) - procure TOTAL, VL TOTAL, VALOR TOTAL
+3. "categoria": uma de: combustivel, manutencao, impostos, outros
+
+Regras importantes:
+- Se a imagem estiver escura ou torta, tente assim mesmo
+- O valor TOTAL geralmente é o maior número no final do cupom
+- Converta vírgula para ponto: 45,90 → 45.90
 - NUNCA retorne 0 se houver qualquer número visível
 
-REGRA 2 - ESTABELECIMENTO:
-- Procure no topo o nome da empresa
-- Se ilegível, use o tipo: "Supermercado", "Posto", "Farmácia"
-
-REGRA 3 - CATEGORIA:
-combustivel = posto, gnv, gasolina, etanol, diesel
-manutencao = mecânica, borracharia, peças, auto
-impostos = IPVA, IPTU, multa, detran
-outros = qualquer outro
-
-Responda SOMENTE JSON puro sem markdown:
-{"estabelecimento":"Nome","valor":0.00,"categoria":"outros"}` }
+Responda APENAS com JSON:
+{"estabelecimento":"Nome da loja","valor":45.90,"categoria":"outros"}` }
               ]
             }]
           })
@@ -1415,7 +1410,11 @@ async function onQRDetectado(url) {
     if(data.status === 'success' && data.data) {
       preencherQRResultado(data.data);
     } else {
-      mostrarQRErro(data.message || 'Não foi possível extrair dados da nota');
+      // Se SEFAZ bloqueou, mostrar dica para usar OCR
+      const msg = data.code === 'sefaz_blocked'
+        ? '⚠️ Portal da SEFAZ bloqueou o acesso. Tente o modo OCR (foto do cupom).'
+        : (data.message || 'Não foi possível extrair dados da nota');
+      mostrarQRErro(msg);
     }
   } catch(e) {
     document.getElementById('qrLoading').style.display = 'none';
