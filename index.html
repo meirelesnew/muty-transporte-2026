@@ -2171,6 +2171,11 @@ async function processarFotoNota(event) {
       // ── Enviar para backend seguro — chave Gemini fica no servidor ──────
       const formData = new FormData();
       formData.append('imagem', file);
+      // Enviar URL do QR se disponível (para extração de parâmetros)
+      if(window._notaQRUrl) {
+        formData.append('qr_url', window._notaQRUrl);
+        window._notaQRUrl = null;
+      }
 
       const resp = await fetch(`${API_URL}/v2/ocr`, {
         method: 'POST',
@@ -2190,18 +2195,22 @@ async function processarFotoNota(event) {
       if(apiData.status === 'success' && apiData.data) {
         const d = apiData.data;
         _aplicarResultado({
-          fonte:    d.fonte || 'backend',
+          fonte:    d.fonte || 'gemini',
           campos:   {
             estabelecimento: d.estabelecimento,
             valor_total:     d.valor_total,
             data:            d.data,
             categoria:       d.categoria,
           },
-          confianca: d.confianca || 0,
+          confianca: d.confianca ?? 1.0,
           avisos:    [],
         });
       } else {
-        _aplicarResultado({ fonte: 'erro', motivo: apiData.message || 'OCR indisponível' });
+        const code = apiData.code || '';
+        const msg  = code === 'ocr_not_configured'
+          ? '⚠️ OCR não configurado. Preencha manualmente.'
+          : (apiData.message || 'OCR indisponível — preencha manualmente.');
+        _aplicarResultado({ fonte: 'erro', motivo: msg });
       }
 
     } catch(err) {
@@ -2326,6 +2335,9 @@ function _aplicarResultado(resultado) {
 
   const { fonte, campos = {}, confianca = 0, avisos = [], motivo } = resultado;
   const altaConfianca = confianca >= 0.7;
+  // Ícone por fonte
+  const icones = { gemini: '🤖', regex: '🧠', qr: '📱', backend: '🤖', manual: '✏️' };
+  const icone  = icones[fonte] || '🤖';
 
   // Erro ou vazio → modo manual puro
   if(fonte === 'erro' || fonte === 'vazio') {
@@ -2344,8 +2356,9 @@ function _aplicarResultado(resultado) {
     const input = document.getElementById('notaEstab');
     input.value     = campos.estabelecimento;
     input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
-    _mostrarTag('tagEstab', altaConfianca ? '🤖 IA' : '⚠️ baixa confiança',
-                 altaConfianca ? '#10b981' : '#f59e0b');
+    _mostrarTag('tagEstab',
+      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
+      altaConfianca ? '#10b981' : '#f59e0b');
   }
 
   // Preencher valor
@@ -2353,14 +2366,15 @@ function _aplicarResultado(resultado) {
     const input = document.getElementById('notaValor');
     input.value     = campos.valor_total;
     input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
-    _mostrarTag('tagValor', altaConfianca ? '🤖 IA' : '⚠️ baixa confiança',
-                 altaConfianca ? '#10b981' : '#f59e0b');
+    _mostrarTag('tagValor',
+      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
+      altaConfianca ? '#10b981' : '#f59e0b');
   }
 
   // Categoria
   _buildCatSelector(campos.categoria || 'outros');
   if(campos.categoria) {
-    _mostrarTag('tagCat', '🤖 IA', '#10b981');
+    _mostrarTag('tagCat', `${icone} ${fonte}`, '#10b981');
   }
 
   // Aviso geral
@@ -2454,9 +2468,10 @@ async function _onQRDetectado(url) {
     _notaAviso('📋 Dados extraídos da nota fiscal.', 'ok');
   } else {
     // SEFAZ bloqueou — abrir câmera automaticamente (sem mensagem de erro técnico)
+    // Salvar URL do QR para usar no OCR como dado extra
+    window._notaQRUrl = url;
     notaSwitchTab('foto');
     _notaAviso('📷 Câmera aberta — tire foto do cupom para completar.', 'warn');
-    // Simular clique na câmera
     setTimeout(() => document.getElementById('notaFotoInput').click(), 300);
   }
 }
