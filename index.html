@@ -2172,14 +2172,22 @@ async function processarFotoNota(event) {
   }, GEMINI_TIMEOUT);
 
   try {
+    // Comprimir imagem se > 1MB (Gemini processa mais rápido)
+    let imagemParaEnviar = file;
+    if (file.size > 1024 * 1024) {
+      console.log('[OCR] Comprimindo imagem:', (file.size/1024/1024).toFixed(1), 'MB...');
+      imagemParaEnviar = await _comprimirImagem(file, 1200, 0.75);
+      console.log('[OCR] Após compressão:', (imagemParaEnviar.size/1024).toFixed(0), 'KB');
+    }
+
     const formData = new FormData();
-    formData.append('imagem', file);
+    formData.append('imagem', imagemParaEnviar, 'cupom.jpg');
     if(window._notaQRUrl) {
       formData.append('qr_url', window._notaQRUrl);
       window._notaQRUrl = null;
     }
 
-    console.log('[OCR] Enviando para backend...', file.name, file.size, 'bytes');
+    console.log('[OCR] Enviando para backend...', imagemParaEnviar.size, 'bytes');
 
     const resp = await fetch(`${API_URL}/v2/ocr`, {
       method: 'POST',
@@ -2609,6 +2617,31 @@ function salvarNota() {
 }
 // ══ FIM MODAL NOTA FISCAL ════════════════════════════════════════════════════
 
+
+
+// ── Compressor de imagem via Canvas ──────────────────────────────────────────
+function _comprimirImagem(file, maxLado, qualidade) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      // Calcular novo tamanho mantendo proporção
+      let w = img.width, h = img.height;
+      if (w > maxLado || h > maxLado) {
+        if (w > h) { h = Math.round(h * maxLado / w); w = maxLado; }
+        else        { w = Math.round(w * maxLado / h); h = maxLado; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(blob => resolve(blob || file), 'image/jpeg', qualidade);
+    };
+    img.onerror = () => resolve(file); // fallback: usar original
+    img.src = url;
+  });
+}
+// ── FIM Compressor ────────────────────────────────────────────────────────────
 
 // ── INIT: aguardar Firebase ou iniciar com localStorage ──
 // Aguardar DOM completo antes de verificar tokens e sessão
