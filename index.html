@@ -1812,15 +1812,24 @@ function mostrarResetMsg(texto, ok) {
 // Detectar token de reset na URL ao carregar a página
 // Ex: https://meirelesnew.github.io/muty-transporte-2026?reset_token=XXXXX
 function verificarURLToken() {
-  const params = new URLSearchParams(window.location.search);
+  const params     = new URLSearchParams(window.location.search);
   const resetToken = params.get('reset_token');
   if(resetToken) {
     window._resetToken = resetToken;
-    // Esconder tela de login e mostrar modal de reset
-    document.getElementById('loginScreen').style.display  = 'none';
-    document.getElementById('resetModal').style.display   = 'flex';
-    // Limpar token da URL (segurança)
+    // Esconder tela de login
+    const loginScreen = document.getElementById('loginScreen');
+    if(loginScreen) loginScreen.style.display = 'none';
+    // Mostrar modal de reset com flex
+    const resetModal = document.getElementById('resetModal');
+    if(resetModal) {
+      resetModal.style.display        = 'flex';
+      resetModal.style.flexDirection  = 'column';
+      resetModal.style.justifyContent = 'center';
+      resetModal.style.alignItems     = 'center';
+    }
+    // Limpar token da URL por segurança
     window.history.replaceState({}, '', window.location.pathname);
+    console.log('[RESET] Modal aberto, token carregado');
     return true;
   }
   return false;
@@ -1925,54 +1934,68 @@ if(!verificarURLToken()) {
 </div>
 
 <!-- ── MODAL REDEFINIR SENHA ── -->
-<div id="resetModal" style="display:none;position:fixed;inset:0;background:#0a0e17;
-     z-index:10001;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;
-              padding:32px;width:100%;max-width:400px;">
-    <div style="text-align:center;margin-bottom:20px;">
-      <div style="font-size:40px;">🔑</div>
-      <h3 style="font-family:var(--font-display);letter-spacing:1px;margin:8px 0;">
-        REDEFINIR SENHA
-      </h3>
-      <p style="color:var(--muted);font-size:0.85rem;">
-        Digite sua nova senha abaixo.
+<div id="resetModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+     background:#0a0e17;z-index:10001;padding:20px;
+     justify-content:center;align-items:center;">
+  <div style="background:#111827;border:1px solid #1f2d42;border-radius:16px;
+              padding:32px;width:100%;max-width:400px;margin:auto;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:48px;">🔑</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
+                 font-size:1.8rem;margin:8px 0;color:#e2e8f0;">
+        NOVA SENHA
+      </h2>
+      <p style="color:#64748b;font-size:0.85rem;">
+        Digite e confirme sua nova senha
       </p>
     </div>
 
-    <div class="login-field">
-      <label>Nova senha</label>
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:0.75rem;text-transform:uppercase;
+                    letter-spacing:1.5px;color:#64748b;margin-bottom:6px;">
+        Nova senha
+      </label>
       <div style="position:relative;">
         <input type="password" id="novaSenha" placeholder="••••••••"
-               style="width:100%;padding-right:44px;"
+               style="width:100%;padding:10px 44px 10px 14px;background:#0a0e17;
+                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+                      font-size:0.95rem;outline:none;box-sizing:border-box;"
                oninput="checarForcaSenha2(this.value)">
         <button type="button" onclick="toggleSenha('novaSenha','olhoReset')"
-                style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
-                       background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
-                id="olhoReset">👁</button>
+                id="olhoReset"
+                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                       background:none;border:none;cursor:pointer;font-size:18px;
+                       color:#64748b;padding:0;">👁</button>
       </div>
-      <div id="forcaSenha2" style="margin-top:6px;font-size:11px;color:var(--muted);"></div>
+      <div id="forcaSenha2" style="margin-top:6px;font-size:11px;"></div>
     </div>
 
-    <div class="login-field" style="margin-top:12px;">
-      <label>Confirmar nova senha</label>
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:0.75rem;text-transform:uppercase;
+                    letter-spacing:1.5px;color:#64748b;margin-bottom:6px;">
+        Confirmar senha
+      </label>
       <div style="position:relative;">
         <input type="password" id="confirmarSenha" placeholder="••••••••"
-               style="width:100%;padding-right:44px;"
+               style="width:100%;padding:10px 44px 10px 14px;background:#0a0e17;
+                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+                      font-size:0.95rem;outline:none;box-sizing:border-box;"
                onkeydown="if(event.key==='Enter') confirmarResetSenha()">
         <button type="button" onclick="toggleSenha('confirmarSenha','olhoConfirm')"
-                style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
-                       background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
-                id="olhoConfirm">👁</button>
+                id="olhoConfirm"
+                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                       background:none;border:none;cursor:pointer;font-size:18px;
+                       color:#64748b;padding:0;">👁</button>
       </div>
     </div>
 
-    <div id="resetMsg" style="margin:10px 0;font-size:0.85rem;display:none;
-         padding:10px;border-radius:8px;"></div>
+    <div id="resetMsg" style="display:none;margin:12px 0;padding:10px 14px;
+         border-radius:8px;font-size:0.85rem;"></div>
 
     <button onclick="confirmarResetSenha()" id="btnReset"
-            style="width:100%;padding:12px;background:var(--accent);color:#000;border:none;
-                   border-radius:10px;font-weight:bold;cursor:pointer;font-size:1rem;
-                   font-family:var(--font-display);letter-spacing:1px;margin-top:8px;">
+            style="width:100%;padding:13px;background:#f59e0b;color:#000;border:none;
+                   border-radius:10px;font-weight:700;cursor:pointer;font-size:1rem;
+                   font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;margin-top:4px;">
       SALVAR NOVA SENHA
     </button>
   </div>
