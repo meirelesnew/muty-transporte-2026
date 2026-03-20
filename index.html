@@ -1837,13 +1837,16 @@ function verificarURLToken() {
 // ── FIM REDEFINIR SENHA ───────────────────────────────────────────────────────
 
 // ── INIT: aguardar Firebase ou iniciar com localStorage ──
-// 1. Verificar se tem token de reset na URL (link do email de senha)
-if(!verificarURLToken()) {
-  // 2. Verificar sessão — se logado carrega dados, senão mostra login
-  if(verificarSessao()) {
-    loadAllData();
+// Aguardar DOM completo antes de verificar tokens e sessão
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Verificar se tem token de reset na URL (link do email)
+  if(!verificarURLToken()) {
+    // 2. Verificar sessão — se logado carrega dados, senão mostra login
+    if(verificarSessao()) {
+      loadAllData();
+    }
   }
-}
+});
 </script>
 
 <!-- ══ MODAL QR CODE NFC-e ══ -->
