@@ -2136,97 +2136,103 @@ async function processarFotoNota(event) {
   if(!file) return;
   event.target.value = '';
 
-  // Trava múltiplas execuções simultâneas
-  if(notaOCRRodando) {
-    cancelarOCR();
-    await new Promise(r => setTimeout(r, 150));
+  // Cancelar qualquer OCR anterior em andamento
+  if(notaOCRRodando && notaOCRController) {
+    notaOCRController.abort();
   }
-  notaOCRRodando = true;
-  notaOCRController = new AbortController();
+  if(notaTimeoutTimer) {
+    clearTimeout(notaTimeoutTimer);
+    notaTimeoutTimer = null;
+  }
+  notaOCRRodando     = true;
+  notaOCRController  = new AbortController();
+  const sinal        = notaOCRController.signal; // capturar referência local
 
-  // ── Preview da foto ───────────────────────────────────────────────────────
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const base64   = e.target.result.split(',')[1];
-    const mimeType = file.type || 'image/jpeg';
+  // Preview
+  const preview = document.getElementById('notaPreview');
+  const previewURL = URL.createObjectURL(file);
+  preview.src           = previewURL;
+  preview.style.display = 'block';
+  document.getElementById('notaDropContent').style.display = 'none';
+  document.getElementById('notaLoading').style.display     = 'block';
+  document.getElementById('notaTimeoutBar').style.display  = 'block';
+  _iniciarTimeoutBar(GEMINI_TIMEOUT);
+  _notaAviso('', '');
 
-    const preview = document.getElementById('notaPreview');
-    preview.src           = e.target.result;
-    preview.style.display = 'block';
-    document.getElementById('notaDropContent').style.display = 'none';
-    document.getElementById('notaLoading').style.display     = 'block';
-    document.getElementById('notaTimeoutBar').style.display  = 'block';
-    _iniciarTimeoutBar(GEMINI_TIMEOUT);
-    _notaAviso('', '');
-
-    // Timeout de segurança — libera manual após 5s
-    notaTimeoutTimer = setTimeout(() => {
-      if(notaOCRRodando) {
-        cancelarOCR();
-        _notaAviso('⏱ OCR demorou mais de 15s. Preencha manualmente ou tente outra foto.', 'warn');
-      }
-    }, GEMINI_TIMEOUT);
-
-    try {
-      // ── Enviar para backend seguro — chave Gemini fica no servidor ──────
-      const formData = new FormData();
-      formData.append('imagem', file);
-      // Enviar URL do QR se disponível (para extração de parâmetros)
-      if(window._notaQRUrl) {
-        formData.append('qr_url', window._notaQRUrl);
-        window._notaQRUrl = null;
-      }
-
-      const resp = await fetch(`${API_URL}/v2/ocr`, {
-        method: 'POST',
-        signal: notaOCRController.signal,
-        body:   formData,
-      });
-
-      clearTimeout(notaTimeoutTimer);
+  // Timeout — após 15s libera modo manual mas NÃO aborta o fetch
+  notaTimeoutTimer = setTimeout(() => {
+    if(notaOCRRodando) {
       notaOCRRodando = false;
       document.getElementById('notaLoading').style.display    = 'none';
       document.getElementById('notaTimeoutBar').style.display = 'none';
-
-      if(!resp.ok) throw new Error(`Backend OCR HTTP ${resp.status}`);
-
-      const apiData = await resp.json();
-
-      if(apiData.status === 'success' && apiData.data) {
-        const d = apiData.data;
-        _aplicarResultado({
-          fonte:    d.fonte || 'gemini',
-          campos:   {
-            estabelecimento: d.estabelecimento,
-            valor_total:     d.valor_total,
-            data:            d.data,
-            categoria:       d.categoria,
-          },
-          confianca: d.confianca ?? 1.0,
-          avisos:    [],
-        });
-      } else {
-        const code = apiData.code || '';
-        const msg  = code === 'ocr_not_configured'
-          ? '⚠️ OCR não configurado. Preencha manualmente.'
-          : (apiData.message || 'OCR indisponível — preencha manualmente.');
-        _aplicarResultado({ fonte: 'erro', motivo: msg });
-      }
-
-    } catch(err) {
-      clearTimeout(notaTimeoutTimer);
-      notaOCRRodando = false;
-      document.getElementById('notaLoading').style.display    = 'none';
-      document.getElementById('notaTimeoutBar').style.display = 'none';
-
-      if(err.name === 'AbortError') return; // cancelado pelo usuário
-
-      console.warn('[OCR] Erro:', err.message);
-      // Qualquer erro → modo manual imediato
-      _aplicarResultado({ fonte: 'erro', motivo: err.message });
+      document.getElementById('notaResultado').style.display  = 'block';
+      document.getElementById('notaSaveBtn').style.display    = 'flex';
+      _notaAviso('⏱ OCR demorou mais de 15s. Preencha manualmente ou aguarde.', 'warn');
     }
-  };
-  reader.readAsDataURL(file);
+  }, GEMINI_TIMEOUT);
+
+  try {
+    const formData = new FormData();
+    formData.append('imagem', file);
+    if(window._notaQRUrl) {
+      formData.append('qr_url', window._notaQRUrl);
+      window._notaQRUrl = null;
+    }
+
+    console.log('[OCR] Enviando para backend...', file.name, file.size, 'bytes');
+
+    const resp = await fetch(`${API_URL}/v2/ocr`, {
+      method: 'POST',
+      signal: sinal,
+      body:   formData,
+    });
+
+    // Chegou resposta — limpar timeout
+    clearTimeout(notaTimeoutTimer);
+    notaTimeoutTimer = null;
+    notaOCRRodando   = false;
+    document.getElementById('notaLoading').style.display    = 'none';
+    document.getElementById('notaTimeoutBar').style.display = 'none';
+
+    console.log('[OCR] Resposta HTTP:', resp.status);
+
+    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+    const apiData = await resp.json();
+    console.log('[OCR] Dados:', JSON.stringify(apiData));
+
+    if(apiData.status === 'success' && apiData.data) {
+      const d = apiData.data;
+      _aplicarResultado({
+        fonte:    d.fonte || 'gemini',
+        campos:   {
+          estabelecimento: d.estabelecimento,
+          valor_total:     d.valor_total,
+          data:            d.data,
+          categoria:       d.categoria,
+        },
+        confianca: d.confianca ?? 1.0,
+        avisos:    [],
+      });
+    } else {
+      _aplicarResultado({ fonte: 'erro', motivo: apiData.message || 'OCR sem dados' });
+    }
+
+  } catch(err) {
+    clearTimeout(notaTimeoutTimer);
+    notaTimeoutTimer = null;
+    notaOCRRodando   = false;
+    document.getElementById('notaLoading').style.display    = 'none';
+    document.getElementById('notaTimeoutBar').style.display = 'none';
+
+    if(err.name === 'AbortError') {
+      console.log('[OCR] Cancelado pelo usuário');
+      return;
+    }
+
+    console.error('[OCR] Erro:', err.message);
+    _aplicarResultado({ fonte: 'erro', motivo: 'Erro de conexão — preencha manualmente.' });
+  }
 }
 
 // ── Camada 1: Tentar parsear JSON do Gemini ──────────────────────────────────
