@@ -278,6 +278,55 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   border:1px solid var(--border);border-radius:6px;color:var(--muted);
   cursor:pointer;font-size:0.8rem;transition:all 0.2s;}
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* ── MODAL NOTA FISCAL UNIFICADO ─────────────────────────── */
+.nota-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;
+  padding:4px;margin-bottom:20px;}
+.nota-tab{flex:1;padding:8px;border:none;background:transparent;
+  color:var(--muted);cursor:pointer;border-radius:7px;
+  font-family:var(--font-display);font-size:0.85rem;letter-spacing:1px;
+  transition:all 0.2s;}
+.nota-tab.active{background:var(--accent);color:#000;font-weight:700;}
+.nota-drop{border:2px dashed var(--border);border-radius:12px;padding:28px;
+  text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:12px;
+  position:relative;}
+.nota-drop:hover,.nota-drop.drag{border-color:var(--accent);background:rgba(245,158,11,0.05);}
+.nota-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.nota-preview{width:100%;max-height:180px;object-fit:contain;border-radius:8px;
+  border:1px solid var(--border);margin-bottom:10px;display:none;}
+.nota-loading{text-align:center;padding:16px;display:none;}
+.nota-loading .spinner{width:36px;height:36px;border:3px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;
+  margin:0 auto 10px;}
+.nota-resultado{display:none;margin-top:12px;}
+.nota-campo{margin-bottom:14px;}
+.nota-campo label{font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--muted);display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.nota-campo label .ai-tag{font-size:10px;padding:1px 6px;border-radius:10px;
+  background:rgba(16,185,129,0.2);color:#10b981;font-weight:600;}
+.nota-campo label .manual-tag{font-size:10px;padding:1px 6px;border-radius:10px;
+  background:rgba(100,116,139,0.2);color:#94a3b8;}
+.nota-campo input,.nota-campo select{width:100%;padding:10px 14px;background:var(--bg);
+  border:1px solid var(--border);border-radius:10px;color:var(--text);
+  font-size:0.95rem;font-family:var(--font-body);outline:none;transition:all 0.2s;
+  box-sizing:border-box;}
+.nota-campo input:focus,.nota-campo select:focus{border-color:var(--accent);}
+.nota-campo input.ai-filled{border-color:rgba(16,185,129,0.5);
+  background:rgba(16,185,129,0.05);}
+.nota-campo input.editado{border-color:var(--accent2);}
+.nota-aviso{font-size:12px;padding:8px 12px;border-radius:8px;margin-bottom:12px;
+  display:none;}
+.nota-aviso.warn{background:rgba(245,158,11,0.1);color:#f59e0b;
+  border:1px solid rgba(245,158,11,0.3);}
+.nota-aviso.ok{background:rgba(16,185,129,0.1);color:#10b981;
+  border:1px solid rgba(16,185,129,0.3);}
+.nota-aviso.err{background:rgba(239,68,68,0.1);color:#ef4444;
+  border:1px solid rgba(239,68,68,0.3);}
+.qr-area{border-radius:12px;overflow:hidden;margin-bottom:12px;
+  background:#000;min-height:200px;display:flex;align-items:center;justify-content:center;}
+.timeout-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:12px;overflow:hidden;}
+.timeout-fill{height:100%;background:var(--accent);border-radius:2px;
+  transition:width linear;}
 </style>
 <!-- html5-qrcode library -->
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -423,8 +472,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     <div class="desp-header">
       <h2>LANÇAMENTOS — <span id="despMesLabel">Janeiro</span></h2>
       <div class="desp-header-btns">
-        <button class="btn-green" onclick="openCupomModal()">🧾 ESCANEAR CUPOM</button>
-        <button class="btn-card" onclick="openQRModal()">📷 LER QR CODE</button>
+        <button class="btn-green" onclick="openNotaModal()">📷 ESCANEAR NOTA</button>
         <button class="btn-card" onclick="openCartaoModal()">💳 IMPORTAR CARTÃO</button>
         <button class="btn-add" onclick="openDespModal()">+ MANUAL</button>
       </div>
@@ -581,6 +629,94 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 
 
 <!-- MODAL CUPOM FISCAL -->
+
+<!-- ══ MODAL NOTA FISCAL UNIFICADO ══════════════════════════════════════════ -->
+<div id="notaModalOverlay" class="modal-overlay" onclick="closeNotaModal(event)" style="display:none;">
+  <div class="modal modal-wide">
+    <h3>📄 LANÇAR DESPESA</h3>
+    <div class="modal-sub">Foto do cupom, QR Code ou preenchimento manual</div>
+
+    <!-- Mês -->
+    <div class="nota-campo">
+      <label>Mês de referência</label>
+      <select class="form-input" id="notaMes" style="width:100%;"></select>
+    </div>
+
+    <!-- Abas -->
+    <div class="nota-tabs">
+      <button class="nota-tab active" id="tabFoto" onclick="notaSwitchTab('foto')">📷 FOTO</button>
+      <button class="nota-tab" id="tabQR"   onclick="notaSwitchTab('qr')">📱 QR CODE</button>
+    </div>
+
+    <!-- ── ABA FOTO ── -->
+    <div id="notaAbaFoto">
+      <div class="nota-drop" id="notaDropZone">
+        <input type="file" id="notaFotoInput" accept="image/*" capture="environment"
+               onchange="processarFotoNota(event)">
+        <div id="notaDropContent">
+          <div style="font-size:2.5rem;">📷</div>
+          <p style="font-weight:600;margin:8px 0 4px;">Toque para tirar foto</p>
+          <p style="font-size:0.8rem;color:var(--muted);">Gemini vai ler o valor e estabelecimento</p>
+        </div>
+      </div>
+      <img id="notaPreview" class="nota-preview">
+
+      <!-- Barra de timeout -->
+      <div class="timeout-bar" id="notaTimeoutBar" style="display:none;">
+        <div class="timeout-fill" id="notaTimeoutFill" style="width:100%;"></div>
+      </div>
+
+      <!-- Loading -->
+      <div class="nota-loading" id="notaLoading">
+        <div class="spinner"></div>
+        <p style="font-size:13px;color:var(--muted);">🤖 Gemini lendo o cupom...</p>
+        <button onclick="cancelarOCR()" style="margin-top:8px;padding:6px 16px;
+          background:transparent;border:1px solid var(--border);border-radius:6px;
+          color:var(--muted);cursor:pointer;font-size:12px;">
+          Preencher manualmente
+        </button>
+      </div>
+    </div>
+
+    <!-- ── ABA QR ── -->
+    <div id="notaAbaQR" style="display:none;">
+      <div class="qr-area" id="notaQrReader"></div>
+      <div id="notaQrStatus" style="text-align:center;font-size:13px;color:var(--muted);
+           padding:8px;background:var(--surface);border-radius:8px;margin-bottom:12px;">
+        📷 Iniciando câmera...
+      </div>
+    </div>
+
+    <!-- ── AVISO ── -->
+    <div class="nota-aviso" id="notaAviso"></div>
+
+    <!-- ── RESULTADO (campos sempre visíveis após leitura) ── -->
+    <div class="nota-resultado" id="notaResultado">
+      <div class="nota-campo">
+        <label>Estabelecimento <span class="ai-tag" id="tagEstab" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagEstabManual" style="display:none;">✏️ manual</span></label>
+        <input type="text" id="notaEstab" placeholder="Nome do estabelecimento"
+               oninput="marcarEditado(this,'tagEstab','tagEstabManual')">
+      </div>
+      <div class="nota-campo">
+        <label>Valor Total (R$) <span class="ai-tag" id="tagValor" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagValorManual" style="display:none;">✏️ manual</span></label>
+        <input type="number" id="notaValor" placeholder="0,00" step="0.01" min="0"
+               oninput="marcarEditado(this,'tagValor','tagValorManual')">
+      </div>
+      <div class="nota-campo">
+        <label>Categoria <span class="ai-tag" id="tagCat" style="display:none;">🤖 IA</span></label>
+        <div id="notaCatSelector" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;"></div>
+      </div>
+    </div>
+
+    <!-- ── BOTÕES ── -->
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
+      <button class="btn-secondary" onclick="closeNotaModalBtn()">Cancelar</button>
+      <button class="btn-primary" id="notaSaveBtn" onclick="salvarNota()"
+              style="display:none;">✓ SALVAR DESPESA</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="cupomModalOverlay" onclick="closeCupomModal(event)">
   <div class="modal modal-wide">
     <h3>📸 ESCANEAR CUPOM</h3>
@@ -1834,6 +1970,431 @@ function verificarURLToken() {
   return false;
 }
 // ── FIM REDEFINIR SENHA ───────────────────────────────────────────────────────
+
+// ══ MODAL NOTA FISCAL UNIFICADO ═════════════════════════════════════════════
+// Arquitetura: OCR principal → QR alternativo → manual sempre disponível
+
+const GEMINI_KEY_NOTA = 'AIzaSyCid4j5aOtBKSfC7ktzKjnsjaW3e9AqLb8';
+const GEMINI_TIMEOUT  = 5000;  // 5s timeout OCR
+const SEFAZ_TIMEOUT   = 3000;  // 3s timeout SEFAZ (background)
+
+let notaCatSelecionada = 'outros';
+let notaQRScanner      = null;
+let notaOCRController  = null;  // AbortController para cancelar OCR
+let notaOCRRodando     = false; // trava múltiplas execuções
+let notaTimeoutTimer   = null;  // timer da barra de progresso
+let notaRascunho       = {};    // rascunho local
+
+// ── Abrir modal ──────────────────────────────────────────────────────────────
+function openNotaModal() {
+  // Restaurar rascunho salvo localmente
+  notaRascunho = loadLS('muty_nota_rascunho', {});
+
+  // Preencher meses
+  document.getElementById('notaMes').innerHTML =
+    MESES_FULL.map((m,i) => `<option value="${i+1}" ${i+1===currentMonth?'selected':''}>${m}</option>`).join('');
+
+  // Reset UI
+  _notaReset();
+
+  // Restaurar rascunho se existir
+  if(notaRascunho.estab || notaRascunho.valor) {
+    _preencherCampos({
+      estabelecimento: notaRascunho.estab || '',
+      valor:           notaRascunho.valor || 0,
+      categoria:       notaRascunho.cat   || 'outros',
+    }, false);
+    _notaAviso('📝 Rascunho restaurado — continue de onde parou.', 'warn');
+  }
+
+  document.getElementById('notaModalOverlay').style.display = 'flex';
+  notaSwitchTab('foto');
+}
+
+// ── Fechar modal ─────────────────────────────────────────────────────────────
+function closeNotaModal(e) {
+  if(e.target === document.getElementById('notaModalOverlay')) closeNotaModalBtn();
+}
+function closeNotaModalBtn() {
+  _pararQRScanner();
+  cancelarOCR();
+  document.getElementById('notaModalOverlay').style.display = 'none';
+}
+
+// ── Alternar abas ─────────────────────────────────────────────────────────────
+function notaSwitchTab(tab) {
+  const isFoto = tab === 'foto';
+
+  document.getElementById('notaAbaFoto').style.display = isFoto ? 'block' : 'none';
+  document.getElementById('notaAbaQR').style.display   = isFoto ? 'none'  : 'block';
+  document.getElementById('tabFoto').classList.toggle('active',  isFoto);
+  document.getElementById('tabQR').classList.toggle('active',   !isFoto);
+
+  if(!isFoto) {
+    _pararQRScanner();
+    _iniciarQRScanner();
+  } else {
+    _pararQRScanner();
+  }
+}
+
+// ── Reset estado do modal ─────────────────────────────────────────────────────
+function _notaReset() {
+  notaOCRRodando = false;
+  notaOCRController = null;
+
+  // Foto
+  document.getElementById('notaDropContent').style.display  = 'block';
+  document.getElementById('notaPreview').style.display      = 'none';
+  document.getElementById('notaLoading').style.display      = 'none';
+  document.getElementById('notaTimeoutBar').style.display   = 'none';
+  document.getElementById('notaFotoInput').value            = '';
+
+  // Resultado
+  document.getElementById('notaResultado').style.display = 'none';
+  document.getElementById('notaSaveBtn').style.display   = 'none';
+  document.getElementById('notaEstab').value  = '';
+  document.getElementById('notaValor').value  = '';
+  document.getElementById('notaEstab').className = 'nota-campo input';
+  document.getElementById('notaValor').className = 'nota-campo input';
+  ['tagEstab','tagEstabManual','tagValor','tagValorManual','tagCat'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+
+  _notaAviso('', '');
+  _buildCatSelector('outros');
+}
+
+// ── Mostrar aviso ─────────────────────────────────────────────────────────────
+function _notaAviso(msg, tipo) {
+  const el = document.getElementById('notaAviso');
+  el.textContent = msg;
+  el.className   = `nota-aviso${tipo ? ' ' + tipo : ''}`;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+// ── Seletor de categoria ──────────────────────────────────────────────────────
+function _buildCatSelector(catAtiva) {
+  notaCatSelecionada = catAtiva || 'outros';
+  const cs = document.getElementById('notaCatSelector');
+  cs.innerHTML = '';
+  CATEGORIAS.filter(c => c.id !== 'cartao').forEach(cat => {
+    const btn = document.createElement('div');
+    btn.className = 'cat-opt' + (cat.id === notaCatSelecionada ? ' selected' : '');
+    btn.innerHTML = `${cat.icon}${cat.nome}`;
+    btn.onclick = () => {
+      notaCatSelecionada = cat.id;
+      document.querySelectorAll('#notaCatSelector .cat-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      _salvarRascunho();
+    };
+    cs.appendChild(btn);
+  });
+}
+
+// ── Marcar campo como editado manualmente ─────────────────────────────────────
+function marcarEditado(input, aiTagId, manualTagId) {
+  input.classList.add('editado');
+  const ai = document.getElementById(aiTagId);
+  const mn = document.getElementById(manualTagId);
+  if(ai) ai.style.display     = 'none';
+  if(mn) mn.style.display     = 'inline-block';
+  _salvarRascunho();
+}
+
+// ── Salvar rascunho local ─────────────────────────────────────────────────────
+function _salvarRascunho() {
+  notaRascunho = {
+    estab: document.getElementById('notaEstab')?.value || '',
+    valor: document.getElementById('notaValor')?.value || '',
+    cat:   notaCatSelecionada,
+  };
+  if(notaRascunho.estab || notaRascunho.valor) {
+    saveLS('muty_nota_rascunho', notaRascunho);
+  }
+}
+
+// ── Preencher campos com dados extraídos ─────────────────────────────────────
+function _preencherCampos(dados, viaIA = true) {
+  const { estabelecimento, valor, categoria } = dados;
+
+  document.getElementById('notaResultado').style.display = 'block';
+  document.getElementById('notaSaveBtn').style.display   = 'flex';
+
+  if(estabelecimento) {
+    document.getElementById('notaEstab').value = estabelecimento;
+    document.getElementById('notaEstab').className = viaIA ? 'ai-filled' : '';
+    const t = document.getElementById(viaIA ? 'tagEstab' : 'tagEstabManual');
+    if(t) t.style.display = 'inline-block';
+  }
+
+  if(valor && valor > 0) {
+    document.getElementById('notaValor').value = valor;
+    document.getElementById('notaValor').className = viaIA ? 'ai-filled' : '';
+    const t = document.getElementById(viaIA ? 'tagValor' : 'tagValorManual');
+    if(t) t.style.display = 'inline-block';
+  }
+
+  _buildCatSelector(categoria || 'outros');
+  if(viaIA) {
+    const tc = document.getElementById('tagCat');
+    if(tc) tc.style.display = 'inline-block';
+  }
+
+  _salvarRascunho();
+}
+
+// ── Cancelar OCR (manual ou timeout) ─────────────────────────────────────────
+function cancelarOCR() {
+  if(notaOCRController) { notaOCRController.abort(); notaOCRController = null; }
+  if(notaTimeoutTimer)  { clearTimeout(notaTimeoutTimer); notaTimeoutTimer = null; }
+  notaOCRRodando = false;
+
+  document.getElementById('notaLoading').style.display    = 'none';
+  document.getElementById('notaTimeoutBar').style.display = 'none';
+
+  // Mostrar campos para preenchimento manual
+  document.getElementById('notaResultado').style.display = 'block';
+  document.getElementById('notaSaveBtn').style.display   = 'flex';
+  _notaAviso('⚠️ Preencha os campos manualmente.', 'warn');
+}
+
+// ── Barra de timeout visual ───────────────────────────────────────────────────
+function _iniciarTimeoutBar(duracaoMs) {
+  const bar = document.getElementById('notaTimeoutBar');
+  const fill = document.getElementById('notaTimeoutFill');
+  bar.style.display = 'block';
+  fill.style.transition = 'none';
+  fill.style.width = '100%';
+  // Forçar reflow para animação funcionar
+  fill.getBoundingClientRect();
+  fill.style.transition = `width ${duracaoMs}ms linear`;
+  fill.style.width = '0%';
+}
+
+// ── PROCESSAMENTO OCR (foto) ──────────────────────────────────────────────────
+async function processarFotoNota(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  event.target.value = '';
+
+  // Trava múltiplas execuções
+  if(notaOCRRodando) {
+    cancelarOCR();
+    await new Promise(r => setTimeout(r, 100));
+  }
+  notaOCRRodando = true;
+
+  // Preview da foto
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64   = e.target.result.split(',')[1];
+    const mimeType = file.type || 'image/jpeg';
+
+    // Mostrar preview
+    const preview = document.getElementById('notaPreview');
+    preview.src           = e.target.result;
+    preview.style.display = 'block';
+    document.getElementById('notaDropContent').style.display = 'none';
+
+    // Mostrar loading + barra de timeout
+    document.getElementById('notaLoading').style.display = 'block';
+    _iniciarTimeoutBar(GEMINI_TIMEOUT);
+    _notaAviso('', '');
+
+    // Timer de timeout — se Gemini demorar, libera manual
+    notaTimeoutTimer = setTimeout(() => {
+      if(notaOCRRodando) {
+        cancelarOCR();
+        _notaAviso('⏱ OCR demorou mais que 5s. Preencha os campos ou tente novamente.', 'warn');
+      }
+    }, GEMINI_TIMEOUT);
+
+    // Criar AbortController
+    notaOCRController = new AbortController();
+
+    try {
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY_NOTA}`,
+        {
+          method:  'POST',
+          headers: {'Content-Type': 'application/json'},
+          signal:  notaOCRController.signal,
+          body: JSON.stringify({
+            contents: [{parts: [
+              {inline_data: {mime_type: mimeType, data: base64}},
+              {text: `Analise este cupom fiscal brasileiro e retorne SOMENTE um JSON válido.
+
+Extraia:
+1. "estabelecimento": nome da loja/empresa (topo do cupom)
+2. "valor": valor total como número decimal (ex: 45.90) - procure TOTAL, VL TOTAL, VALOR TOTAL
+3. "categoria": combustivel | manutencao | impostos | outros
+
+Regras:
+- Imagem escura ou torta: tente assim mesmo
+- Valor TOTAL geralmente é o maior número no final
+- Vírgula para ponto: 45,90 → 45.90
+- NUNCA retorne 0 se houver número visível
+
+Resposta APENAS JSON (sem markdown, sem explicação):
+{"estabelecimento":"Nome","valor":45.90,"categoria":"outros"}`}
+            ]}]}
+          )
+        }
+      );
+
+      clearTimeout(notaTimeoutTimer);
+      notaOCRRodando = false;
+      document.getElementById('notaLoading').style.display    = 'none';
+      document.getElementById('notaTimeoutBar').style.display = 'none';
+
+      if(!resp.ok) throw new Error('Gemini HTTP ' + resp.status);
+
+      const data = await resp.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+
+      let parsed = {};
+      try {
+        parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+      } catch(_) {
+        // Tentar extrair JSON do texto
+        const m = text.match(/\{[^}]+\}/);
+        if(m) { try { parsed = JSON.parse(m[0]); } catch(__) {} }
+      }
+
+      if(parsed.estabelecimento || parsed.valor) {
+        _preencherCampos(parsed, true);
+        _notaAviso('🤖 Gemini identificou os dados — confirme e salve.', 'ok');
+      } else {
+        // Gemini não retornou dados úteis — modo manual
+        document.getElementById('notaResultado').style.display = 'block';
+        document.getElementById('notaSaveBtn').style.display   = 'flex';
+        _notaAviso('⚠️ Não foi possível ler automaticamente. Preencha os campos.', 'warn');
+      }
+
+    } catch(err) {
+      clearTimeout(notaTimeoutTimer);
+      notaOCRRodando = false;
+      document.getElementById('notaLoading').style.display    = 'none';
+      document.getElementById('notaTimeoutBar').style.display = 'none';
+
+      if(err.name === 'AbortError') return; // cancelado pelo usuário
+
+      // Falha do Gemini — modo manual imediato
+      document.getElementById('notaResultado').style.display = 'block';
+      document.getElementById('notaSaveBtn').style.display   = 'flex';
+      _notaAviso('⚠️ OCR indisponível. Preencha os campos manualmente.', 'warn');
+      console.warn('[OCR] Erro Gemini:', err.message);
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── QR CODE — iniciar scanner ─────────────────────────────────────────────────
+function _iniciarQRScanner() {
+  if(notaQRScanner) { notaQRScanner.clear(); notaQRScanner = null; }
+  notaQRScanner = new Html5Qrcode('notaQrReader');
+  notaQRScanner.start(
+    {facingMode: 'environment'},
+    {fps: 10, qrbox: {width: 220, height: 220}},
+    (url) => _onQRDetectado(url),
+    () => {}
+  ).then(() => {
+    document.getElementById('notaQrStatus').textContent = '✅ Câmera ativa — aponte para o QR Code';
+  }).catch(err => {
+    document.getElementById('notaQrStatus').textContent = '❌ Câmera não autorizada.';
+    console.error('[QR]', err);
+  });
+}
+
+function _pararQRScanner() {
+  if(notaQRScanner) {
+    notaQRScanner.stop().catch(() => {});
+    notaQRScanner = null;
+  }
+}
+
+// ── QR detectado — tenta SEFAZ em background (timeout 3s) ────────────────────
+async function _onQRDetectado(url) {
+  _pararQRScanner();
+  document.getElementById('notaQrStatus').textContent = '🔍 QR lido — buscando dados...';
+
+  if(!url.startsWith('http')) {
+    // Não é URL — ir para foto automaticamente
+    notaSwitchTab('foto');
+    _notaAviso('QR inválido. Tire uma foto do cupom.', 'warn');
+    return;
+  }
+
+  // Tentar SEFAZ em background com timeout curto
+  let dadosSEFAZ = null;
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), SEFAZ_TIMEOUT);
+
+    const r = await fetch(`${API_URL}/v2/nota-fiscal`, {
+      method:  'POST',
+      headers: {'Content-Type': 'application/json'},
+      body:    JSON.stringify({url}),
+      signal:  ctrl.signal,
+    });
+    clearTimeout(timer);
+
+    const d = await r.json();
+    if(d.status === 'success' && d.data?.valor > 0) {
+      dadosSEFAZ = d.data;
+    }
+  } catch(_) {
+    // Timeout ou bloqueio — silencioso
+  }
+
+  if(dadosSEFAZ) {
+    // SEFAZ funcionou — preencher campos
+    notaSwitchTab('foto');
+    _preencherCampos(dadosSEFAZ, false);
+    _notaAviso('📋 Dados extraídos da nota fiscal.', 'ok');
+  } else {
+    // SEFAZ bloqueou — abrir câmera automaticamente (sem mensagem de erro técnico)
+    notaSwitchTab('foto');
+    _notaAviso('📷 Câmera aberta — tire foto do cupom para completar.', 'warn');
+    // Simular clique na câmera
+    setTimeout(() => document.getElementById('notaFotoInput').click(), 300);
+  }
+}
+
+// ── Salvar despesa ────────────────────────────────────────────────────────────
+function salvarNota() {
+  const valor = parseFloat(document.getElementById('notaValor').value);
+  const desc  = document.getElementById('notaEstab').value.trim() || 'Nota Fiscal';
+  const mes   = parseInt(document.getElementById('notaMes').value);
+
+  if(!valor || valor <= 0) {
+    _notaAviso('⚠️ Informe o valor da despesa.', 'warn');
+    document.getElementById('notaValor').focus();
+    return;
+  }
+
+  despesas.push({
+    id:     Date.now(),
+    cat:    notaCatSelecionada,
+    desc,
+    valor,
+    mes,
+    fonte:  'nota',
+  });
+
+  saveData('despesas', despesas);
+
+  // Limpar rascunho
+  saveLS('muty_nota_rascunho', {});
+
+  closeNotaModalBtn();
+  currentTab = 'despesas';
+  switchTab('despesas');
+}
+// ══ FIM MODAL NOTA FISCAL ════════════════════════════════════════════════════
+
 
 // ── INIT: aguardar Firebase ou iniciar com localStorage ──
 // Aguardar DOM completo antes de verificar tokens e sessão
