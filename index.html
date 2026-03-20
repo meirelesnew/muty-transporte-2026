@@ -1340,7 +1340,7 @@ function drawPie(svgId,legendId,slices,total){
 }
 
 // ── CUPOM FISCAL (Foto + Gemini) ────────────────────────────────────────────
-const GEMINI_KEY = 'AIzaSyCid4j5aOtBKSfC7ktzKjnsjaW3e9AqLb8';
+// GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
 let cupomCatSelecionada = 'combustivel';
 
 // QR vars (mantidos para não quebrar referências)
@@ -1363,85 +1363,51 @@ function closeCupomModal(e){ if(e.target===document.getElementById('cupomModalOv
 function closeCupomModalBtn(){ document.getElementById('cupomModalOverlay').classList.remove('open'); }
 function pararQR(){ if(qrStream){qrStream.getTracks().forEach(t=>t.stop());qrStream=null;} }
 
-async function processarFotoCupom(event){
+async function processarFotoCupom(event) {
+  // Função legada — agora usa o backend seguro
   const file = event.target.files[0];
   if(!file) return;
   event.target.value = '';
 
-  // Mostrar preview
-  const reader = new FileReader();
+  const preview = document.getElementById('cupomFotoPreview');
+  const reader  = new FileReader();
   reader.onload = async (e) => {
-    const base64 = e.target.result.split(',')[1];
-    const mimeType = file.type || 'image/jpeg';
-
-    // Preview da foto
-    const preview = document.getElementById('cupomFotoPreview');
-    preview.src = e.target.result;
+    preview.src           = e.target.result;
     preview.style.display = 'block';
-    document.getElementById('cupomDropZone').style.display = 'none';
-
-    // Loading
+    document.getElementById('cupomDropZone').style.display   = 'none';
     document.getElementById('cupomLoadingGemini').style.display = 'block';
-    document.getElementById('cupomResultado').style.display = 'none';
-    document.getElementById('cupomSaveBtn').style.display = 'none';
+    document.getElementById('cupomResultado').style.display  = 'none';
+    document.getElementById('cupomSaveBtn').style.display    = 'none';
 
-    // Chamar Gemini
     try {
-      const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{
-              parts: [
-                { inline_data: { mime_type: mimeType, data: base64 } },
-                { text: `Analise este cupom fiscal brasileiro e retorne SOMENTE um JSON válido, sem explicações, sem markdown, sem blocos de código.
-
-Extraia:
-1. "estabelecimento": nome da loja/empresa no topo do cupom
-2. "valor": valor total (número decimal com ponto, ex: 45.90) - procure TOTAL, VL TOTAL, VALOR TOTAL
-3. "categoria": uma de: combustivel, manutencao, impostos, outros
-
-Regras importantes:
-- Se a imagem estiver escura ou torta, tente assim mesmo
-- O valor TOTAL geralmente é o maior número no final do cupom
-- Converta vírgula para ponto: 45,90 → 45.90
-- NUNCA retorne 0 se houver qualquer número visível
-
-Responda APENAS com JSON:
-{"estabelecimento":"Nome da loja","valor":45.90,"categoria":"outros"}` }
-              ]
-            }]
-          })
-        }
-      );
+      // Chama backend — chave Gemini fica segura no servidor
+      const formData = new FormData();
+      formData.append('imagem', file);
+      const resp = await fetch(`${API_URL}/v2/ocr`, {method:'POST', body: formData});
       const data = await resp.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-      let parsed = {};
-      try { parsed = JSON.parse(text.replace(/```json|```/g,'').trim()); } catch(e){}
 
       document.getElementById('cupomLoadingGemini').style.display = 'none';
-      document.getElementById('cupomResultado').style.display = 'block';
-      document.getElementById('cupomSaveBtn').style.display = 'flex';
+      document.getElementById('cupomResultado').style.display  = 'block';
+      document.getElementById('cupomSaveBtn').style.display    = 'flex';
 
-      // Preencher campos
-      const estabelecimento = parsed.estabelecimento || 'Nota Fiscal';
-      const valor = parsed.valor || 0;
-      const categoria = parsed.categoria || 'outros';
-
-      document.getElementById('cupomDesc').value = estabelecimento;
-      document.getElementById('cupomValor').value = valor > 0 ? valor : '';
-      document.getElementById('cupomAiInfo').textContent =
-        `🤖 Gemini identificou: ${estabelecimento}${valor > 0 ? ' — R$ ' + valor.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ' — informe o valor'}`;
+      if(data.status === 'success' && data.data) {
+        const d = data.data;
+        document.getElementById('cupomDesc').value  = d.estabelecimento || 'Nota Fiscal';
+        document.getElementById('cupomValor').value = d.valor_total > 0 ? d.valor_total : '';
+        document.getElementById('cupomAiInfo').textContent =
+          `🤖 Backend identificou: ${d.estabelecimento || '?'}${d.valor_total > 0 ? ' — R$ ' + d.valor_total.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ' — informe o valor'}`;
+        cupomCatSelecionada = d.categoria || 'outros';
+      } else {
+        document.getElementById('cupomAiInfo').textContent = '⚠️ Não foi possível ler. Preencha manualmente.';
+        document.getElementById('cupomDesc').value = 'Nota Fiscal';
+      }
 
       // Categoria selector
-      cupomCatSelecionada = categoria;
       const cs = document.getElementById('cupomCatSelector'); cs.innerHTML = '';
       CATEGORIAS.filter(c=>c.id!=='cartao').forEach(cat=>{
         const btn = document.createElement('div');
         btn.className = 'cat-opt' + (cat.id===cupomCatSelecionada?' selected':'');
-        btn.innerHTML = `<span>${cat.icon}</span>${cat.nome}`;
+        btn.innerHTML = `${cat.icon}${cat.nome}`;
         btn.onclick = ()=>{
           cupomCatSelecionada = cat.id;
           document.querySelectorAll('#cupomCatSelector .cat-opt').forEach(b=>b.classList.remove('selected'));
@@ -1451,26 +1417,11 @@ Responda APENAS com JSON:
       });
 
     } catch(err) {
-      console.error('Gemini erro:', err);
       document.getElementById('cupomLoadingGemini').style.display = 'none';
-      document.getElementById('cupomResultado').style.display = 'block';
-      document.getElementById('cupomSaveBtn').style.display = 'flex';
-      document.getElementById('cupomAiInfo').textContent = '⚠️ Não foi possível ler automaticamente. Preencha os campos manualmente.';
+      document.getElementById('cupomResultado').style.display  = 'block';
+      document.getElementById('cupomSaveBtn').style.display    = 'flex';
+      document.getElementById('cupomAiInfo').textContent = '⚠️ OCR indisponível. Preencha manualmente.';
       document.getElementById('cupomDesc').value = 'Nota Fiscal';
-      // Categoria selector fallback
-      cupomCatSelecionada = 'outros';
-      const cs = document.getElementById('cupomCatSelector'); cs.innerHTML = '';
-      CATEGORIAS.filter(c=>c.id!=='cartao').forEach(cat=>{
-        const btn = document.createElement('div');
-        btn.className = 'cat-opt' + (cat.id===cupomCatSelecionada?' selected':'');
-        btn.innerHTML = `<span>${cat.icon}</span>${cat.nome}`;
-        btn.onclick = ()=>{
-          cupomCatSelecionada = cat.id;
-          document.querySelectorAll('#cupomCatSelector .cat-opt').forEach(b=>b.classList.remove('selected'));
-          btn.classList.add('selected');
-        };
-        cs.appendChild(btn);
-      });
     }
   };
   reader.readAsDataURL(file);
@@ -1980,7 +1931,7 @@ function verificarURLToken() {
 // ══ MODAL NOTA FISCAL UNIFICADO ═════════════════════════════════════════════
 // Arquitetura: OCR principal → QR alternativo → manual sempre disponível
 
-const GEMINI_KEY_NOTA = 'AIzaSyCid4j5aOtBKSfC7ktzKjnsjaW3e9AqLb8';
+// GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
 const GEMINI_TIMEOUT  = 5000;  // 5s timeout OCR
 const SEFAZ_TIMEOUT   = 3000;  // 3s timeout SEFAZ (background)
 
@@ -2217,64 +2168,41 @@ async function processarFotoNota(event) {
     }, GEMINI_TIMEOUT);
 
     try {
-      // ── Chamada Gemini com JSON mode e temperature baixa ─────────────────
-      const payload = {
-        contents: [{
-          parts: [
-            { inline_data: { mime_type: mimeType, data: base64 } },
-            { text: `Analise este cupom fiscal brasileiro (NFC-e) e retorne APENAS um JSON válido, sem nenhum texto adicional:
+      // ── Enviar para backend seguro — chave Gemini fica no servidor ──────
+      const formData = new FormData();
+      formData.append('imagem', file);
 
-{
-  "estabelecimento": "string com nome da loja ou null",
-  "valor_total": numero_decimal_com_ponto_ou_null,
-  "data": "YYYY-MM-DD ou null",
-  "confianca": numero_entre_0_e_1
-}
-
-Regras obrigatórias:
-- valor_total deve ser o TOTAL FINAL (não subtotal nem itens individuais)
-- remover R$ e vírgulas, usar ponto decimal: 45,90 → 45.90
-- data deve ser a data da compra em formato ISO: 23/03/2026 → 2026-03-23
-- se houver dúvida sobre qualquer campo, retornar null naquele campo
-- confianca: 1.0 se tudo claro, 0.5 se imagem parcialmente legível, 0.2 se muito difícil
-- NÃO retornar texto explicativo, NÃO usar markdown, NÃO usar blocos de código
-- retornar APENAS o JSON puro` }
-          ]
-        }],
-        generationConfig: {
-          temperature:      0.1,
-          topP:             0.8,
-          topK:             10,
-          responseMimeType: "application/json",
-        }
-      };
-
-      const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY_NOTA}`,
-        {
-          method:  'POST',
-          headers: {'Content-Type': 'application/json'},
-          signal:  notaOCRController.signal,
-          body:    JSON.stringify(payload),
-        }
-      );
+      const resp = await fetch(`${API_URL}/v2/ocr`, {
+        method: 'POST',
+        signal: notaOCRController.signal,
+        body:   formData,
+      });
 
       clearTimeout(notaTimeoutTimer);
       notaOCRRodando = false;
       document.getElementById('notaLoading').style.display    = 'none';
       document.getElementById('notaTimeoutBar').style.display = 'none';
 
-      if(!resp.ok) {
-        const errBody = await resp.json().catch(() => ({}));
-        throw new Error(`Gemini ${resp.status}: ${errBody?.error?.message || 'erro desconhecido'}`);
-      }
+      if(!resp.ok) throw new Error(`Backend OCR HTTP ${resp.status}`);
 
       const apiData = await resp.json();
-      const rawText = apiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
-      // ── Pós-processamento em 3 camadas ────────────────────────────────────
-      const resultado = _processarRespostaGemini(rawText);
-      _aplicarResultado(resultado);
+      if(apiData.status === 'success' && apiData.data) {
+        const d = apiData.data;
+        _aplicarResultado({
+          fonte:    d.fonte || 'backend',
+          campos:   {
+            estabelecimento: d.estabelecimento,
+            valor_total:     d.valor_total,
+            data:            d.data,
+            categoria:       d.categoria,
+          },
+          confianca: d.confianca || 0,
+          avisos:    [],
+        });
+      } else {
+        _aplicarResultado({ fonte: 'erro', motivo: apiData.message || 'OCR indisponível' });
+      }
 
     } catch(err) {
       clearTimeout(notaTimeoutTimer);
