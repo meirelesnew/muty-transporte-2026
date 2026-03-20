@@ -1932,7 +1932,7 @@ function verificarURLToken() {
 // Arquitetura: OCR principal → QR alternativo → manual sempre disponível
 
 // GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
-const GEMINI_TIMEOUT  = 5000;  // 5s timeout OCR
+const GEMINI_TIMEOUT  = 15000; // 15s timeout OCR (backend tem 10s + rede)
 const SEFAZ_TIMEOUT   = 3000;  // 3s timeout SEFAZ (background)
 
 let notaCatSelecionada = 'outros';
@@ -2163,7 +2163,7 @@ async function processarFotoNota(event) {
     notaTimeoutTimer = setTimeout(() => {
       if(notaOCRRodando) {
         cancelarOCR();
-        _notaAviso('⏱ OCR demorou mais que 5s. Preencha os campos manualmente.', 'warn');
+        _notaAviso('⏱ OCR demorou mais de 15s. Preencha manualmente ou tente outra foto.', 'warn');
       }
     }, GEMINI_TIMEOUT);
 
@@ -2339,6 +2339,18 @@ function _aplicarResultado(resultado) {
   const icones = { gemini: '🤖', regex: '🧠', qr: '📱', backend: '🤖', manual: '✏️' };
   const icone  = icones[fonte] || '🤖';
 
+  // Mesclar com dados QR pré-existentes nos campos (sem sobrescrever)
+  // Se QR já preencheu valor e OCR também trouxe, mantém o QR (maior confiança)
+  const valorExistente = parseFloat(document.getElementById('notaValor')?.value || '0');
+  const estabExistente = document.getElementById('notaEstab')?.value?.trim() || '';
+
+  if(valorExistente > 0 && !campos.valor_total) {
+    campos.valor_total = valorExistente; // preservar valor do QR
+  }
+  if(estabExistente && !campos.estabelecimento) {
+    campos.estabelecimento = estabExistente; // preservar estab do QR
+  }
+
   // Erro ou vazio → modo manual puro
   if(fonte === 'erro' || fonte === 'vazio') {
     _notaAviso(
@@ -2430,50 +2442,133 @@ function _pararQRScanner() {
 // ── QR detectado — tenta SEFAZ em background (timeout 3s) ────────────────────
 async function _onQRDetectado(url) {
   _pararQRScanner();
-  document.getElementById('notaQrStatus').textContent = '🔍 QR lido — buscando dados...';
 
   if(!url.startsWith('http')) {
-    // Não é URL — ir para foto automaticamente
-    notaSwitchTab('foto');
-    _notaAviso('QR inválido. Tire uma foto do cupom.', 'warn');
+    document.getElementById('notaQrStatus').textContent = '❌ QR inválido — não é uma nota fiscal';
+    setTimeout(_iniciarQRScanner, 2000);
     return;
   }
 
-  // Tentar SEFAZ em background com timeout curto
-  let dadosSEFAZ = null;
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), SEFAZ_TIMEOUT);
+  document.getElementById('notaQrStatus').textContent = '✅ QR lido — processando...';
+  window._notaQRUrl = url; // salvar para enriquecer OCR
 
-    const r = await fetch(`${API_URL}/v2/nota-fiscal`, {
-      method:  'POST',
-      headers: {'Content-Type': 'application/json'},
-      body:    JSON.stringify({url}),
-      signal:  ctrl.signal,
+  // 1. Extrair parâmetros direto da URL
+  const dadosQR = _parsearURLQR(url);
+  const temValor = dadosQR.valor_total > 0;
+  const temEstab = !!dadosQR.estabelecimento;
+
+  // 2. Verificar se QR tem dados suficientes
+  if(temValor && temEstab) {
+    // QR completo — preencher e ir para foto (aba foto já visível)
+    notaSwitchTab('foto');
+    _aplicarResultado({
+      fonte: 'qr', campos: dadosQR, confianca: 0.85, avisos: []
     });
-    clearTimeout(timer);
+    _notaAviso('📱 QR lido com sucesso! Tire uma foto para confirmar os dados.', 'ok');
+    return;
+  }
 
-    const d = await r.json();
-    if(d.status === 'success' && d.data?.valor > 0) {
-      dadosSEFAZ = d.data;
+  // 3. QR incompleto → ativar OCR automaticamente
+  notaSwitchTab('foto');
+
+  // Preencher o que o QR já tem (parcial)
+  if(temValor || temEstab) {
+    _aplicarResultadoParcialQR(dadosQR);
+  }
+
+  // Mostrar área de foto com mensagem amigável
+  _notaAvisoComBotao(
+    '📷 Completando dados automaticamente — tire uma foto do cupom.',
+    () => document.getElementById('notaFotoInput').click()
+  );
+}
+
+// Preenche apenas os campos que o QR trouxe (sem limpar os vazios)
+function _aplicarResultadoParcialQR(dadosQR) {
+  if(dadosQR.valor_total > 0) {
+    const el = document.getElementById('notaValor');
+    el.value     = dadosQR.valor_total;
+    el.className = 'ai-filled';
+    _mostrarTag('tagValor', '📱 qr', '#3b82f6');
+  }
+  if(dadosQR.estabelecimento) {
+    const el = document.getElementById('notaEstab');
+    el.value     = dadosQR.estabelecimento;
+    el.className = 'ai-filled';
+    _mostrarTag('tagEstab', '📱 qr', '#3b82f6');
+  }
+  if(dadosQR.data) {
+    document.getElementById('notaResultado').style.display = 'block';
+    document.getElementById('notaSaveBtn').style.display   = 'flex';
+  }
+  _buildCatSelector(dadosQR.categoria || 'outros');
+}
+
+// Aviso com botão de ação embutido
+function _notaAvisoComBotao(msg, onClickFn) {
+  const el  = document.getElementById('notaAviso');
+  const bid = 'notaAvisoBtnOCR';
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <span>${msg}</span>
+      <button id="${bid}"
+        style="padding:8px 16px;background:var(--accent);color:#000;border:none;
+               border-radius:8px;font-weight:bold;cursor:pointer;font-size:13px;
+               white-space:nowrap;flex-shrink:0;">
+        📷 Abrir câmera
+      </button>
+    </div>`;
+  el.className      = 'nota-aviso warn';
+  el.style.display  = 'block';
+
+  const btn = document.getElementById(bid);
+  if(btn && onClickFn) btn.addEventListener('click', onClickFn, {once: true});
+}
+
+// Extrai parâmetros diretamente da URL do QR sem depender da SEFAZ
+function _parsearURLQR(url) {
+  const resultado = { estabelecimento: null, valor_total: null, data: null, categoria: 'outros' };
+  try {
+    const params = new URLSearchParams(new URL(url).search);
+
+    // Valor — parâmetro vNF (padrão NFC-e brasileiro)
+    for(const k of ['vNF','vnf','vNf','vTotNF','valor']) {
+      const v = params.get(k);
+      if(v) {
+        const n = parseFloat(v.replace(',','.'));
+        if(n > 0 && n < 100000) { resultado.valor_total = n; break; }
+      }
     }
-  } catch(_) {
-    // Timeout ou bloqueio — silencioso
-  }
 
-  if(dadosSEFAZ) {
-    // SEFAZ funcionou — preencher campos
-    notaSwitchTab('foto');
-    _preencherCampos(dadosSEFAZ, false);
-    _notaAviso('📋 Dados extraídos da nota fiscal.', 'ok');
-  } else {
-    // SEFAZ bloqueou — abrir câmera automaticamente (sem mensagem de erro técnico)
-    // Salvar URL do QR para usar no OCR como dado extra
-    window._notaQRUrl = url;
-    notaSwitchTab('foto');
-    _notaAviso('📷 Câmera aberta — tire foto do cupom para completar.', 'warn');
-    setTimeout(() => document.getElementById('notaFotoInput').click(), 300);
+    // Data — parâmetro dEmi
+    for(const k of ['dEmi','demi','dhEmi','data']) {
+      const v = params.get(k);
+      if(v) {
+        // Formato ISO
+        const m1 = v.match(/(\d{4})-(\d{2})-(\d{2})/);
+        if(m1) { resultado.data = `${m1[1]}-${m1[2]}-${m1[3]}`; break; }
+        // Formato BR
+        const m2 = v.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+        if(m2) { resultado.data = `${m2[3]}-${m2[2]}-${m2[1]}`; break; }
+      }
+    }
+
+    // Estabelecimento — parâmetro xNome
+    for(const k of ['xNome','xnome','razaoSocial','nome']) {
+      const v = params.get(k);
+      if(v && v.length > 2) { resultado.estabelecimento = decodeURIComponent(v); break; }
+    }
+
+    // Categoria pelo estabelecimento
+    if(resultado.estabelecimento) {
+      resultado.categoria = _sugerirCategoria(resultado.estabelecimento);
+    }
+
+  } catch(e) {
+    console.warn('[QR-PARSE]', e.message);
   }
+  return resultado;
 }
 
 // ── Salvar despesa ────────────────────────────────────────────────────────────
