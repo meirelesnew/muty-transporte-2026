@@ -305,8 +305,22 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
       <div class="login-field">
         <label>Senha</label>
-        <input type="password" id="loginSenha" placeholder="••••••••" autocomplete="current-password"
-               onkeydown="if(event.key==='Enter') fazerLogin()">
+        <div style="position:relative;">
+          <input type="password" id="loginSenha" placeholder="••••••••"
+                 autocomplete="current-password" style="width:100%;padding-right:44px;"
+                 onkeydown="if(event.key==='Enter') fazerLogin()">
+          <button type="button" onclick="toggleSenha('loginSenha','olhoLogin')"
+                  style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                         background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
+                  id="olhoLogin">👁</button>
+        </div>
+      </div>
+      <div style="text-align:right;margin-bottom:12px;">
+        <button type="button" onclick="abrirEsqueciSenha()"
+                style="background:none;border:none;color:var(--muted);font-size:0.8rem;
+                       cursor:pointer;text-decoration:underline;">
+          Esqueci minha senha
+        </button>
       </div>
       <button class="login-btn" onclick="fazerLogin()" id="btnLogin">ENTRAR</button>
     </div>
@@ -326,9 +340,16 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
         <input type="email" id="cadEmail" placeholder="seu@email.com">
       </div>
       <div class="login-field">
-        <label>Senha (mínimo 6 caracteres)</label>
-        <input type="password" id="cadSenha" placeholder="••••••••"
-               onkeydown="if(event.key==='Enter') fazerCadastro()">
+        <label>Senha</label>
+        <div style="position:relative;">
+          <input type="password" id="cadSenha" placeholder="••••••••" style="width:100%;padding-right:44px;"
+                 onkeydown="if(event.key==='Enter') fazerCadastro()">
+          <button type="button" onclick="toggleSenha('cadSenha','olhoCad')"
+                  style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                         background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
+                  id="olhoCad">👁</button>
+        </div>
+        <div id="forçaSenha" style="margin-top:6px;font-size:11px;color:var(--muted);"></div>
       </div>
       <button class="login-btn" onclick="fazerCadastro()" id="btnCadastro">CRIAR CONTA</button>
     </div>
@@ -1605,6 +1626,107 @@ function verificarSessao() {
 }
 // ══ FIM AUTENTICAÇÃO ════════════════════════════════════════════════════════
 
+
+// ── TOGGLE MOSTRAR/OCULTAR SENHA ─────────────────────────────────────────────
+function toggleSenha(inputId, btnId) {
+  const input = document.getElementById(inputId);
+  const btn   = document.getElementById(btnId);
+  if(input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';  // ícone muda para indicar que está visível
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+// ── INDICADOR DE FORÇA DA SENHA ───────────────────────────────────────────────
+function checarForcaSenha(senha) {
+  const el = document.getElementById('forçaSenha');
+  if(!el || !senha) { if(el) el.textContent = ''; return; }
+
+  let pontos = 0;
+  const checks = [
+    { ok: senha.length >= 6,          txt: '6+ chars' },
+    { ok: /[A-Z]/.test(senha),         txt: 'Maiúscula' },
+    { ok: /[a-z]/.test(senha),         txt: 'Minúscula' },
+    { ok: /\d/.test(senha),            txt: 'Número' },
+    { ok: /[!@#$%^&*(),.?]/.test(senha), txt: 'Especial' },
+  ];
+
+  checks.forEach(c => { if(c.ok) pontos++; });
+
+  const cores  = ['#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981'];
+  const textos = ['Muito fraca','Fraca','Média','Boa','Forte ✅'];
+
+  el.innerHTML = `<span style="color:${cores[pontos-1] || '#64748b'}">
+    ${textos[pontos-1] || 'Digite a senha'} —
+    ${checks.filter(c=>!c.ok).map(c=>`<span style="opacity:.7">${c.txt}</span>`).join(' ')}
+  </span>`;
+}
+
+// Escuta digitação no campo de senha do cadastro
+document.addEventListener('DOMContentLoaded', () => {
+  const cadSenha = document.getElementById('cadSenha');
+  if(cadSenha) cadSenha.addEventListener('input', e => checarForcaSenha(e.target.value));
+});
+
+// ── ESQUECI MINHA SENHA ───────────────────────────────────────────────────────
+function abrirEsqueciSenha() {
+  // Pré-preenche com email que foi digitado
+  const email = document.getElementById('loginEmail')?.value || '';
+  document.getElementById('esqueciEmail').value = email;
+  document.getElementById('esqueciMsg').style.display = 'none';
+  document.getElementById('esqueciModal').style.display = 'flex';
+}
+
+function fecharEsqueciSenha() {
+  document.getElementById('esqueciModal').style.display = 'none';
+}
+
+async function enviarResetSenha() {
+  const email = document.getElementById('esqueciEmail').value.trim();
+  const btn   = document.getElementById('btnEsqueci');
+  const msg   = document.getElementById('esqueciMsg');
+
+  if(!email) {
+    msg.textContent    = 'Digite seu email.';
+    msg.style.cssText  = 'display:block;background:rgba(239,68,68,.15);color:#ef4444;padding:10px;border-radius:8px;font-size:0.85rem;';
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = 'ENVIANDO...';
+
+  try {
+    const r = await fetch(`${API_URL}/v2/forgot-password`, {
+      method:  'POST',
+      headers: {'Content-Type':'application/json'},
+      body:    JSON.stringify({ email })
+    });
+    const data = await r.json();
+
+    msg.textContent   = data.message;
+    msg.style.cssText = `display:block;padding:10px;border-radius:8px;font-size:0.85rem;
+      background:${data.status==='success' ? 'rgba(16,185,129,.15)' : 'rgba(239,68,68,.15)'};
+      color:${data.status==='success' ? '#10b981' : '#ef4444'};`;
+
+    if(data.status === 'success') {
+      btn.textContent = '✅ ENVIADO';
+      setTimeout(fecharEsqueciSenha, 3000);
+    } else {
+      btn.disabled    = false;
+      btn.textContent = 'ENVIAR LINK';
+    }
+  } catch(e) {
+    msg.textContent   = 'Sem conexão com o servidor.';
+    msg.style.cssText = 'display:block;background:rgba(239,68,68,.15);color:#ef4444;padding:10px;border-radius:8px;font-size:0.85rem;';
+    btn.disabled    = false;
+    btn.textContent = 'ENVIAR LINK';
+  }
+}
+// ── FIM ESQUECI SENHA ─────────────────────────────────────────────────────────
+
 // ── INIT: aguardar Firebase ou iniciar com localStorage ──
 // Verificar sessão — se logado carrega dados, senão mostra login
 if(verificarSessao()) {
@@ -1661,6 +1783,40 @@ if(verificarSessao()) {
     <div style="display:flex;gap:12px;margin-top:20px;justify-content:flex-end;">
       <button class="btn-secondary" onclick="closeQRModalBtn()">Cancelar</button>
       <button id="qrSaveBtn" class="btn-primary" onclick="salvarQR()" style="display:none;">✓ SALVAR DESPESA</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL ESQUECI SENHA ── -->
+<div id="esqueciModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);
+     z-index:10000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;
+              padding:32px;width:100%;max-width:380px;">
+    <h3 style="font-family:var(--font-display);letter-spacing:1px;margin-bottom:16px;">
+      🔑 ESQUECI MINHA SENHA
+    </h3>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:20px;">
+      Digite seu email cadastrado. Enviaremos um link para redefinir sua senha.
+    </p>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="esqueciEmail" placeholder="seu@email.com" class="form-input"
+             style="width:100%;" onkeydown="if(event.key==='Enter') enviarResetSenha()">
+    </div>
+    <div id="esqueciMsg" style="margin:10px 0;font-size:0.85rem;display:none;
+         padding:10px;border-radius:8px;"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button onclick="fecharEsqueciSenha()"
+              style="flex:1;padding:10px;background:transparent;border:1px solid var(--border);
+                     border-radius:8px;color:var(--muted);cursor:pointer;">
+        Cancelar
+      </button>
+      <button onclick="enviarResetSenha()" id="btnEsqueci"
+              style="flex:2;padding:10px;background:var(--accent);color:#000;border:none;
+                     border-radius:8px;font-weight:bold;cursor:pointer;font-family:var(--font-display);
+                     letter-spacing:1px;">
+        ENVIAR LINK
+      </button>
     </div>
   </div>
 </div>
