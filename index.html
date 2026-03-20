@@ -327,6 +327,12 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 .timeout-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:12px;overflow:hidden;}
 .timeout-fill{height:100%;background:var(--accent);border-radius:2px;
   transition:width linear;}
+
+/* ── Campos baixa confiança ─── */
+.nota-campo input.ai-filled.baixa {
+  border-color: rgba(245,158,11,0.5);
+  background: rgba(245,158,11,0.05);
+}
 </style>
 <!-- html5-qrcode library -->
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -2179,68 +2185,77 @@ async function processarFotoNota(event) {
   if(!file) return;
   event.target.value = '';
 
-  // Trava múltiplas execuções
+  // Trava múltiplas execuções simultâneas
   if(notaOCRRodando) {
     cancelarOCR();
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 150));
   }
   notaOCRRodando = true;
+  notaOCRController = new AbortController();
 
-  // Preview da foto
+  // ── Preview da foto ───────────────────────────────────────────────────────
   const reader = new FileReader();
   reader.onload = async (e) => {
     const base64   = e.target.result.split(',')[1];
     const mimeType = file.type || 'image/jpeg';
 
-    // Mostrar preview
     const preview = document.getElementById('notaPreview');
     preview.src           = e.target.result;
     preview.style.display = 'block';
     document.getElementById('notaDropContent').style.display = 'none';
-
-    // Mostrar loading + barra de timeout
-    document.getElementById('notaLoading').style.display = 'block';
+    document.getElementById('notaLoading').style.display     = 'block';
+    document.getElementById('notaTimeoutBar').style.display  = 'block';
     _iniciarTimeoutBar(GEMINI_TIMEOUT);
     _notaAviso('', '');
 
-    // Timer de timeout — se Gemini demorar, libera manual
+    // Timeout de segurança — libera manual após 5s
     notaTimeoutTimer = setTimeout(() => {
       if(notaOCRRodando) {
         cancelarOCR();
-        _notaAviso('⏱ OCR demorou mais que 5s. Preencha os campos ou tente novamente.', 'warn');
+        _notaAviso('⏱ OCR demorou mais que 5s. Preencha os campos manualmente.', 'warn');
       }
     }, GEMINI_TIMEOUT);
 
-    // Criar AbortController
-    notaOCRController = new AbortController();
-
     try {
+      // ── Chamada Gemini com JSON mode e temperature baixa ─────────────────
+      const payload = {
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: mimeType, data: base64 } },
+            { text: `Analise este cupom fiscal brasileiro (NFC-e) e retorne APENAS um JSON válido, sem nenhum texto adicional:
+
+{
+  "estabelecimento": "string com nome da loja ou null",
+  "valor_total": numero_decimal_com_ponto_ou_null,
+  "data": "YYYY-MM-DD ou null",
+  "confianca": numero_entre_0_e_1
+}
+
+Regras obrigatórias:
+- valor_total deve ser o TOTAL FINAL (não subtotal nem itens individuais)
+- remover R$ e vírgulas, usar ponto decimal: 45,90 → 45.90
+- data deve ser a data da compra em formato ISO: 23/03/2026 → 2026-03-23
+- se houver dúvida sobre qualquer campo, retornar null naquele campo
+- confianca: 1.0 se tudo claro, 0.5 se imagem parcialmente legível, 0.2 se muito difícil
+- NÃO retornar texto explicativo, NÃO usar markdown, NÃO usar blocos de código
+- retornar APENAS o JSON puro` }
+          ]
+        }],
+        generationConfig: {
+          temperature:      0.1,
+          topP:             0.8,
+          topK:             10,
+          responseMimeType: "application/json",
+        }
+      };
+
       const resp = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY_NOTA}`,
         {
           method:  'POST',
           headers: {'Content-Type': 'application/json'},
           signal:  notaOCRController.signal,
-          body: JSON.stringify({
-            contents: [{parts: [
-              {inline_data: {mime_type: mimeType, data: base64}},
-              {text: `Analise este cupom fiscal brasileiro e retorne SOMENTE um JSON válido.
-
-Extraia:
-1. "estabelecimento": nome da loja/empresa (topo do cupom)
-2. "valor": valor total como número decimal (ex: 45.90) - procure TOTAL, VL TOTAL, VALOR TOTAL
-3. "categoria": combustivel | manutencao | impostos | outros
-
-Regras:
-- Imagem escura ou torta: tente assim mesmo
-- Valor TOTAL geralmente é o maior número no final
-- Vírgula para ponto: 45,90 → 45.90
-- NUNCA retorne 0 se houver número visível
-
-Resposta APENAS JSON (sem markdown, sem explicação):
-{"estabelecimento":"Nome","valor":45.90,"categoria":"outros"}`}
-            ]}]}
-          )
+          body:    JSON.stringify(payload),
         }
       );
 
@@ -2249,29 +2264,17 @@ Resposta APENAS JSON (sem markdown, sem explicação):
       document.getElementById('notaLoading').style.display    = 'none';
       document.getElementById('notaTimeoutBar').style.display = 'none';
 
-      if(!resp.ok) throw new Error('Gemini HTTP ' + resp.status);
-
-      const data = await resp.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-
-      let parsed = {};
-      try {
-        parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
-      } catch(_) {
-        // Tentar extrair JSON do texto
-        const m = text.match(/\{[^}]+\}/);
-        if(m) { try { parsed = JSON.parse(m[0]); } catch(__) {} }
+      if(!resp.ok) {
+        const errBody = await resp.json().catch(() => ({}));
+        throw new Error(`Gemini ${resp.status}: ${errBody?.error?.message || 'erro desconhecido'}`);
       }
 
-      if(parsed.estabelecimento || parsed.valor) {
-        _preencherCampos(parsed, true);
-        _notaAviso('🤖 Gemini identificou os dados — confirme e salve.', 'ok');
-      } else {
-        // Gemini não retornou dados úteis — modo manual
-        document.getElementById('notaResultado').style.display = 'block';
-        document.getElementById('notaSaveBtn').style.display   = 'flex';
-        _notaAviso('⚠️ Não foi possível ler automaticamente. Preencha os campos.', 'warn');
-      }
+      const apiData = await resp.json();
+      const rawText = apiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+      // ── Pós-processamento em 3 camadas ────────────────────────────────────
+      const resultado = _processarRespostaGemini(rawText);
+      _aplicarResultado(resultado);
 
     } catch(err) {
       clearTimeout(notaTimeoutTimer);
@@ -2281,14 +2284,181 @@ Resposta APENAS JSON (sem markdown, sem explicação):
 
       if(err.name === 'AbortError') return; // cancelado pelo usuário
 
-      // Falha do Gemini — modo manual imediato
-      document.getElementById('notaResultado').style.display = 'block';
-      document.getElementById('notaSaveBtn').style.display   = 'flex';
-      _notaAviso('⚠️ OCR indisponível. Preencha os campos manualmente.', 'warn');
-      console.warn('[OCR] Erro Gemini:', err.message);
+      console.warn('[OCR] Erro:', err.message);
+      // Qualquer erro → modo manual imediato
+      _aplicarResultado({ fonte: 'erro', motivo: err.message });
     }
   };
   reader.readAsDataURL(file);
+}
+
+// ── Camada 1: Tentar parsear JSON do Gemini ──────────────────────────────────
+function _processarRespostaGemini(rawText) {
+  if(!rawText || rawText.trim() === '') {
+    return { fonte: 'vazio' };
+  }
+
+  // Tentativa 1: JSON direto (modo JSON ativo)
+  try {
+    const dados = JSON.parse(rawText.trim());
+    return _validarDadosGemini(dados, 'gemini_json');
+  } catch(_) {}
+
+  // Tentativa 2: extrair JSON de texto com markdown ou texto livre
+  try {
+    const match = rawText.match(/\{[\s\S]*?\}/);
+    if(match) {
+      const dados = JSON.parse(match[0]);
+      return _validarDadosGemini(dados, 'gemini_extraido');
+    }
+  } catch(_) {}
+
+  // Tentativa 3: regex fallback para valor e data
+  return _fallbackRegex(rawText);
+}
+
+// ── Camada 2: Validar e normalizar campos ─────────────────────────────────────
+function _validarDadosGemini(dados, fonte) {
+  const resultado = { fonte, campos: {}, confianca: dados.confianca || 0, avisos: [] };
+
+  // Estabelecimento
+  if(dados.estabelecimento && typeof dados.estabelecimento === 'string' && dados.estabelecimento.trim().length > 1) {
+    resultado.campos.estabelecimento = dados.estabelecimento.trim();
+  } else {
+    resultado.avisos.push('estabelecimento');
+  }
+
+  // Valor total
+  const val = parseFloat(String(dados.valor_total || '').replace(',', '.'));
+  if(!isNaN(val) && val > 0 && val < 100000) {
+    resultado.campos.valor_total = val;
+  } else {
+    resultado.avisos.push('valor_total');
+  }
+
+  // Data
+  if(dados.data && /^\d{4}-\d{2}-\d{2}$/.test(dados.data)) {
+    const d = new Date(dados.data + 'T12:00:00');
+    if(!isNaN(d.getTime()) && d.getFullYear() >= 2020) {
+      resultado.campos.data = dados.data;
+    } else {
+      resultado.avisos.push('data');
+    }
+  }
+
+  // Categoria sugerida pelo estabelecimento
+  resultado.campos.categoria = _sugerirCategoria(resultado.campos.estabelecimento || '');
+
+  return resultado;
+}
+
+// ── Camada 3: Regex fallback ──────────────────────────────────────────────────
+function _fallbackRegex(texto) {
+  const resultado = { fonte: 'regex', campos: {}, confianca: 0.3, avisos: [] };
+
+  // Valor — padrões brasileiros
+  const padroes = [
+    /(?:TOTAL|VALOR TOTAL|TOTAL A PAGAR|VL TOTAL)[^\d]*(\d{1,6}[,.]\d{2})/i,
+    /R\$\s*(\d{1,6}[,.]\d{2})/,
+  ];
+  for(const p of padroes) {
+    const m = texto.match(p);
+    if(m) {
+      const v = parseFloat(m[1].replace(',', '.'));
+      if(v > 0 && v < 100000) { resultado.campos.valor_total = v; break; }
+    }
+  }
+
+  // Data dd/mm/yyyy
+  const dm = texto.match(/(\d{2}\/\d{2}\/\d{4})/);
+  if(dm) {
+    const [d, mo, y] = dm[1].split('/');
+    resultado.campos.data = `${y}-${mo}-${d}`;
+  }
+
+  resultado.campos.categoria = 'outros';
+  if(!resultado.campos.valor_total) resultado.avisos.push('valor_total');
+
+  return resultado;
+}
+
+// ── Sugerir categoria pelo nome ───────────────────────────────────────────────
+function _sugerirCategoria(nome) {
+  const n = (nome || '').toLowerCase();
+  if(/posto|gnv|combusti|gasolina|etanol|ipiranga|shell|petrobras/.test(n)) return 'combustivel';
+  if(/mecanica|auto|pneu|borracha|oficina|manutencao/.test(n))              return 'manutencao';
+  if(/detran|ipva|iptu|multa|tributo|sefaz/.test(n))                        return 'impostos';
+  return 'outros';
+}
+
+// ── Aplicar resultado na UI ───────────────────────────────────────────────────
+function _aplicarResultado(resultado) {
+  document.getElementById('notaResultado').style.display = 'block';
+  document.getElementById('notaSaveBtn').style.display   = 'flex';
+
+  const { fonte, campos = {}, confianca = 0, avisos = [], motivo } = resultado;
+  const altaConfianca = confianca >= 0.7;
+
+  // Erro ou vazio → modo manual puro
+  if(fonte === 'erro' || fonte === 'vazio') {
+    _notaAviso(
+      fonte === 'erro'
+        ? `⚠️ OCR indisponível (${motivo || 'erro'}). Preencha manualmente.`
+        : '⚠️ Não foi possível ler o cupom. Preencha manualmente.',
+      'warn'
+    );
+    _buildCatSelector('outros');
+    return;
+  }
+
+  // Preencher estabelecimento
+  if(campos.estabelecimento) {
+    const input = document.getElementById('notaEstab');
+    input.value     = campos.estabelecimento;
+    input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
+    _mostrarTag('tagEstab', altaConfianca ? '🤖 IA' : '⚠️ baixa confiança',
+                 altaConfianca ? '#10b981' : '#f59e0b');
+  }
+
+  // Preencher valor
+  if(campos.valor_total) {
+    const input = document.getElementById('notaValor');
+    input.value     = campos.valor_total;
+    input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
+    _mostrarTag('tagValor', altaConfianca ? '🤖 IA' : '⚠️ baixa confiança',
+                 altaConfianca ? '#10b981' : '#f59e0b');
+  }
+
+  // Categoria
+  _buildCatSelector(campos.categoria || 'outros');
+  if(campos.categoria) {
+    _mostrarTag('tagCat', '🤖 IA', '#10b981');
+  }
+
+  // Aviso geral
+  const temDados = campos.estabelecimento || campos.valor_total;
+  if(!temDados) {
+    _notaAviso('⚠️ Não foi possível extrair dados. Preencha manualmente.', 'warn');
+  } else if(!altaConfianca) {
+    _notaAviso('⚠️ Dados extraídos com baixa confiança — verifique antes de salvar.', 'warn');
+  } else if(avisos.length > 0) {
+    _notaAviso(`🤖 Alguns campos não foram encontrados: ${avisos.join(', ')}. Complete manualmente.`, 'warn');
+  } else {
+    _notaAviso('🤖 Dados extraídos com sucesso — confirme e salve.', 'ok');
+  }
+
+  _salvarRascunho();
+}
+
+// ── Mostrar tag colorida no label ─────────────────────────────────────────────
+function _mostrarTag(id, texto, cor) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent      = texto;
+  el.style.display    = 'inline-block';
+  el.style.background = cor + '22';
+  el.style.color      = cor;
+  el.style.border     = `1px solid ${cor}44`;
 }
 
 // ── QR CODE — iniciar scanner ─────────────────────────────────────────────────
