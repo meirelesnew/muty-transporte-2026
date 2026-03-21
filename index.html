@@ -420,8 +420,21 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     <div class="header-inner">
       <!-- Barra usuário logado -->
       <div class="login-user-bar" id="userBar" style="display:none;">
-        <span>👤 <strong id="userNome"></strong></span>
-        <span id="userEmpresa" style="font-size:0.8rem;"></span>
+        <div onclick="abrirPerfil()"
+             style="display:flex;align-items:center;gap:8px;cursor:pointer;
+                    padding:4px 8px;border-radius:8px;transition:background 0.2s;"
+             onmouseover="this.style.background='rgba(245,158,11,0.1)'"
+             onmouseout="this.style.background='transparent'">
+          <div id="userFotoEl"
+               style="width:32px;height:32px;border-radius:50%;background:#1e293b;
+                      border:2px solid #f59e0b;overflow:hidden;display:flex;
+                      align-items:center;justify-content:center;font-size:1.1rem;
+                      flex-shrink:0;">👤</div>
+          <div>
+            <div style="font-size:0.85rem;font-weight:600;" id="userNome"></div>
+            <div style="font-size:0.7rem;color:#64748b;" id="userEmpresa"></div>
+          </div>
+        </div>
         <button class="logout-btn" onclick="fazerLogout()">SAIR</button>
       </div>
 
@@ -1619,9 +1632,8 @@ function loginMsg(texto, tipo) {
 function mostrarDashboard(user) {
   document.getElementById('loginScreen').style.display = 'none';
   // Atualizar barra de usuário no header
-  document.getElementById('userBar').style.display  = 'flex';
-  document.getElementById('userNome').textContent   = user.nome    || user.email;
-  document.getElementById('userEmpresa').textContent = user.empresa ? '— ' + user.empresa : '';
+  document.getElementById('userBar').style.display = 'flex';
+  _atualizarHeader(user);
 }
 
 // Logout — limpa token e recarrega a página
@@ -1690,9 +1702,9 @@ async function fazerCadastro() {
     const data = await r.json();
 
     if(data.status === 'success') {
-      loginMsg('✅ Conta criada! Bem-vindo, ' + data.data.nome + '!', 'ok');
-      salvarAuth(data.data.token, data.data);
-      setTimeout(() => { mostrarDashboard(data.data); loadAllData(); }, 1200);
+      // Mostrar tela de verificação — não logar ainda
+      _emailCadastrado = email;
+      mostrarTelaVerificacao(email);
     } else {
       loginMsg(data.message || 'Erro ao cadastrar.', 'erro');
     }
@@ -2643,6 +2655,183 @@ function _comprimirImagem(file, maxLado, qualidade) {
 }
 // ── FIM Compressor ────────────────────────────────────────────────────────────
 
+
+// ── VERIFICAÇÃO DE EMAIL ──────────────────────────────────────────────────────
+let _emailCadastrado = '';
+
+function mostrarTelaVerificacao(email) {
+  _emailCadastrado = email;
+  document.getElementById('verificacaoEmail').textContent = email;
+  document.getElementById('verificacaoAviso').style.display = 'none';
+  document.getElementById('loginScreen').style.display     = 'none';
+  document.getElementById('verificacaoScreen').style.display = 'flex';
+}
+
+function voltarParaLogin() {
+  document.getElementById('verificacaoScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display       = 'flex';
+  // Mostrar aba de login
+  switchLoginTab('login');
+}
+
+async function reenviarEmailVerificacao() {
+  const aviso = document.getElementById('verificacaoAviso');
+  const email = _emailCadastrado;
+  if(!email) return;
+
+  aviso.textContent   = '⏳ Reenviando...';
+  aviso.style.cssText = 'display:block;background:rgba(96,165,250,0.1);color:#60a5fa;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
+
+  try {
+    const r = await fetch(`${API_URL}/v2/resend-verify`, {
+      method:  'POST',
+      headers: {'Content-Type': 'application/json'},
+      body:    JSON.stringify({ email })
+    });
+    const d = await r.json();
+    if(d.status === 'success') {
+      aviso.textContent   = '✅ Email reenviado! Verifique sua caixa de entrada.';
+      aviso.style.cssText = 'display:block;background:rgba(16,185,129,0.1);color:#10b981;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
+    } else {
+      aviso.textContent   = d.message || 'Erro ao reenviar.';
+      aviso.style.cssText = 'display:block;background:rgba(239,68,68,0.1);color:#ef4444;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
+    }
+  } catch(e) {
+    aviso.textContent   = 'Sem conexão com o servidor.';
+    aviso.style.cssText = 'display:block;background:rgba(239,68,68,0.1);color:#ef4444;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
+  }
+}
+// ── FIM VERIFICAÇÃO ───────────────────────────────────────────────────────────
+
+
+// ── PERFIL DO USUÁRIO ─────────────────────────────────────────────────────────
+let _perfilFotoBase64 = null;
+
+function abrirPerfil() {
+  const user = loadLS('muty_auth_user', null);
+  if(!user) return;
+
+  // Preencher campos com dados atuais
+  document.getElementById('perfilNickname').value = user.nickname || '';
+  document.getElementById('perfilNome').value     = user.nome     || '';
+  document.getElementById('perfilEmpresa').value  = user.empresa  || '';
+  document.getElementById('perfilTelefone').value = user.telefone || '';
+
+  // Foto
+  const fotoEl = document.getElementById('perfilFotoContainer');
+  if(user.foto_url) {
+    fotoEl.innerHTML = `<img src="${user.foto_url}" style="width:100%;height:100%;object-fit:cover;">`;
+  } else {
+    fotoEl.innerHTML = '👤';
+  }
+
+  _perfilFotoBase64 = null;
+  document.getElementById('perfilMsg').style.display = 'none';
+  document.getElementById('perfilModal').style.display = 'flex';
+}
+
+function fecharPerfil() {
+  document.getElementById('perfilModal').style.display = 'none';
+}
+
+function processarFotoPerfil(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  event.target.value = '';
+
+  // Comprimir foto de perfil
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    const lado   = Math.min(img.width, img.height, 300);
+    canvas.width = canvas.height = lado;
+    const ctx = canvas.getContext('2d');
+    // Recortar centro
+    const ox = (img.width  - lado) / 2;
+    const oy = (img.height - lado) / 2;
+    ctx.drawImage(img, ox, oy, lado, lado, 0, 0, lado, lado);
+    const b64 = canvas.toDataURL('image/jpeg', 0.8);
+    _perfilFotoBase64 = b64;
+    document.getElementById('perfilFotoContainer').innerHTML =
+      `<img src="${b64}" style="width:100%;height:100%;object-fit:cover;">`;
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(file);
+}
+
+async function salvarPerfil() {
+  const btn = document.getElementById('btnSalvarPerfil');
+  const msg = document.getElementById('perfilMsg');
+  const token = loadLS('muty_auth_token', null);
+  if(!token) return;
+
+  btn.disabled    = true;
+  btn.textContent = 'SALVANDO...';
+
+  const payload = {
+    nickname: document.getElementById('perfilNickname').value.trim(),
+    nome:     document.getElementById('perfilNome').value.trim(),
+    empresa:  document.getElementById('perfilEmpresa').value.trim(),
+    telefone: document.getElementById('perfilTelefone').value.trim(),
+  };
+
+  // Foto: se nova foto foi escolhida, enviar base64
+  if(_perfilFotoBase64) {
+    payload.foto_url = _perfilFotoBase64;
+  }
+
+  try {
+    const r = await fetch(`${API_URL}/v2/me`, {
+      method:  'PUT',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+    const d = await r.json();
+
+    if(d.status === 'success') {
+      // Atualizar dados locais
+      const userAtual = loadLS('muty_auth_user', {});
+      const atualizado = {...userAtual, ...d.data};
+      saveLS('muty_auth_user', atualizado);
+
+      // Atualizar header
+      _atualizarHeader(atualizado);
+
+      msg.textContent   = '✅ Perfil salvo com sucesso!';
+      msg.style.cssText = 'display:block;background:rgba(16,185,129,0.1);color:#10b981;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
+      setTimeout(fecharPerfil, 1500);
+    } else {
+      msg.textContent   = d.message || 'Erro ao salvar.';
+      msg.style.cssText = 'display:block;background:rgba(239,68,68,0.1);color:#ef4444;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
+    }
+  } catch(e) {
+    msg.textContent   = 'Sem conexão com o servidor.';
+    msg.style.cssText = 'display:block;background:rgba(239,68,68,0.1);color:#ef4444;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'SALVAR PERFIL';
+  }
+}
+
+function _atualizarHeader(user) {
+  const nomeExibir = user.nickname || user.nome || user.email || '';
+  document.getElementById('userNome').textContent    = nomeExibir;
+  document.getElementById('userEmpresa').textContent = user.empresa || '';
+
+  const fotoEl = document.getElementById('userFotoEl');
+  if(fotoEl) {
+    if(user.foto_url) {
+      fotoEl.innerHTML = `<img src="${user.foto_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else {
+      fotoEl.textContent = '👤';
+    }
+  }
+}
+// ── FIM PERFIL ────────────────────────────────────────────────────────────────
+
 // ── INIT: aguardar Firebase ou iniciar com localStorage ──
 // Aguardar DOM completo antes de verificar tokens e sessão
 document.addEventListener('DOMContentLoaded', function() {
@@ -2808,6 +2997,143 @@ document.addEventListener('DOMContentLoaded', function() {
                    font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;margin-top:4px;">
       SALVAR NOVA SENHA
     </button>
+  </div>
+</div>
+
+<!-- ══ TELA VERIFICAÇÃO DE EMAIL ══════════════════════════════════════════ -->
+<div id="verificacaoScreen" style="display:none;position:fixed;inset:0;
+     background:#0a0e17;z-index:9999;align-items:center;justify-content:center;
+     padding:20px;">
+  <div style="background:#111827;border:1px solid #1f2d42;border-radius:20px;
+              padding:36px;width:100%;max-width:420px;text-align:center;">
+    <div style="font-size:56px;margin-bottom:12px;">📧</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
+               font-size:1.8rem;color:#f59e0b;margin:0 0 12px;">
+      VERIFIQUE SEU EMAIL
+    </h2>
+    <p style="color:#94a3b8;font-size:0.9rem;line-height:1.6;margin-bottom:8px;">
+      Enviamos um link de confirmação para:
+    </p>
+    <p id="verificacaoEmail" style="color:#60a5fa;font-weight:600;
+       font-size:1rem;margin-bottom:24px;word-break:break-all;"></p>
+    <p style="color:#64748b;font-size:0.82rem;margin-bottom:28px;">
+      Clique no link do email para ativar sua conta.<br>
+      Verifique a caixa de spam se não encontrar.
+    </p>
+
+    <div id="verificacaoAviso" style="display:none;padding:10px 14px;
+         border-radius:8px;font-size:0.85rem;margin-bottom:16px;"></div>
+
+    <button onclick="reenviarEmailVerificacao()"
+            style="width:100%;padding:12px;background:#1e3a5f;color:#60a5fa;
+                   border:1px solid #2d5a8f;border-radius:10px;cursor:pointer;
+                   font-size:0.9rem;margin-bottom:10px;">
+      🔄 Reenviar email de verificação
+    </button>
+    <button onclick="voltarParaLogin()"
+            style="width:100%;padding:10px;background:transparent;
+                   border:1px solid #334155;border-radius:10px;
+                   color:#64748b;cursor:pointer;font-size:0.85rem;">
+      ← Voltar para o login
+    </button>
+  </div>
+</div>
+
+<!-- ══ MODAL PERFIL ═══════════════════════════════════════════════════════ -->
+<div id="perfilModal" style="display:none;position:fixed;inset:0;
+     background:rgba(0,0,0,0.7);z-index:9000;align-items:center;
+     justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="background:#111827;border:1px solid #1f2d42;border-radius:20px;
+              padding:28px;width:100%;max-width:420px;margin:auto;">
+
+    <!-- Header modal -->
+    <div style="display:flex;justify-content:space-between;align-items:center;
+                margin-bottom:24px;">
+      <h3 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
+                 font-size:1.4rem;margin:0;">MEU PERFIL</h3>
+      <button onclick="fecharPerfil()"
+              style="background:none;border:none;color:#64748b;
+                     font-size:1.5rem;cursor:pointer;">✕</button>
+    </div>
+
+    <!-- Foto de perfil -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <div id="perfilFotoContainer" onclick="document.getElementById('perfilFotoInput').click()"
+           style="width:90px;height:90px;border-radius:50%;background:#1e293b;
+                  border:3px solid #f59e0b;margin:0 auto 10px;cursor:pointer;
+                  overflow:hidden;display:flex;align-items:center;justify-content:center;
+                  font-size:2.5rem;">
+        👤
+      </div>
+      <input type="file" id="perfilFotoInput" accept="image/*"
+             style="display:none" onchange="processarFotoPerfil(event)">
+      <p style="color:#64748b;font-size:11px;margin:0;">
+        Toque para alterar a foto
+      </p>
+    </div>
+
+    <!-- Campos -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <div>
+        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
+                      color:#64748b;display:block;margin-bottom:5px;">Nickname</label>
+        <input type="text" id="perfilNickname" maxlength="30" placeholder="@seunick"
+               style="width:100%;padding:10px 14px;background:#0a0e17;
+                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+                      font-size:0.95rem;box-sizing:border-box;outline:none;">
+      </div>
+
+      <div>
+        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
+                      color:#64748b;display:block;margin-bottom:5px;">Nome completo</label>
+        <input type="text" id="perfilNome" maxlength="80"
+               style="width:100%;padding:10px 14px;background:#0a0e17;
+                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+                      font-size:0.95rem;box-sizing:border-box;outline:none;">
+      </div>
+
+      <div>
+        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
+                      color:#64748b;display:block;margin-bottom:5px;">Empresa</label>
+        <input type="text" id="perfilEmpresa" maxlength="80"
+               style="width:100%;padding:10px 14px;background:#0a0e17;
+                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+                      font-size:0.95rem;box-sizing:border-box;outline:none;">
+      </div>
+
+      <div>
+        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
+                      color:#64748b;display:block;margin-bottom:5px;">Telefone</label>
+        <input type="tel" id="perfilTelefone" maxlength="20" placeholder="(21) 99999-9999"
+               style="width:100%;padding:10px 14px;background:#0a0e17;
+                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+                      font-size:0.95rem;box-sizing:border-box;outline:none;">
+      </div>
+
+    </div>
+
+    <!-- Mensagem feedback -->
+    <div id="perfilMsg" style="display:none;margin-top:14px;padding:10px 14px;
+         border-radius:8px;font-size:0.85rem;"></div>
+
+    <!-- Botões -->
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="fecharPerfil()"
+              style="flex:1;padding:11px;background:transparent;
+                     border:1px solid #334155;border-radius:10px;
+                     color:#64748b;cursor:pointer;">
+        Cancelar
+      </button>
+      <button onclick="salvarPerfil()" id="btnSalvarPerfil"
+              style="flex:2;padding:11px;background:#f59e0b;color:#000;border:none;
+                     border-radius:10px;font-weight:700;cursor:pointer;
+                     font-family:'Bebas Neue',sans-serif;letter-spacing:1px;
+                     font-size:1rem;">
+        SALVAR PERFIL
+      </button>
+    </div>
+
   </div>
 </div>
 </body>
