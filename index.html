@@ -2115,6 +2115,7 @@ function _preencherCampos(dados, viaIA = true) {
 }
 
 // ââ Cancelar OCR (manual ou timeout) âââââââââââââââââââââââââââââââââââââââââ
+// Cancela processamento OCR em andamento
 function cancelarOCR() {
   if(notaOCRController) { notaOCRController.abort(); notaOCRController = null; }
   if(notaTimeoutTimer)  { clearTimeout(notaTimeoutTimer); notaTimeoutTimer = null; }
@@ -2632,6 +2633,7 @@ function salvarNota() {
 
 
 // ââ Compressor de imagem via Canvas ââââââââââââââââââââââââââââââââââââââââââ
+// Comprime imagem via Canvas para reduzir tamanho antes do OCR
 function _comprimirImagem(file, maxLado, qualidade) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -2659,6 +2661,7 @@ function _comprimirImagem(file, maxLado, qualidade) {
 // ââ VERIFICAÃÃO DE EMAIL ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 let _emailCadastrado = '';
 
+// Exibe tela pedindo confirmação de email após cadastro
 function mostrarTelaVerificacao(email) {
   _emailCadastrado = email;
   document.getElementById('verificacaoEmail').textContent = email;
@@ -2707,6 +2710,7 @@ async function reenviarEmailVerificacao() {
 // ââ PERFIL DO USUÃRIO âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 let _perfilFotoBase64 = null;
 
+// Abre o modal de perfil e preenche campos com dados atuais do usuário
 function abrirPerfil() {
   const user = loadLS('muty_auth_user', null);
   if(!user) return;
@@ -2730,10 +2734,12 @@ function abrirPerfil() {
   document.getElementById('perfilModal').style.display = 'flex';
 }
 
+// Fecha o modal de perfil sem salvar
 function fecharPerfil() {
   document.getElementById('perfilModal').style.display = 'none';
 }
 
+// Comprime e recorta a foto de perfil em círculo 300x300px
 function processarFotoPerfil(event) {
   const file = event.target.files[0];
   if(!file) return;
@@ -2759,6 +2765,7 @@ function processarFotoPerfil(event) {
   img.src = URL.createObjectURL(file);
 }
 
+// Salva alterações do perfil via PUT /v2/me e atualiza header
 async function salvarPerfil() {
   const btn    = document.getElementById('btnSalvarPerfil');
   const msgEl  = document.getElementById('perfilMsg');
@@ -2827,6 +2834,7 @@ async function salvarPerfil() {
   }
 }
 
+// Atualiza nome/empresa/foto no header após login ou edição de perfil
 function _atualizarHeader(user) {
   const nomeExibir = user.nickname || user.nome || user.email || '';
   document.getElementById('userNome').textContent    = nomeExibir;
