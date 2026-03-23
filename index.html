@@ -125,7 +125,7 @@ td{padding:12px 16px;font-size:0.875rem;vertical-align:middle;}
 .desp-del{background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;padding:4px 8px;font-size:0.75rem;transition:all 0.15s;}
 .desp-del:hover{border-color:var(--red);color:var(--red);}
 .desp-empty{padding:32px;text-align:center;color:var(--muted);font-size:0.875rem;}
-/* CARTÁO CSV */
+/* CARTÃO CSV */
 .csv-drop{border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;margin-bottom:20px;transition:all 0.2s;cursor:pointer;}
 .csv-drop:hover,.csv-drop.drag{border-color:var(--purple);background:rgba(167,139,250,0.05);}
 .csv-drop .drop-icon{font-size:2rem;margin-bottom:8px;}
@@ -224,7 +224,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 @media(max-width:900px){.header-year{display:none;} thead th:nth-child(n+5){display:none;} td:nth-child(n+5){display:none;}}
 @media(max-width:600px){.brand-text h1{font-size:1.8rem;} .balance-bar{grid-template-columns:1fr;}}
 
-/* ââ TELA DE LOGIN âââââââââââââââââââââââââââââââââââââââââââ */
+/* ── TELA DE LOGIN ─────────────────────────────────────────── */
 #loginScreen{
   position:fixed;inset:0;background:var(--bg);z-index:9999;
   display:flex;align-items:center;justify-content:center;
@@ -279,7 +279,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   cursor:pointer;font-size:0.8rem;transition:all 0.2s;}
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
 
-/* ââ MODAL NOTA FISCAL UNIFICADO âââââââââââââââââââââââââââ */
+/* ── MODAL NOTA FISCAL UNIFICADO ─────────────────────────── */
 .nota-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;
   padding:4px;margin-bottom:20px;}
 .nota-tab{flex:1;padding:8px;border:none;background:transparent;
@@ -328,7 +328,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 .timeout-fill{height:100%;background:var(--accent);border-radius:2px;
   transition:width linear;}
 
-/* ââ Campos baixa confiança âââ */
+/* ── Campos baixa confiança ─── */
 .nota-campo input.ai-filled.baixa {
   border-color: rgba(245,158,11,0.5);
   background: rgba(245,158,11,0.05);
@@ -338,11 +338,11 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
-<!-- ââ TELA DE LOGIN ââ -->
+<!-- ── TELA DE LOGIN ── -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
-      <div class="brand-icon">&#x1F68C;</div>
+      <div class="brand-icon">🚌</div>
       <h2>MUTY TRANSPORTE</h2>
       <p>Controle Financeiro 2026</p>
     </div>
@@ -361,13 +361,13 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="login-field">
         <label>Senha</label>
         <div style="position:relative;">
-          <input type="password" id="loginSenha" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"
+          <input type="password" id="loginSenha" placeholder="••••••••"
                  autocomplete="current-password" style="width:100%;padding-right:44px;"
                  onkeydown="if(event.key==='Enter') fazerLogin()">
           <button type="button" onclick="toggleSenha('loginSenha','olhoLogin')"
                   style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
                          background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
-                  id="olhoLogin">&#x1F441;</button>
+                  id="olhoLogin">👁</button>
         </div>
       </div>
       <div style="text-align:right;margin-bottom:12px;">
@@ -397,12 +397,12 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="login-field">
         <label>Senha</label>
         <div style="position:relative;">
-          <input type="password" id="cadSenha" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" style="width:100%;padding-right:44px;"
+          <input type="password" id="cadSenha" placeholder="••••••••" style="width:100%;padding-right:44px;"
                  onkeydown="if(event.key==='Enter') fazerCadastro()">
           <button type="button" onclick="toggleSenha('cadSenha','olhoCad')"
                   style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
                          background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
-                  id="olhoCad">&#x1F441;</button>
+                  id="olhoCad">👁</button>
         </div>
         <div id="forçaSenha" style="margin-top:6px;font-size:11px;color:var(--muted);"></div>
       </div>
@@ -429,7 +429,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
                style="width:38px;height:38px;border-radius:50%;background:#1e293b;
                       border:2px solid #f59e0b;overflow:hidden;display:flex;
                       align-items:center;justify-content:center;font-size:1.3rem;
-                      flex-shrink:0;">&#x1F464;</div>
+                      flex-shrink:0;">👤</div>
           <div>
             <div style="font-size:0.85rem;font-weight:600;" id="userNome"></div>
             <div style="font-size:0.7rem;color:#64748b;" id="userEmpresa"></div>
@@ -439,10 +439,10 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
 
       <div class="brand">
-        <div class="brand-icon">&#x1F68C;</div>
+        <div class="brand-icon">🚌</div>
         <div class="brand-text">
           <h1>MUTY TRANSPORTE</h1>
-          <p>Erondino Meireles Lima â Controle Financeiro 2026</p>
+          <p>Erondino Meireles Lima — Controle Financeiro 2026</p>
         </div>
       </div>
       <div class="header-year">2026</div>
@@ -450,13 +450,13 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </header>
 
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('pagamentos')">&#x1F4B0; PAGAMENTOS</button>
-    <button class="nav-tab" onclick="switchTab('despesas')">&#x1F9FE; DESPESAS</button>
-    <button class="nav-tab" onclick="switchTab('resultado')">&#x1F4CA; RESULTADO</button>
-    <button class="nav-tab" onclick="switchTab('clientes')">&#x1F465; CLIENTES</button>
+    <button class="nav-tab active" onclick="switchTab('pagamentos')">💰 PAGAMENTOS</button>
+    <button class="nav-tab" onclick="switchTab('despesas')">🧾 DESPESAS</button>
+    <button class="nav-tab" onclick="switchTab('resultado')">📊 RESULTADO</button>
+    <button class="nav-tab" onclick="switchTab('clientes')">👥 CLIENTES</button>
   </div>
 
-  <!-- âââ PAGAMENTOS âââ -->
+  <!-- ═══ PAGAMENTOS ═══ -->
   <div class="section active" id="tab-pagamentos">
     <div class="month-bar" id="monthBar"></div>
     <div class="summary-grid">
@@ -466,12 +466,12 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="summary-card clientes"><label>Clientes Ativos</label><div class="value" id="cardClientes">0</div><div class="sub">na carteira</div></div>
     </div>
     <div class="progress-section">
-      <div class="progress-label"><span>Recebimento â <strong id="progMes">Janeiro</strong></span><span id="progPct">0%</span></div>
+      <div class="progress-label"><span>Recebimento — <strong id="progMes">Janeiro</strong></span><span id="progPct">0%</span></div>
       <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
     <div class="charts-grid">
-      <div class="chart-card"><h3>RECEBIMENTOS POR MÁS</h3><div class="bar-chart" id="barChart"></div></div>
-      <div class="chart-card"><h3>STATUS DO MÁS</h3><div class="pie-wrap"><svg class="pie-svg" width="100" height="100" viewBox="0 0 100 100" id="pieChart"><circle cx="50" cy="50" r="40" fill="var(--border)"/></svg><div class="pie-legend" id="pieLegend"></div></div></div>
+      <div class="chart-card"><h3>RECEBIMENTOS POR MÊS</h3><div class="bar-chart" id="barChart"></div></div>
+      <div class="chart-card"><h3>STATUS DO MÊS</h3><div class="pie-wrap"><svg class="pie-svg" width="100" height="100" viewBox="0 0 100 100" id="pieChart"><circle cx="50" cy="50" r="40" fill="var(--border)"/></svg><div class="pie-legend" id="pieLegend"></div></div></div>
     </div>
     <div class="table-header">
       <h2>CLIENTES</h2>
@@ -484,22 +484,22 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     </div>
   </div>
 
-  <!-- âââ DESPESAS âââ -->
+  <!-- ═══ DESPESAS ═══ -->
   <div class="section" id="tab-despesas">
     <div class="month-bar" id="monthBarDesp"></div>
     <div class="cat-grid" id="catGrid"></div>
     <div class="desp-header">
-      <h2>LANÁAMENTOS â <span id="despMesLabel">Janeiro</span></h2>
+      <h2>LANÇAMENTOS — <span id="despMesLabel">Janeiro</span></h2>
       <div class="desp-header-btns">
-        <button class="btn-green" onclick="openNotaModal()">&#x1F4F7; ESCANEAR NOTA</button>
-        <button class="btn-card" onclick="openCartaoModal()">&#x1F4B3; IMPORTAR CARTÁO</button>
+        <button class="btn-green" onclick="openNotaModal()">📷 ESCANEAR NOTA</button>
+        <button class="btn-card" onclick="openCartaoModal()">💳 IMPORTAR CARTÃO</button>
         <button class="btn-add" onclick="openDespModal()">+ MANUAL</button>
       </div>
     </div>
     <div class="desp-list" id="despList"></div>
   </div>
 
-  <!-- âââ RESULTADO âââ -->
+  <!-- ═══ RESULTADO ═══ -->
   <div class="section" id="tab-resultado">
     <div class="month-bar" id="monthBarRes"></div>
     <div class="balance-bar">
@@ -515,10 +515,10 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     <div class="table-wrap"><table><thead><tr><th>Mês</th><th>Receita</th><th>Despesas</th><th>Lucro</th><th>Margem</th></tr></thead><tbody id="resTable"></tbody></table></div>
   </div>
 
-  <!-- âââ CLIENTES âââ -->
+  <!-- ═══ CLIENTES ═══ -->
   <div class="section" id="tab-clientes">
     <div class="table-header">
-      <h2>GESTÁO DE CLIENTES</h2>
+      <h2>GESTÃO DE CLIENTES</h2>
       <button class="btn-add" onclick="openClienteModal(null)">+ NOVO CLIENTE</button>
     </div>
     <div class="table-wrap">
@@ -527,13 +527,13 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<footer><div class="container">MUTY TRANSPORTE ESCOLAR Â· 2026 Â· Duque de Caxias â RJ</div></footer>
+<footer><div class="container">MUTY TRANSPORTE ESCOLAR · 2026 · Duque de Caxias – RJ</div></footer>
 
 <!-- MODAL PAGAMENTO -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal">
-    <h3 id="modalName">â</h3>
-    <div class="modal-sub" id="modalSub">â</div>
+    <h3 id="modalName">–</h3>
+    <div class="modal-sub" id="modalSub">–</div>
     <div class="modal-note" id="modalNote"></div>
     <div class="status-selector" id="statusSelector"></div>
     <div class="modal-grid" id="modalGrid"></div>
@@ -548,7 +548,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 <div class="modal-overlay" id="despModalOverlay" onclick="closeDespModal(event)">
   <div class="modal">
     <h3>NOVA DESPESA</h3>
-    <div class="modal-sub" id="despModalSub">â</div>
+    <div class="modal-sub" id="despModalSub">–</div>
     <div class="form-group"><label>Categoria</label><div class="cat-selector" id="catSelector"></div></div>
     <div class="form-group"><label>Descrição</label><input class="form-input" id="despDesc" placeholder="Ex: Abastecimento posto Shell..." type="text"></div>
     <div class="form-group"><label>Valor (R$)</label><input class="form-input" id="despValor" placeholder="0,00" type="number" step="0.01" min="0"></div>
@@ -560,10 +560,10 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<!-- MODAL CARTÁO -->
+<!-- MODAL CARTÃO -->
 <div class="modal-overlay" id="cartaoModalOverlay" onclick="closeCartaoModal(event)">
   <div class="modal modal-wide">
-    <h3>&#x1F4B3; IMPORTAR FATURA DO CARTÁO</h3>
+    <h3>💳 IMPORTAR FATURA DO CARTÃO</h3>
     <div class="modal-sub">Cole o extrato ou faça upload do CSV da sua fatura</div>
 
     <div class="form-group">
@@ -573,23 +573,23 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 
     <!-- Upload CSV -->
     <div class="csv-drop" id="csvDrop" onclick="document.getElementById('csvFile').click()" ondragover="csvDragOver(event)" ondragleave="csvDragLeave(event)" ondrop="csvDrop2(event)">
-      <div class="drop-icon">&#x1F4C4;</div>
+      <div class="drop-icon">📄</div>
       <p><strong>Clique para selecionar</strong> ou arraste o arquivo CSV aqui</p>
       <p style="margin-top:4px;font-size:0.75rem">Aceita CSV exportado do seu banco (Nubank, Itaú, Bradesco, etc.)</p>
       <input type="file" id="csvFile" accept=".csv,.txt" style="display:none" onchange="handleCSV(event)">
     </div>
 
-    <div style="text-align:center;color:var(--muted);font-size:0.8rem;margin-bottom:14px;">â ou adicione manualmente â</div>
+    <div style="text-align:center;color:var(--muted);font-size:0.8rem;margin-bottom:14px;">— ou adicione manualmente —</div>
 
     <!-- Lançamento manual de linha -->
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
       <input class="form-input" id="cartaoDesc" placeholder="Descrição" style="flex:1;min-width:140px;">
       <input class="form-input" id="cartaoVal" placeholder="Valor R$" type="number" step="0.01" min="0" style="width:110px;">
       <select class="form-input" id="cartaoCat" style="width:140px;">
-        <option value="combustivel">â½ Combustível</option>
-        <option value="manutencao">&#x1F527; Manutenção</option>
-        <option value="impostos">&#x1F4CB; Impostos</option>
-        <option value="outros" selected>&#x1F4E6; Outros</option>
+        <option value="combustivel">⛽ Combustível</option>
+        <option value="manutencao">🔧 Manutenção</option>
+        <option value="impostos">📋 Impostos</option>
+        <option value="outros" selected>📦 Outros</option>
       </select>
       <button class="btn btn-secondary" onclick="addCartaoManual()">+ Adicionar</button>
     </div>
@@ -609,7 +609,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
         <span id="csvTotal" style="font-family:var(--font-mono);color:var(--red);font-size:0.9rem;font-weight:600"></span>
         <div class="modal-actions" style="margin-top:0">
           <button class="btn btn-ghost" onclick="closeCartaoModalBtn()">Cancelar</button>
-          <button class="btn btn-purple" onclick="importarCartao()">&#x1F4B3; IMPORTAR SELECIONADOS</button>
+          <button class="btn btn-purple" onclick="importarCartao()">💳 IMPORTAR SELECIONADOS</button>
         </div>
       </div>
     </div>
@@ -630,8 +630,8 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     <div class="form-group">
       <label>Tipo de pagamento</label>
       <select class="form-input" id="cliTipo">
-        <option value="mensal">&#x1F4C6; Mensal</option>
-        <option value="trimestral">&#x1F4C5; Trimestral</option>
+        <option value="mensal">📆 Mensal</option>
+        <option value="trimestral">📅 Trimestral</option>
       </select>
     </div>
     <div class="form-group">
@@ -649,10 +649,10 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 
 <!-- MODAL CUPOM FISCAL -->
 
-<!-- ââ MODAL NOTA FISCAL UNIFICADO ââââââââââââââââââââââââââââââââââââââââââ -->
+<!-- ══ MODAL NOTA FISCAL UNIFICADO ══════════════════════════════════════════ -->
 <div id="notaModalOverlay" class="modal-overlay" onclick="closeNotaModal(event)" style="display:none;">
   <div class="modal modal-wide">
-    <h3>&#x1F4C4; LANÁAR DESPESA</h3>
+    <h3>📄 LANÇAR DESPESA</h3>
     <div class="modal-sub">Foto do cupom, QR Code ou preenchimento manual</div>
 
     <!-- Mês -->
@@ -663,17 +663,17 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 
     <!-- Abas -->
     <div class="nota-tabs">
-      <button class="nota-tab active" id="tabFoto" onclick="notaSwitchTab('foto')">&#x1F4F7; FOTO</button>
-      <button class="nota-tab" id="tabQR"   onclick="notaSwitchTab('qr')">&#x1F4F1; QR CODE</button>
+      <button class="nota-tab active" id="tabFoto" onclick="notaSwitchTab('foto')">📷 FOTO</button>
+      <button class="nota-tab" id="tabQR"   onclick="notaSwitchTab('qr')">📱 QR CODE</button>
     </div>
 
-    <!-- ââ ABA FOTO ââ -->
+    <!-- ── ABA FOTO ── -->
     <div id="notaAbaFoto">
       <div class="nota-drop" id="notaDropZone">
         <input type="file" id="notaFotoInput" accept="image/*" capture="environment"
                onchange="processarFotoNota(event)">
         <div id="notaDropContent">
-          <div style="font-size:2.5rem;">&#x1F4F7;</div>
+          <div style="font-size:2.5rem;">📷</div>
           <p style="font-weight:600;margin:8px 0 4px;">Toque para tirar foto</p>
           <p style="font-size:0.8rem;color:var(--muted);">Gemini vai ler o valor e estabelecimento</p>
         </div>
@@ -688,7 +688,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <!-- Loading -->
       <div class="nota-loading" id="notaLoading">
         <div class="spinner"></div>
-        <p style="font-size:13px;color:var(--muted);">&#x1F916; Gemini lendo o cupom...</p>
+        <p style="font-size:13px;color:var(--muted);">🤖 Gemini lendo o cupom...</p>
         <button onclick="cancelarOCR()" style="margin-top:8px;padding:6px 16px;
           background:transparent;border:1px solid var(--border);border-radius:6px;
           color:var(--muted);cursor:pointer;font-size:12px;">
@@ -697,60 +697,60 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
     </div>
 
-    <!-- ââ ABA QR ââ -->
+    <!-- ── ABA QR ── -->
     <div id="notaAbaQR" style="display:none;">
       <div class="qr-area" id="notaQrReader"></div>
       <div id="notaQrStatus" style="text-align:center;font-size:13px;color:var(--muted);
            padding:8px;background:var(--surface);border-radius:8px;margin-bottom:12px;">
-        &#x1F4F7; Iniciando câmera...
+        📷 Iniciando câmera...
       </div>
     </div>
 
-    <!-- ââ AVISO ââ -->
+    <!-- ── AVISO ── -->
     <div class="nota-aviso" id="notaAviso"></div>
 
-    <!-- ââ RESULTADO (campos sempre visíveis após leitura) ââ -->
+    <!-- ── RESULTADO (campos sempre visíveis após leitura) ── -->
     <div class="nota-resultado" id="notaResultado">
       <div class="nota-campo">
-        <label>Estabelecimento <span class="ai-tag" id="tagEstab" style="display:none;">&#x1F916; IA</span><span class="manual-tag" id="tagEstabManual" style="display:none;">âï¸ manual</span></label>
+        <label>Estabelecimento <span class="ai-tag" id="tagEstab" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagEstabManual" style="display:none;">✏️ manual</span></label>
         <input type="text" id="notaEstab" placeholder="Nome do estabelecimento"
                oninput="marcarEditado(this,'tagEstab','tagEstabManual')">
       </div>
       <div class="nota-campo">
-        <label>Valor Total (R$) <span class="ai-tag" id="tagValor" style="display:none;">&#x1F916; IA</span><span class="manual-tag" id="tagValorManual" style="display:none;">âï¸ manual</span></label>
+        <label>Valor Total (R$) <span class="ai-tag" id="tagValor" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagValorManual" style="display:none;">✏️ manual</span></label>
         <input type="number" id="notaValor" placeholder="0,00" step="0.01" min="0"
                oninput="marcarEditado(this,'tagValor','tagValorManual')">
       </div>
       <div class="nota-campo">
-        <label>Categoria <span class="ai-tag" id="tagCat" style="display:none;">&#x1F916; IA</span></label>
+        <label>Categoria <span class="ai-tag" id="tagCat" style="display:none;">🤖 IA</span></label>
         <div id="notaCatSelector" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;"></div>
       </div>
     </div>
 
-    <!-- ââ BOTÁES ââ -->
+    <!-- ── BOTÕES ── -->
     <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
       <button class="btn-secondary" onclick="closeNotaModalBtn()">Cancelar</button>
       <button class="btn-primary" id="notaSaveBtn" onclick="salvarNota()"
-              style="display:none;">â SALVAR DESPESA</button>
+              style="display:none;">✓ SALVAR DESPESA</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="cupomModalOverlay" onclick="closeCupomModal(event)">
   <div class="modal modal-wide">
-    <h3>&#x1F4F8; ESCANEAR CUPOM</h3>
-    <div class="modal-sub">Tire foto do cupom â o Gemini lê o nome e valor automaticamente</div>
+    <h3>📸 ESCANEAR CUPOM</h3>
+    <div class="modal-sub">Tire foto do cupom — o Gemini lê o nome e valor automaticamente</div>
 
     <div class="form-group">
       <label>Mês de referência</label>
       <select class="form-input" id="cupomMes"></select>
     </div>
 
-    <!-- Área de foto -->
+    <!-- Área de foto -->
     <div id="cupomFotoArea">
       <div style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;margin-bottom:12px;transition:all 0.2s;" 
            id="cupomDropZone" onclick="document.getElementById('cupomFotoInput').click()">
-        <div style="font-size:3rem;">&#x1F4F7;</div>
+        <div style="font-size:3rem;">📷</div>
         <p style="margin-top:10px;font-weight:600;">Toque para tirar foto do cupom</p>
         <p style="font-size:0.75rem;color:var(--muted);margin-top:4px;">O Gemini vai identificar o estabelecimento e o valor</p>
         <input type="file" id="cupomFotoInput" accept="image/*" capture="environment" style="display:none" onchange="processarFotoCupom(event)">
@@ -761,7 +761,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     <!-- Loading Gemini -->
     <div id="cupomLoadingGemini" style="display:none;text-align:center;padding:20px;">
       <div class="ai-spinner" style="margin:0 auto 12px;"></div>
-      <p style="color:var(--muted);font-size:0.85rem;">&#x1F916; Gemini identificando estabelecimento e valor...</p>
+      <p style="color:var(--muted);font-size:0.85rem;">🤖 Gemini identificando estabelecimento e valor...</p>
     </div>
 
     <!-- Resultado -->
@@ -779,16 +779,16 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
         <label>Valor total (R$)</label>
         <input class="form-input" id="cupomValor" type="number" step="0.01" min="0" placeholder="0,00">
       </div>
-      <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="document.getElementById('cupomFotoInput').click()">&#x1F504; Tirar outra foto</button>
+      <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="document.getElementById('cupomFotoInput').click()">🔄 Tirar outra foto</button>
     </div>
 
     <div class="modal-actions" style="margin-top:12px;">
       <button class="btn btn-ghost" onclick="closeCupomModalBtn()">Cancelar</button>
-      <button class="btn btn-primary" id="cupomSaveBtn" style="display:none;" onclick="salvarCupom()">â SALVAR DESPESA</button>
+      <button class="btn btn-primary" id="cupomSaveBtn" style="display:none;" onclick="salvarCupom()">✓ SALVAR DESPESA</button>
     </div>
   </div>
 </div>
-<div class="save-indicator" id="saveIndicator">â Salvo</div>
+<div class="save-indicator" id="saveIndicator">✓ Salvo</div>
 
 <!-- API Render + MongoDB -->
 <script>
@@ -849,18 +849,18 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   window.fbSave  = apiSave;
   window.fbTodos = apiLoadTodos;
   window.fbReady = true;
-  console.log('â API Render v2 (JWT) pronta:', API_URL);
+  console.log('✅ API Render v2 (JWT) pronta:', API_URL);
 </script>
 
 <script>
 const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 const MESES_FULL=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const CATEGORIAS=[
-  {id:'combustivel',nome:'Combustível',icon:'â½'},
-  {id:'manutencao', nome:'Manutenção',  icon:'&#x1F527;'},
-  {id:'impostos',   nome:'Impostos',    icon:'&#x1F4CB;'},
-  {id:'outros',     nome:'Outros',      icon:'&#x1F4E6;'},
-  {id:'cartao',     nome:'Cartão',      icon:'&#x1F4B3;'},
+  {id:'combustivel',nome:'Combustível',icon:'⛽'},
+  {id:'manutencao', nome:'Manutenção',  icon:'🔧'},
+  {id:'impostos',   nome:'Impostos',    icon:'📋'},
+  {id:'outros',     nome:'Outros',      icon:'📦'},
+  {id:'cartao',     nome:'Cartão',      icon:'💳'},
 ];
 const CLIENTES_DEFAULT=[
   {id:1, nome:'Jamile',                                valor:1000,tipo:'trimestral',mesesAtivos:[2,4,7]},
@@ -881,7 +881,7 @@ const CLIENTES_DEFAULT=[
   {id:16,nome:'Carlos Diego Jamila',                   valor:1000,tipo:'trimestral',mesesAtivos:[2,4,7]},
 ];
 
-// ââ STATE ââ
+// ── STATE ──
 let currentMonth=new Date().getMonth();
 let currentTab='pagamentos';
 let pagamentos={};
@@ -893,7 +893,7 @@ let editingClienteId=null;
 let cartaoItems=[];
 let dbPronto=false;
 
-// ââ STORAGE: Firebase + localStorage como backup ââ
+// ── STORAGE: Firebase + localStorage como backup ──
 function loadLS(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
@@ -918,7 +918,7 @@ function updateSyncBadge(ok, msg) {
     badge.style.cssText = 'position:fixed;bottom:12px;right:12px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;z-index:9999;transition:all 0.3s;';
     document.body.appendChild(badge);
   }
-  badge.textContent = msg || (ok ? 'â Sincronizado' : '&#x1F4F4; Offline');
+  badge.textContent = msg || (ok ? '☁ Sincronizado' : '📴 Offline');
   badge.style.background = ok ? '#16a34a' : '#f59e0b';
   badge.style.color = '#fff';
   // Auto-esconder após 4s se sincronizado
@@ -939,11 +939,11 @@ async function loadAllData() {
 }
 
 async function sincronizarComAPI() {
-  updateSyncBadge(false, 'â³ Conectando...');
+  updateSyncBadge(false, '⏳ Conectando...');
   // Tenta até 3 vezes com intervalo (Render pode estar dormindo)
   for(let tentativa = 1; tentativa <= 3; tentativa++) {
     try {
-      // USA v2 com JWT â dados isolados por usuário
+      // USA v2 com JWT — dados isolados por usuário
       const todos = await apiLoadTodos();
       if(!todos) throw new Error('Sem resposta da API');
 
@@ -957,18 +957,18 @@ async function sincronizarComAPI() {
       if(todos.clientes !== undefined) {
         clientes = todos.clientes; saveLS('muty_clientes', clientes); changed = true;
       }
-      updateSyncBadge(true, 'â Sincronizado');
+      updateSyncBadge(true, '☁ Sincronizado');
       if(changed) refresh();
-      console.log('â MongoDB v2 sincronizado! Tentativa:', tentativa);
+      console.log('☁ MongoDB v2 sincronizado! Tentativa:', tentativa);
       return;
     } catch(e) {
       console.warn(`Tentativa ${tentativa}/3 falhou:`, e.message);
-      updateSyncBadge(false, `â³ Aguardando API (${tentativa}/3)...`);
+      updateSyncBadge(false, `⏳ Aguardando API (${tentativa}/3)...`);
       if(tentativa < 3) await new Promise(res => setTimeout(res, 8000));
     }
   }
-  updateSyncBadge(false, 'â ï¸ Offline');
-  console.warn('API indisponível â usando dados locais');
+  updateSyncBadge(false, '⚠️ Offline');
+  console.warn('API indisponível — usando dados locais');
 }
 
 function getStatus(cid,mes){return(pagamentos[cid]||{})[mes]||null;}
@@ -994,12 +994,12 @@ function refresh(){
   if(currentTab==='clientes'){renderClientesTable();}
 }
 
-// ââ HELPERS ââ
+// ── HELPERS ──
 function recebidoNoMes(mes){let r=0;clientes.forEach(c=>{if(!c.mesesAtivos.includes(mes))return;const st=getStatus(c.id,mes);if(st==='pago')r+=c.valor;if(st==='parcial')r+=c.valor/2;});return r;}
 function totalDespMes(mes,cat){return despesas.filter(d=>d.mes===mes&&(!cat||d.cat===cat)).reduce((s,d)=>s+d.valor,0);}
 function fmt(v){return'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 
-// ââ PAGAMENTOS ââ
+// ── PAGAMENTOS ──
 function updateCards(){
   const ativos=clientes.filter(c=>c.mesesAtivos.includes(currentMonth));
   const totalEsp=ativos.reduce((s,c)=>s+c.valor,0);
@@ -1033,7 +1033,7 @@ function renderTable(){
     const stAtual=getStatus(c.id,currentMonth);const ativoMes=c.mesesAtivos.includes(currentMonth);
     let badgeHtml=!ativoMes?`<span class="badge saiu">Inativo</span>`:stAtual?`<button class="badge ${stAtual}" onclick="openModal(${c.id},${currentMonth})">${stAtual.toUpperCase()}</button>`:`<button class="badge pendente" onclick="openModal(${c.id},${currentMonth})">PENDENTE</button>`;
     let totalPago=0;c.mesesAtivos.forEach(mi=>{const s=getStatus(c.id,mi);if(s==='pago')totalPago+=c.valor;if(s==='parcial')totalPago+=c.valor/2;});
-    tr.innerHTML=`<td style="color:var(--muted);font-family:var(--font-mono);font-size:0.75rem">${String(idx+1).padStart(2,'0')}</td><td class="name-cell">${c.nome}<small>${c.tipo==='trimestral'?'&#x1F4C5; Trimestral':'&#x1F4C6; Mensal'}</small></td><td class="value-cell">${fmt(c.valor)}</td><td><span class="badge ${c.tipo==='trimestral'?'trimestral':'pago'}" style="cursor:default">${c.tipo.toUpperCase()}</span></td><td>${dotsHtml}</td><td>${badgeHtml}</td><td class="value-cell" style="color:var(--green)">${fmt(totalPago)}</td>`;
+    tr.innerHTML=`<td style="color:var(--muted);font-family:var(--font-mono);font-size:0.75rem">${String(idx+1).padStart(2,'0')}</td><td class="name-cell">${c.nome}<small>${c.tipo==='trimestral'?'📅 Trimestral':'📆 Mensal'}</small></td><td class="value-cell">${fmt(c.valor)}</td><td><span class="badge ${c.tipo==='trimestral'?'trimestral':'pago'}" style="cursor:default">${c.tipo.toUpperCase()}</span></td><td>${dotsHtml}</td><td>${badgeHtml}</td><td class="value-cell" style="color:var(--green)">${fmt(totalPago)}</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1049,7 +1049,7 @@ function renderPieChart(){
   drawPie('pieChart','pieLegend',[{val:nP,color:'#10b981',label:'Pago'},{val:nPc,color:'#f59e0b',label:'Parcial'},{val:nPd,color:'#ef4444',label:'Pendente'}],ativos.length||1);
 }
 
-// ââ DESPESAS ââ
+// ── DESPESAS ──
 function renderDespesas(){
   document.getElementById('despMesLabel').textContent=MESES_FULL[currentMonth];
   const cg=document.getElementById('catGrid');cg.innerHTML='';
@@ -1061,13 +1061,13 @@ function renderDespesas(){
   });
   const list=document.getElementById('despList');
   const itens=despesas.filter(d=>d.mes===currentMonth).sort((a,b)=>b.id-a.id);
-  if(!itens.length){list.innerHTML='<div class="desp-empty">Nenhuma despesa registrada neste mês.<br>Use <strong>+ Manual</strong> ou <strong>&#x1F4B3; Importar Cartão</strong>.</div>';return;}
+  if(!itens.length){list.innerHTML='<div class="desp-empty">Nenhuma despesa registrada neste mês.<br>Use <strong>+ Manual</strong> ou <strong>💳 Importar Cartão</strong>.</div>';return;}
   list.innerHTML='';
   itens.forEach(d=>{
     const cat=CATEGORIAS.find(c=>c.id===d.cat)||CATEGORIAS[3];
     const isCard=d.fonte==='cartao'; const isCupom=d.fonte==='cupom';
     const div=document.createElement('div');div.className='desp-item';
-    div.innerHTML=`<div class="desp-cat-icon">${cat.icon}</div><div class="desp-info"><div class="desp-desc">${d.desc||cat.nome}${isCard?' <span class="badge cartao" style="font-size:0.65rem;padding:2px 6px;cursor:default">&#x1F4B3; CARTÁO</span>':''}${isCupom?' <span class="badge pago" style="font-size:0.65rem;padding:2px 6px;cursor:default">&#x1F9FE; CUPOM</span>':''}</div><div class="desp-meta">${cat.nome} Â· ${MESES_FULL[d.mes]} 2026</div></div><div class="desp-valor">â ${fmt(d.valor)}</div><button class="desp-del" onclick="deleteDespesa(${d.id})">â</button>`;
+    div.innerHTML=`<div class="desp-cat-icon">${cat.icon}</div><div class="desp-info"><div class="desp-desc">${d.desc||cat.nome}${isCard?' <span class="badge cartao" style="font-size:0.65rem;padding:2px 6px;cursor:default">💳 CARTÃO</span>':''}${isCupom?' <span class="badge pago" style="font-size:0.65rem;padding:2px 6px;cursor:default">🧾 CUPOM</span>':''}</div><div class="desp-meta">${cat.nome} · ${MESES_FULL[d.mes]} 2026</div></div><div class="desp-valor">− ${fmt(d.valor)}</div><button class="desp-del" onclick="deleteDespesa(${d.id})">✕</button>`;
     list.appendChild(div);
   });
 }
@@ -1096,7 +1096,7 @@ function deleteDespesa(id){if(!confirm('Remover esta despesa?'))return;despesas=
 function closeDespModal(e){if(e.target===document.getElementById('despModalOverlay'))closeDespModalBtn();}
 function closeDespModalBtn(){document.getElementById('despModalOverlay').classList.remove('open');}
 
-// ââ CARTÁO ââ
+// ── CARTÃO ──
 function openCartaoModal(){
   cartaoItems=[];
   document.getElementById('cartaoMes').innerHTML=MESES_FULL.map((m,i)=>`<option value="${i}" ${i===currentMonth?'selected':''}>${m}</option>`).join('');
@@ -1171,7 +1171,7 @@ function renderCartaoPreview(){
           ${CATEGORIAS.filter(c=>c.id!=='cartao').map(c=>`<option value="${c.id}" ${c.id===item.cat?'selected':''}>${c.icon} ${c.nome}</option>`).join('')}
         </select>
       </span>
-      <button class="desp-del" style="flex-shrink:0" onclick="cartaoItems.splice(${i},1);renderCartaoPreview()">â</button>`;
+      <button class="desp-del" style="flex-shrink:0" onclick="cartaoItems.splice(${i},1);renderCartaoPreview()">✕</button>`;
     container.appendChild(row);
   });
   updateCartaoTotal();
@@ -1201,10 +1201,10 @@ function importarCartao(){
   closeCartaoModalBtn();
   currentTab='despesas';
   switchTab('despesas');
-  alert(`â ${selecionados.length} lançamento${selecionados.length!==1?'s':''} importado${selecionados.length!==1?'s':''}!`);
+  alert(`✓ ${selecionados.length} lançamento${selecionados.length!==1?'s':''} importado${selecionados.length!==1?'s':''}!`);
 }
 
-// ââ GESTÁO DE CLIENTES ââ
+// ── GESTÃO DE CLIENTES ──
 function renderClientesTable(){
   const tbody=document.getElementById('clientesTableBody');tbody.innerHTML='';
   clientes.forEach((c,idx)=>{
@@ -1216,8 +1216,8 @@ function renderClientesTable(){
       <td><span class="badge ${c.tipo==='trimestral'?'trimestral':'pago'}" style="cursor:default">${c.tipo.toUpperCase()}</span></td>
       <td style="color:var(--muted);font-size:0.78rem;font-family:var(--font-mono)">${mesesStr}</td>
       <td><div class="cli-actions">
-        <button class="cli-btn" onclick="openClienteModal(${c.id})">âï¸ Editar</button>
-        <button class="cli-btn del" onclick="removeCliente(${c.id})">&#x1F5D1; Remover</button>
+        <button class="cli-btn" onclick="openClienteModal(${c.id})">✏️ Editar</button>
+        <button class="cli-btn del" onclick="removeCliente(${c.id})">🗑 Remover</button>
       </div></td>`;
     tbody.appendChild(tr);
   });
@@ -1283,7 +1283,7 @@ function removeCliente(id){
 function closeClienteModal(e){if(e.target===document.getElementById('clienteModalOverlay'))closeClienteModalBtn();}
 function closeClienteModalBtn(){document.getElementById('clienteModalOverlay').classList.remove('open');editingClienteId=null;}
 
-// ââ RESULTADO ââ
+// ── RESULTADO ──
 function renderResultado(){
   const rec=recebidoNoMes(currentMonth);const desp=totalDespMes(currentMonth,null);const sald=rec-desp;
   document.getElementById('resReceita').textContent=fmt(rec);
@@ -1316,18 +1316,18 @@ function renderResultado(){
   tbody.appendChild(tr);
 }
 
-// ââ MODAL PAGAMENTO ââ
+// ── MODAL PAGAMENTO ──
 function openModal(cid,mes){
   modalClienteId=cid;modalMes=mes;const c=clientes.find(x=>x.id===cid);const st=getStatus(cid,mes)||'pendente';modalSelectedStatus=st;
   document.getElementById('modalName').textContent=c.nome;
-  document.getElementById('modalSub').textContent=`${MESES_FULL[mes]} 2026 Â· ${fmt(c.valor)}`;
-  document.getElementById('modalNote').textContent=c.tipo==='trimestral'?'&#x1F4C5; Pagamento trimestral â vencimento dia 10':'&#x1F4C6; Mensalidade â vencimento dia 10';
+  document.getElementById('modalSub').textContent=`${MESES_FULL[mes]} 2026 · ${fmt(c.valor)}`;
+  document.getElementById('modalNote').textContent=c.tipo==='trimestral'?'📅 Pagamento trimestral – vencimento dia 10':'📆 Mensalidade – vencimento dia 10';
   document.getElementById('statusSelector').innerHTML=['pago','parcial','pendente'].map(s=>`<button class="status-opt ${s} ${s===modalSelectedStatus?'selected':''}" onclick="selectStatus('${s}')">${s.toUpperCase()}</button>`).join('');
   const grid=document.getElementById('modalGrid');grid.innerHTML='';
   c.mesesAtivos.forEach(mi=>{
     const mSt=getStatus(cid,mi)||'';const btn=document.createElement('button');
     btn.className=`modal-month-btn ${mSt} ${mi===mes?'selected':''}`;btn.textContent=MESES[mi];
-    btn.onclick=()=>{document.querySelectorAll('.modal-month-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');modalMes=mi;const s=getStatus(cid,mi)||'pendente';modalSelectedStatus=s;selectStatus(s);document.getElementById('modalSub').textContent=`${MESES_FULL[mi]} 2026 Â· ${fmt(c.valor)}`;};
+    btn.onclick=()=>{document.querySelectorAll('.modal-month-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');modalMes=mi;const s=getStatus(cid,mi)||'pendente';modalSelectedStatus=s;selectStatus(s);document.getElementById('modalSub').textContent=`${MESES_FULL[mi]} 2026 · ${fmt(c.valor)}`;};
     grid.appendChild(btn);
   });
   document.getElementById('modalOverlay').classList.add('open');
@@ -1337,7 +1337,7 @@ function saveModal(){if(modalClienteId===null||modalMes===null)return;setStatus(
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalBtn();}
 function closeModalBtn(){document.getElementById('modalOverlay').classList.remove('open');modalClienteId=null;modalMes=null;}
 
-// ââ PIE ââ
+// ── PIE ──
 function drawPie(svgId,legendId,slices,total){
   const svg=document.getElementById(svgId);const legend=document.getElementById(legendId);
   let html='<circle cx="50" cy="50" r="40" fill="var(--border)"/>';let startAngle=-90;
@@ -1352,8 +1352,8 @@ function drawPie(svgId,legendId,slices,total){
   legend.innerHTML=slices.filter(s=>s.val>0).map(s=>`<div class="legend-item"><div class="legend-dot" style="background:${s.color}"></div><span style="color:var(--muted);font-size:0.78rem">${s.label}: <strong style="color:var(--text)">${fmt(s.val)}</strong></span></div>`).join('');
 }
 
-// ââ CUPOM FISCAL (Foto + Gemini) ââââââââââââââââââââââââââââââââââââââââââââ
-// GEMINI_KEY removida â OCR agora é feito pelo backend (/v2/ocr)
+// ── CUPOM FISCAL (Foto + Gemini) ────────────────────────────────────────────
+// GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
 let cupomCatSelecionada = 'combustivel';
 
 // QR vars (mantidos para não quebrar referências)
@@ -1377,7 +1377,7 @@ function closeCupomModalBtn(){ document.getElementById('cupomModalOverlay').clas
 function pararQR(){ if(qrStream){qrStream.getTracks().forEach(t=>t.stop());qrStream=null;} }
 
 async function processarFotoCupom(event) {
-  // Função legada â agora usa o backend seguro
+  // Função legada — agora usa o backend seguro
   const file = event.target.files[0];
   if(!file) return;
   event.target.value = '';
@@ -1393,10 +1393,10 @@ async function processarFotoCupom(event) {
     document.getElementById('cupomSaveBtn').style.display    = 'none';
 
     try {
-      // Chama backend — chave Gemini fica segura no servidor
+      // Chama backend — chave Gemini fica segura no servidor
       const formData = new FormData();
       formData.append('imagem', file);
-      // CORRIGIDO: Authorization Bearer adicionado — /v2/ocr agora exige JWT
+      // CORRIGIDO: /v2/ocr agora exige JWT
       const resp = await fetch(`${API_URL}/v2/ocr`, {
         method:  'POST',
         headers: authHeaders(),
@@ -1413,10 +1413,10 @@ async function processarFotoCupom(event) {
         document.getElementById('cupomDesc').value  = d.estabelecimento || 'Nota Fiscal';
         document.getElementById('cupomValor').value = d.valor_total > 0 ? d.valor_total : '';
         document.getElementById('cupomAiInfo').textContent =
-          `&#x1F916; Backend identificou: ${d.estabelecimento || '?'}${d.valor_total > 0 ? ' â R$ ' + d.valor_total.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ' â informe o valor'}`;
+          `🤖 Backend identificou: ${d.estabelecimento || '?'}${d.valor_total > 0 ? ' — R$ ' + d.valor_total.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ' — informe o valor'}`;
         cupomCatSelecionada = d.categoria || 'outros';
       } else {
-        document.getElementById('cupomAiInfo').textContent = 'â ï¸ Não foi possível ler. Preencha manualmente.';
+        document.getElementById('cupomAiInfo').textContent = '⚠️ Não foi possível ler. Preencha manualmente.';
         document.getElementById('cupomDesc').value = 'Nota Fiscal';
       }
 
@@ -1438,7 +1438,7 @@ async function processarFotoCupom(event) {
       document.getElementById('cupomLoadingGemini').style.display = 'none';
       document.getElementById('cupomResultado').style.display  = 'block';
       document.getElementById('cupomSaveBtn').style.display    = 'flex';
-      document.getElementById('cupomAiInfo').textContent = 'â ï¸ OCR indisponível. Preencha manualmente.';
+      document.getElementById('cupomAiInfo').textContent = '⚠️ OCR indisponível. Preencha manualmente.';
       document.getElementById('cupomDesc').value = 'Nota Fiscal';
     }
   };
@@ -1457,7 +1457,7 @@ function salvarCupom(){
 }
 
 
-// ââ QR CODE NFC-e ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══ QR CODE NFC-e ══════════════════════════════════════════════════════════
 const API_URL_QR = 'https://muty-api.onrender.com';
 let qrScanner = null;
 let qrCatSelecionada = 'outros';
@@ -1470,7 +1470,7 @@ function openQRModal() {
   document.getElementById('qrResultado').style.display = 'none';
   document.getElementById('qrLoading').style.display = 'none';
   document.getElementById('qrSaveBtn').style.display = 'none';
-  document.getElementById('qrStatus').textContent = '&#x1F4F7; Iniciando câmera...';
+  document.getElementById('qrStatus').textContent = '📷 Iniciando câmera...';
   document.getElementById('qrModalOverlay').style.display = 'flex';
   // Iniciar scanner
   setTimeout(iniciarQRScanner, 300);
@@ -1485,9 +1485,9 @@ function iniciarQRScanner() {
     (url) => onQRDetectado(url),
     (err) => {}
   ).then(() => {
-    document.getElementById('qrStatus').textContent = 'â Câmera ativa â aponte para o QR Code da nota';
+    document.getElementById('qrStatus').textContent = '✅ Câmera ativa — aponte para o QR Code da nota';
   }).catch((err) => {
-    document.getElementById('qrStatus').textContent = 'â Câmera não autorizada. Verifique as permissões.';
+    document.getElementById('qrStatus').textContent = '❌ Câmera não autorizada. Verifique as permissões.';
     console.error('QR Scanner erro:', err);
   });
 }
@@ -1497,12 +1497,12 @@ async function onQRDetectado(url) {
   if(qrScanner) { await qrScanner.stop(); qrScanner = null; }
   document.getElementById('qrCameraArea').style.display = 'none';
   document.getElementById('qrLoading').style.display = 'block';
-  document.getElementById('qrStatus').textContent = '&#x1F50D; QR detectado: ' + url.substring(0, 60) + '...';
+  document.getElementById('qrStatus').textContent = '🔍 QR detectado: ' + url.substring(0, 60) + '...';
 
   // Validar se é URL de NFC-e
   if(!url.startsWith('http')) {
     document.getElementById('qrLoading').style.display = 'none';
-    document.getElementById('qrStatus').textContent = 'â QR Code inválido â não é uma nota fiscal';
+    document.getElementById('qrStatus').textContent = '❌ QR Code inválido — não é uma nota fiscal';
     document.getElementById('qrCameraArea').style.display = 'block';
     iniciarQRScanner();
     return;
@@ -1510,7 +1510,7 @@ async function onQRDetectado(url) {
 
   // Enviar para backend processar
   try {
-    // CORRIGIDO: Authorization Bearer adicionado — /v2/nota-fiscal agora exige JWT
+    // CORRIGIDO: /v2/nota-fiscal agora exige JWT
     const r = await fetch(`${API_URL_QR}/v2/nota-fiscal`, {
       method:  'POST',
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
@@ -1524,7 +1524,7 @@ async function onQRDetectado(url) {
     } else {
       // Se SEFAZ bloqueou, mostrar dica para usar OCR
       const msg = data.code === 'sefaz_blocked'
-        ? 'â ï¸ Portal da SEFAZ bloqueou o acesso. Tente o modo OCR (foto do cupom).'
+        ? '⚠️ Portal da SEFAZ bloqueou o acesso. Tente o modo OCR (foto do cupom).'
         : (data.message || 'Não foi possível extrair dados da nota');
       mostrarQRErro(msg);
     }
@@ -1547,7 +1547,7 @@ function preencherQRResultado(nota) {
   document.getElementById('qrValor').value = valor > 0 ? valor : '';
   document.getElementById('qrData').value = data;
   document.getElementById('qrAiInfo').textContent =
-    `â Nota lida: ${estabelecimento}${valor > 0 ? ' â R$ ' + valor.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ''} ${data ? 'â '+data : ''}`;
+    `✅ Nota lida: ${estabelecimento}${valor > 0 ? ' — R$ ' + valor.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ''} ${data ? '— '+data : ''}`;
 
   // Seletor de categoria
   qrCatSelecionada = categoria;
@@ -1568,7 +1568,7 @@ function preencherQRResultado(nota) {
 
 function mostrarQRErro(msg) {
   document.getElementById('qrAiInfo') && (document.getElementById('qrResultado').style.display = 'block');
-  document.getElementById('qrAiInfo').textContent = 'â ï¸ ' + msg + ' â preencha manualmente ou use o OCR.';
+  document.getElementById('qrAiInfo').textContent = '⚠️ ' + msg + ' — preencha manualmente ou use o OCR.';
   document.getElementById('qrAiInfo').style.color = '#f59e0b';
   document.getElementById('qrSaveBtn').style.display = 'flex';
   document.getElementById('qrDesc').value = '';
@@ -1596,10 +1596,10 @@ function closeQRModalBtn() {
   document.getElementById('qrModalOverlay').style.display = 'none';
   document.getElementById('qrCameraArea').style.display = 'block';
 }
-// ââ FIM QR CODE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══ FIM QR CODE ═════════════════════════════════════════════════════════════
 
 
-// ââ AUTENTICAÁÁO ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══ AUTENTICAÇÃO ════════════════════════════════════════════════════════════
 const AUTH_KEY  = 'muty_auth_token';
 const USER_KEY  = 'muty_auth_user';
 
@@ -1642,7 +1642,7 @@ function mostrarDashboard(user) {
   _atualizarHeader(user);
 }
 
-// Logout â limpa token e recarrega a página
+// Logout — limpa token e recarrega a página
 function fazerLogout() {
   if(!confirm('Deseja sair da sua conta?')) return;
   limparAuth();
@@ -1708,7 +1708,7 @@ async function fazerCadastro() {
     const data = await r.json();
 
     if(data.status === 'success') {
-      // Mostrar tela de verificação â não logar ainda
+      // Mostrar tela de verificação — não logar ainda
       _emailCadastrado = email;
       mostrarTelaVerificacao(email);
     } else {
@@ -1734,23 +1734,23 @@ function verificarSessao() {
   document.getElementById('loginScreen').style.display = 'flex';
   return false;
 }
-// ââ FIM AUTENTICAÁÁO ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══ FIM AUTENTICAÇÃO ════════════════════════════════════════════════════════
 
 
-// ââ TOGGLE MOSTRAR/OCULTAR SENHA âââââââââââââââââââââââââââââââââââââââââââââ
+// ── TOGGLE MOSTRAR/OCULTAR SENHA ─────────────────────────────────────────────
 function toggleSenha(inputId, btnId) {
   const input = document.getElementById(inputId);
   const btn   = document.getElementById(btnId);
   if(input.type === 'password') {
     input.type = 'text';
-    btn.textContent = '&#x1F648;';  // ícone muda para indicar que está visível
+    btn.textContent = '🙈';  // ícone muda para indicar que está visível
   } else {
     input.type = 'password';
-    btn.textContent = '&#x1F441;';
+    btn.textContent = '👁';
   }
 }
 
-// ââ INDICADOR DE FORÁA DA SENHA âââââââââââââââââââââââââââââââââââââââââââââââ
+// ── INDICADOR DE FORÇA DA SENHA ───────────────────────────────────────────────
 function checarForcaSenha(senha) {
   const el = document.getElementById('forçaSenha');
   if(!el || !senha) { if(el) el.textContent = ''; return; }
@@ -1767,10 +1767,10 @@ function checarForcaSenha(senha) {
   checks.forEach(c => { if(c.ok) pontos++; });
 
   const cores  = ['#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981'];
-  const textos = ['Muito fraca','Fraca','Média','Boa','Forte â'];
+  const textos = ['Muito fraca','Fraca','Média','Boa','Forte ✅'];
 
   el.innerHTML = `<span style="color:${cores[pontos-1] || '#64748b'}">
-    ${textos[pontos-1] || 'Digite a senha'} â
+    ${textos[pontos-1] || 'Digite a senha'} —
     ${checks.filter(c=>!c.ok).map(c=>`<span style="opacity:.7">${c.txt}</span>`).join(' ')}
   </span>`;
 }
@@ -1781,7 +1781,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(cadSenha) cadSenha.addEventListener('input', e => checarForcaSenha(e.target.value));
 });
 
-// ââ ESQUECI MINHA SENHA âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── ESQUECI MINHA SENHA ───────────────────────────────────────────────────────
 function abrirEsqueciSenha() {
   // Pré-preenche com email que foi digitado
   const email = document.getElementById('loginEmail')?.value || '';
@@ -1822,7 +1822,7 @@ async function enviarResetSenha() {
       color:${data.status==='success' ? '#10b981' : '#ef4444'};`;
 
     if(data.status === 'success') {
-      btn.textContent = 'â ENVIADO';
+      btn.textContent = '✅ ENVIADO';
       setTimeout(fecharEsqueciSenha, 3000);
     } else {
       btn.disabled    = false;
@@ -1835,10 +1835,10 @@ async function enviarResetSenha() {
     btn.textContent = 'ENVIAR LINK';
   }
 }
-// ââ FIM ESQUECI SENHA âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── FIM ESQUECI SENHA ─────────────────────────────────────────────────────────
 
 
-// ââ REDEFINIR SENHA (via link do email) ââââââââââââââââââââââââââââââââââââââ
+// ── REDEFINIR SENHA (via link do email) ──────────────────────────────────────
 function checarForcaSenha2(senha) {
   const el = document.getElementById('forcaSenha2');
   if(!el || !senha) { if(el) el.textContent=''; return; }
@@ -1852,10 +1852,10 @@ function checarForcaSenha2(senha) {
   ];
   checks.forEach(c => { if(c.ok) pontos++; });
   const cores  = ['#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981'];
-  const textos = ['Muito fraca','Fraca','Média','Boa','Forte â'];
-  const faltam = checks.filter(c=>!c.ok).map(c=>c.txt).join(' Â· ');
+  const textos = ['Muito fraca','Fraca','Média','Boa','Forte ✅'];
+  const faltam = checks.filter(c=>!c.ok).map(c=>c.txt).join(' · ');
   el.innerHTML = `<span style="color:${cores[pontos-1]||'#64748b'}">
-    ${textos[pontos-1]||'Digite a senha'}${faltam ? ' â falta: '+faltam : ''}
+    ${textos[pontos-1]||'Digite a senha'}${faltam ? ' — falta: '+faltam : ''}
   </span>`;
 }
 
@@ -1889,7 +1889,7 @@ async function confirmarResetSenha() {
     const data = await r.json();
 
     if(data.status === 'success') {
-      mostrarResetMsg('â Senha redefinida! Redirecionando para o login...', true);
+      mostrarResetMsg('✅ Senha redefinida! Redirecionando para o login...', true);
       setTimeout(() => {
         // Limpar URL e mostrar tela de login
         window._resetToken = null;
@@ -1944,12 +1944,12 @@ function verificarURLToken() {
   }
   return false;
 }
-// ââ FIM REDEFINIR SENHA âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── FIM REDEFINIR SENHA ───────────────────────────────────────────────────────
 
-// ââ MODAL NOTA FISCAL UNIFICADO âââââââââââââââââââââââââââââââââââââââââââââ
-// Arquitetura: OCR principal â QR alternativo â manual sempre disponível
+// ══ MODAL NOTA FISCAL UNIFICADO ═════════════════════════════════════════════
+// Arquitetura: OCR principal → QR alternativo → manual sempre disponível
 
-// GEMINI_KEY removida â OCR agora é feito pelo backend (/v2/ocr)
+// GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
 const GEMINI_TIMEOUT  = 15000; // 15s timeout OCR (backend tem 10s + rede)
 const SEFAZ_TIMEOUT   = 3000;  // 3s timeout SEFAZ (background)
 
@@ -1960,7 +1960,7 @@ let notaOCRRodando     = false; // trava múltiplas execuções
 let notaTimeoutTimer   = null;  // timer da barra de progresso
 let notaRascunho       = {};    // rascunho local
 
-// ââ Abrir modal ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Abrir modal ──────────────────────────────────────────────────────────────
 function openNotaModal() {
   // Restaurar rascunho salvo localmente
   notaRascunho = loadLS('muty_nota_rascunho', {});
@@ -1979,14 +1979,14 @@ function openNotaModal() {
       valor:           notaRascunho.valor || 0,
       categoria:       notaRascunho.cat   || 'outros',
     }, false);
-    _notaAviso('&#x1F4DD; Rascunho restaurado â continue de onde parou.', 'warn');
+    _notaAviso('📝 Rascunho restaurado — continue de onde parou.', 'warn');
   }
 
   document.getElementById('notaModalOverlay').style.display = 'flex';
   notaSwitchTab('foto');
 }
 
-// ââ Fechar modal âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Fechar modal ─────────────────────────────────────────────────────────────
 function closeNotaModal(e) {
   if(e.target === document.getElementById('notaModalOverlay')) closeNotaModalBtn();
 }
@@ -1996,7 +1996,7 @@ function closeNotaModalBtn() {
   document.getElementById('notaModalOverlay').style.display = 'none';
 }
 
-// ââ Alternar abas âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Alternar abas ─────────────────────────────────────────────────────────────
 function notaSwitchTab(tab) {
   const isFoto = tab === 'foto';
 
@@ -2013,7 +2013,7 @@ function notaSwitchTab(tab) {
   }
 }
 
-// ââ Reset estado do modal âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Reset estado do modal ─────────────────────────────────────────────────────
 function _notaReset() {
   notaOCRRodando = false;
   notaOCRController = null;
@@ -2041,7 +2041,7 @@ function _notaReset() {
   _buildCatSelector('outros');
 }
 
-// ââ Mostrar aviso âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Mostrar aviso ─────────────────────────────────────────────────────────────
 function _notaAviso(msg, tipo) {
   const el = document.getElementById('notaAviso');
   el.textContent = msg;
@@ -2049,7 +2049,7 @@ function _notaAviso(msg, tipo) {
   el.style.display = msg ? 'block' : 'none';
 }
 
-// ââ Seletor de categoria ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Seletor de categoria ──────────────────────────────────────────────────────
 function _buildCatSelector(catAtiva) {
   notaCatSelecionada = catAtiva || 'outros';
   const cs = document.getElementById('notaCatSelector');
@@ -2068,7 +2068,7 @@ function _buildCatSelector(catAtiva) {
   });
 }
 
-// ââ Marcar campo como editado manualmente âââââââââââââââââââââââââââââââââââââ
+// ── Marcar campo como editado manualmente ─────────────────────────────────────
 function marcarEditado(input, aiTagId, manualTagId) {
   input.classList.add('editado');
   const ai = document.getElementById(aiTagId);
@@ -2078,7 +2078,7 @@ function marcarEditado(input, aiTagId, manualTagId) {
   _salvarRascunho();
 }
 
-// ââ Salvar rascunho local âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Salvar rascunho local ─────────────────────────────────────────────────────
 function _salvarRascunho() {
   notaRascunho = {
     estab: document.getElementById('notaEstab')?.value || '',
@@ -2090,7 +2090,7 @@ function _salvarRascunho() {
   }
 }
 
-// ââ Preencher campos com dados extraídos âââââââââââââââââââââââââââââââââââââ
+// ── Preencher campos com dados extraídos ─────────────────────────────────────
 function _preencherCampos(dados, viaIA = true) {
   const { estabelecimento, valor, categoria } = dados;
 
@@ -2120,7 +2120,7 @@ function _preencherCampos(dados, viaIA = true) {
   _salvarRascunho();
 }
 
-// ââ Cancelar OCR (manual ou timeout) âââââââââââââââââââââââââââââââââââââââââ
+// ── Cancelar OCR (manual ou timeout) ─────────────────────────────────────────
 // Cancela processamento OCR em andamento
 function cancelarOCR() {
   if(notaOCRController) { notaOCRController.abort(); notaOCRController = null; }
@@ -2133,10 +2133,10 @@ function cancelarOCR() {
   // Mostrar campos para preenchimento manual
   document.getElementById('notaResultado').style.display = 'block';
   document.getElementById('notaSaveBtn').style.display   = 'flex';
-  _notaAviso('â ï¸ Preencha os campos manualmente.', 'warn');
+  _notaAviso('⚠️ Preencha os campos manualmente.', 'warn');
 }
 
-// ââ Barra de timeout visual âââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Barra de timeout visual ───────────────────────────────────────────────────
 function _iniciarTimeoutBar(duracaoMs) {
   const bar = document.getElementById('notaTimeoutBar');
   const fill = document.getElementById('notaTimeoutFill');
@@ -2149,7 +2149,7 @@ function _iniciarTimeoutBar(duracaoMs) {
   fill.style.width = '0%';
 }
 
-// ââ PROCESSAMENTO OCR (foto) ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── PROCESSAMENTO OCR (foto) ──────────────────────────────────────────────────
 async function processarFotoNota(event) {
   const file = event.target.files[0];
   if(!file) return;
@@ -2178,7 +2178,7 @@ async function processarFotoNota(event) {
   _iniciarTimeoutBar(GEMINI_TIMEOUT);
   _notaAviso('', '');
 
-  // Timeout â após 15s libera modo manual mas NÁO aborta o fetch
+  // Timeout — após 15s libera modo manual mas NÃO aborta o fetch
   notaTimeoutTimer = setTimeout(() => {
     if(notaOCRRodando) {
       notaOCRRodando = false;
@@ -2186,7 +2186,7 @@ async function processarFotoNota(event) {
       document.getElementById('notaTimeoutBar').style.display = 'none';
       document.getElementById('notaResultado').style.display  = 'block';
       document.getElementById('notaSaveBtn').style.display    = 'flex';
-      _notaAviso('â± OCR demorou mais de 15s. Preencha manualmente ou aguarde.', 'warn');
+      _notaAviso('⏱ OCR demorou mais de 15s. Preencha manualmente ou aguarde.', 'warn');
     }
   }, GEMINI_TIMEOUT);
 
@@ -2208,7 +2208,7 @@ async function processarFotoNota(event) {
 
     console.log('[OCR] Enviando para backend...', imagemParaEnviar.size, 'bytes');
 
-    // CORRIGIDO: Authorization Bearer adicionado — /v2/ocr agora exige JWT
+    // CORRIGIDO: /v2/ocr agora exige JWT
     const resp = await fetch(`${API_URL}/v2/ocr`, {
       method:  'POST',
       headers: authHeaders(),
@@ -2216,7 +2216,7 @@ async function processarFotoNota(event) {
       body:    formData,
     });
 
-    // Chegou resposta â limpar timeout
+    // Chegou resposta — limpar timeout
     clearTimeout(notaTimeoutTimer);
     notaTimeoutTimer = null;
     notaOCRRodando   = false;
@@ -2260,11 +2260,11 @@ async function processarFotoNota(event) {
     }
 
     console.error('[OCR] Erro:', err.message);
-    _aplicarResultado({ fonte: 'erro', motivo: 'Erro de conexão â preencha manualmente.' });
+    _aplicarResultado({ fonte: 'erro', motivo: 'Erro de conexão — preencha manualmente.' });
   }
 }
 
-// ââ Camada 1: Tentar parsear JSON do Gemini ââââââââââââââââââââââââââââââââââ
+// ── Camada 1: Tentar parsear JSON do Gemini ──────────────────────────────────
 function _processarRespostaGemini(rawText) {
   if(!rawText || rawText.trim() === '') {
     return { fonte: 'vazio' };
@@ -2289,7 +2289,7 @@ function _processarRespostaGemini(rawText) {
   return _fallbackRegex(rawText);
 }
 
-// ââ Camada 2: Validar e normalizar campos âââââââââââââââââââââââââââââââââââââ
+// ── Camada 2: Validar e normalizar campos ─────────────────────────────────────
 function _validarDadosGemini(dados, fonte) {
   const resultado = { fonte, campos: {}, confianca: dados.confianca || 0, avisos: [] };
 
@@ -2324,11 +2324,11 @@ function _validarDadosGemini(dados, fonte) {
   return resultado;
 }
 
-// ââ Camada 3: Regex fallback ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Camada 3: Regex fallback ──────────────────────────────────────────────────
 function _fallbackRegex(texto) {
   const resultado = { fonte: 'regex', campos: {}, confianca: 0.3, avisos: [] };
 
-  // Valor â padrões brasileiros
+  // Valor — padrões brasileiros
   const padroes = [
     /(?:TOTAL|VALOR TOTAL|TOTAL A PAGAR|VL TOTAL)[^\d]*(\d{1,6}[,.]\d{2})/i,
     /R\$\s*(\d{1,6}[,.]\d{2})/,
@@ -2354,7 +2354,7 @@ function _fallbackRegex(texto) {
   return resultado;
 }
 
-// ââ Sugerir categoria pelo nome âââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Sugerir categoria pelo nome ───────────────────────────────────────────────
 function _sugerirCategoria(nome) {
   const n = (nome || '').toLowerCase();
   if(/posto|gnv|combusti|gasolina|etanol|ipiranga|shell|petrobras/.test(n)) return 'combustivel';
@@ -2363,16 +2363,16 @@ function _sugerirCategoria(nome) {
   return 'outros';
 }
 
-// ââ Aplicar resultado na UI âââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Aplicar resultado na UI ───────────────────────────────────────────────────
 function _aplicarResultado(resultado) {
   document.getElementById('notaResultado').style.display = 'block';
   document.getElementById('notaSaveBtn').style.display   = 'flex';
 
   const { fonte, campos = {}, confianca = 0, avisos = [], motivo } = resultado;
   const altaConfianca = confianca >= 0.7;
-  // Ácone por fonte
-  const icones = { gemini: '&#x1F916;', regex: '&#x1F9FE; ', qr: '&#x1F4F1;', backend: '&#x1F916;', manual: 'âï¸' };
-  const icone  = icones[fonte] || '&#x1F916;';
+  // Ícone por fonte
+  const icones = { gemini: '🤖', regex: '🧠', qr: '📱', backend: '🤖', manual: '✏️' };
+  const icone  = icones[fonte] || '🤖';
 
   // Mesclar com dados QR pré-existentes nos campos (sem sobrescrever)
   // Se QR já preencheu valor e OCR também trouxe, mantém o QR (maior confiança)
@@ -2386,12 +2386,12 @@ function _aplicarResultado(resultado) {
     campos.estabelecimento = estabExistente; // preservar estab do QR
   }
 
-  // Erro ou vazio â modo manual puro
+  // Erro ou vazio → modo manual puro
   if(fonte === 'erro' || fonte === 'vazio') {
     _notaAviso(
       fonte === 'erro'
-        ? `â ï¸ OCR indisponível (${motivo || 'erro'}). Preencha manualmente.`
-        : 'â ï¸ Não foi possível ler o cupom. Preencha manualmente.',
+        ? `⚠️ OCR indisponível (${motivo || 'erro'}). Preencha manualmente.`
+        : '⚠️ Não foi possível ler o cupom. Preencha manualmente.',
       'warn'
     );
     _buildCatSelector('outros');
@@ -2404,7 +2404,7 @@ function _aplicarResultado(resultado) {
     input.value     = campos.estabelecimento;
     input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
     _mostrarTag('tagEstab',
-      altaConfianca ? `${icone} ${fonte}` : `â ï¸ ${fonte}`,
+      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
       altaConfianca ? '#10b981' : '#f59e0b');
   }
 
@@ -2414,7 +2414,7 @@ function _aplicarResultado(resultado) {
     input.value     = campos.valor_total;
     input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
     _mostrarTag('tagValor',
-      altaConfianca ? `${icone} ${fonte}` : `â ï¸ ${fonte}`,
+      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
       altaConfianca ? '#10b981' : '#f59e0b');
   }
 
@@ -2427,19 +2427,19 @@ function _aplicarResultado(resultado) {
   // Aviso geral
   const temDados = campos.estabelecimento || campos.valor_total;
   if(!temDados) {
-    _notaAviso('â ï¸ Não foi possível extrair dados. Preencha manualmente.', 'warn');
+    _notaAviso('⚠️ Não foi possível extrair dados. Preencha manualmente.', 'warn');
   } else if(!altaConfianca) {
-    _notaAviso('â ï¸ Dados extraídos com baixa confiança â verifique antes de salvar.', 'warn');
+    _notaAviso('⚠️ Dados extraídos com baixa confiança — verifique antes de salvar.', 'warn');
   } else if(avisos.length > 0) {
-    _notaAviso(`&#x1F916; Alguns campos não foram encontrados: ${avisos.join(', ')}. Complete manualmente.`, 'warn');
+    _notaAviso(`🤖 Alguns campos não foram encontrados: ${avisos.join(', ')}. Complete manualmente.`, 'warn');
   } else {
-    _notaAviso('&#x1F916; Dados extraídos com sucesso â confirme e salve.', 'ok');
+    _notaAviso('🤖 Dados extraídos com sucesso — confirme e salve.', 'ok');
   }
 
   _salvarRascunho();
 }
 
-// ââ Mostrar tag colorida no label âââââââââââââââââââââââââââââââââââââââââââââ
+// ── Mostrar tag colorida no label ─────────────────────────────────────────────
 function _mostrarTag(id, texto, cor) {
   const el = document.getElementById(id);
   if(!el) return;
@@ -2450,7 +2450,7 @@ function _mostrarTag(id, texto, cor) {
   el.style.border     = `1px solid ${cor}44`;
 }
 
-// ââ QR CODE â iniciar scanner âââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── QR CODE — iniciar scanner ─────────────────────────────────────────────────
 function _iniciarQRScanner() {
   if(notaQRScanner) { notaQRScanner.clear(); notaQRScanner = null; }
   notaQRScanner = new Html5Qrcode('notaQrReader');
@@ -2460,9 +2460,9 @@ function _iniciarQRScanner() {
     (url) => _onQRDetectado(url),
     () => {}
   ).then(() => {
-    document.getElementById('notaQrStatus').textContent = 'â Câmera ativa â aponte para o QR Code';
+    document.getElementById('notaQrStatus').textContent = '✅ Câmera ativa — aponte para o QR Code';
   }).catch(err => {
-    document.getElementById('notaQrStatus').textContent = 'â Câmera não autorizada.';
+    document.getElementById('notaQrStatus').textContent = '❌ Câmera não autorizada.';
     console.error('[QR]', err);
   });
 }
@@ -2474,17 +2474,17 @@ function _pararQRScanner() {
   }
 }
 
-// ââ QR detectado â tenta SEFAZ em background (timeout 3s) ââââââââââââââââââââ
+// ── QR detectado — tenta SEFAZ em background (timeout 3s) ────────────────────
 async function _onQRDetectado(url) {
   _pararQRScanner();
 
   if(!url.startsWith('http')) {
-    document.getElementById('notaQrStatus').textContent = 'â QR inválido â não é uma nota fiscal';
+    document.getElementById('notaQrStatus').textContent = '❌ QR inválido — não é uma nota fiscal';
     setTimeout(_iniciarQRScanner, 2000);
     return;
   }
 
-  document.getElementById('notaQrStatus').textContent = 'â QR lido â processando...';
+  document.getElementById('notaQrStatus').textContent = '✅ QR lido — processando...';
   window._notaQRUrl = url; // salvar para enriquecer OCR
 
   // 1. Extrair parâmetros direto da URL
@@ -2494,16 +2494,16 @@ async function _onQRDetectado(url) {
 
   // 2. Verificar se QR tem dados suficientes
   if(temValor && temEstab) {
-    // QR completo â preencher e ir para foto (aba foto já visível)
+    // QR completo — preencher e ir para foto (aba foto já visível)
     notaSwitchTab('foto');
     _aplicarResultado({
       fonte: 'qr', campos: dadosQR, confianca: 0.85, avisos: []
     });
-    _notaAviso('&#x1F4F1; QR lido com sucesso! Tire uma foto para confirmar os dados.', 'ok');
+    _notaAviso('📱 QR lido com sucesso! Tire uma foto para confirmar os dados.', 'ok');
     return;
   }
 
-  // 3. QR incompleto â ativar OCR automaticamente
+  // 3. QR incompleto → ativar OCR automaticamente
   notaSwitchTab('foto');
 
   // Preencher o que o QR já tem (parcial)
@@ -2513,7 +2513,7 @@ async function _onQRDetectado(url) {
 
   // Mostrar área de foto com mensagem amigável
   _notaAvisoComBotao(
-    '&#x1F4F7; Completando dados automaticamente â tire uma foto do cupom.',
+    '📷 Completando dados automaticamente — tire uma foto do cupom.',
     () => document.getElementById('notaFotoInput').click()
   );
 }
@@ -2524,13 +2524,13 @@ function _aplicarResultadoParcialQR(dadosQR) {
     const el = document.getElementById('notaValor');
     el.value     = dadosQR.valor_total;
     el.className = 'ai-filled';
-    _mostrarTag('tagValor', '&#x1F4F1; qr', '#3b82f6');
+    _mostrarTag('tagValor', '📱 qr', '#3b82f6');
   }
   if(dadosQR.estabelecimento) {
     const el = document.getElementById('notaEstab');
     el.value     = dadosQR.estabelecimento;
     el.className = 'ai-filled';
-    _mostrarTag('tagEstab', '&#x1F4F1; qr', '#3b82f6');
+    _mostrarTag('tagEstab', '📱 qr', '#3b82f6');
   }
   if(dadosQR.data) {
     document.getElementById('notaResultado').style.display = 'block';
@@ -2551,7 +2551,7 @@ function _notaAvisoComBotao(msg, onClickFn) {
         style="padding:8px 16px;background:var(--accent);color:#000;border:none;
                border-radius:8px;font-weight:bold;cursor:pointer;font-size:13px;
                white-space:nowrap;flex-shrink:0;">
-        &#x1F4F7; Abrir câmera
+        📷 Abrir câmera
       </button>
     </div>`;
   el.className      = 'nota-aviso warn';
@@ -2567,7 +2567,7 @@ function _parsearURLQR(url) {
   try {
     const params = new URLSearchParams(new URL(url).search);
 
-    // Valor â parâmetro vNF (padrão NFC-e brasileiro)
+    // Valor — parâmetro vNF (padrão NFC-e brasileiro)
     for(const k of ['vNF','vnf','vNf','vTotNF','valor']) {
       const v = params.get(k);
       if(v) {
@@ -2576,7 +2576,7 @@ function _parsearURLQR(url) {
       }
     }
 
-    // Data â parâmetro dEmi
+    // Data — parâmetro dEmi
     for(const k of ['dEmi','demi','dhEmi','data']) {
       const v = params.get(k);
       if(v) {
@@ -2589,7 +2589,7 @@ function _parsearURLQR(url) {
       }
     }
 
-    // Estabelecimento â parâmetro xNome
+    // Estabelecimento — parâmetro xNome
     for(const k of ['xNome','xnome','razaoSocial','nome']) {
       const v = params.get(k);
       if(v && v.length > 2) { resultado.estabelecimento = decodeURIComponent(v); break; }
@@ -2606,14 +2606,14 @@ function _parsearURLQR(url) {
   return resultado;
 }
 
-// ââ Salvar despesa ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Salvar despesa ────────────────────────────────────────────────────────────
 function salvarNota() {
   const valor = parseFloat(document.getElementById('notaValor').value);
   const desc  = document.getElementById('notaEstab').value.trim() || 'Nota Fiscal';
   const mes   = parseInt(document.getElementById('notaMes').value);
 
   if(!valor || valor <= 0) {
-    _notaAviso('â ï¸ Informe o valor da despesa.', 'warn');
+    _notaAviso('⚠️ Informe o valor da despesa.', 'warn');
     document.getElementById('notaValor').focus();
     return;
   }
@@ -2636,11 +2636,11 @@ function salvarNota() {
   currentTab = 'despesas';
   switchTab('despesas');
 }
-// ââ FIM MODAL NOTA FISCAL ââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══ FIM MODAL NOTA FISCAL ════════════════════════════════════════════════════
 
 
 
-// ââ Compressor de imagem via Canvas ââââââââââââââââââââââââââââââââââââââââââ
+// ── Compressor de imagem via Canvas ──────────────────────────────────────────
 // Comprime imagem via Canvas para reduzir tamanho antes do OCR
 function _comprimirImagem(file, maxLado, qualidade) {
   return new Promise((resolve) => {
@@ -2663,10 +2663,10 @@ function _comprimirImagem(file, maxLado, qualidade) {
     img.src = url;
   });
 }
-// ââ FIM Compressor ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── FIM Compressor ────────────────────────────────────────────────────────────
 
 
-// ââ VERIFICAÁÁO DE EMAIL ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── VERIFICAÇÃO DE EMAIL ──────────────────────────────────────────────────────
 let _emailCadastrado = '';
 
 // Exibe tela pedindo confirmação de email após cadastro
@@ -2690,12 +2690,11 @@ async function reenviarEmailVerificacao() {
   const email = _emailCadastrado;
   if(!email) return;
 
-  aviso.textContent   = 'â³ Reenviando...';
+  aviso.textContent   = '⏳ Reenviando...';
   aviso.style.cssText = 'display:block;background:rgba(96,165,250,0.1);color:#60a5fa;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
 
   try {
-    // CORRIGIDO: endpoint era /v2/resend-verify (não existe) → trocado por /v2/forgot-password
-    // Mesmo fluxo: envia email com link de verificação/ativação
+    // CORRIGIDO: /v2/resend-verify não existe → usar /v2/forgot-password
     const r = await fetch(`${API_URL}/v2/forgot-password`, {
       method:  'POST',
       headers: {'Content-Type': 'application/json'},
@@ -2703,7 +2702,7 @@ async function reenviarEmailVerificacao() {
     });
     const d = await r.json();
     if(d.status === 'success') {
-      aviso.textContent   = 'â Email reenviado! Verifique sua caixa de entrada.';
+      aviso.textContent   = '✅ Email reenviado! Verifique sua caixa de entrada.';
       aviso.style.cssText = 'display:block;background:rgba(16,185,129,0.1);color:#10b981;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
     } else {
       aviso.textContent   = d.message || 'Erro ao reenviar.';
@@ -2714,10 +2713,10 @@ async function reenviarEmailVerificacao() {
     aviso.style.cssText = 'display:block;background:rgba(239,68,68,0.1);color:#ef4444;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
   }
 }
-// ââ FIM VERIFICAÁÁO âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── FIM VERIFICAÇÃO ───────────────────────────────────────────────────────────
 
 
-// ââ PERFIL DO USUÁRIO âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── PERFIL DO USUÁRIO ─────────────────────────────────────────────────────────
 let _perfilFotoBase64 = null;
 
 // Abre o modal de perfil e preenche campos com dados atuais do usuário
@@ -2736,7 +2735,7 @@ function abrirPerfil() {
   if(user.foto_url) {
     fotoEl.innerHTML = `<img src="${user.foto_url}" style="width:100%;height:100%;object-fit:cover;">`;
   } else {
-    fotoEl.innerHTML = '&#x1F464;';
+    fotoEl.innerHTML = '👤';
   }
 
   _perfilFotoBase64 = null;
@@ -2855,18 +2854,18 @@ function _atualizarHeader(user) {
     if(user.foto_url) {
       fotoEl.innerHTML = `<img src="${user.foto_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
     } else {
-      fotoEl.textContent = '&#x1F464;';
+      fotoEl.textContent = '👤';
     }
   }
 }
-// ââ FIM PERFIL ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── FIM PERFIL ────────────────────────────────────────────────────────────────
 
-// ââ INIT: aguardar Firebase ou iniciar com localStorage ââ
+// ── INIT: aguardar Firebase ou iniciar com localStorage ──
 // Aguardar DOM completo antes de verificar tokens e sessão
 document.addEventListener('DOMContentLoaded', function() {
   // 1. Verificar se tem token de reset na URL (link do email)
   if(!verificarURLToken()) {
-    // 2. Verificar sessão â se logado carrega dados, senão mostra login
+    // 2. Verificar sessão — se logado carrega dados, senão mostra login
     if(verificarSessao()) {
       loadAllData();
     }
@@ -2874,22 +2873,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- ââ MODAL QR CODE NFC-e ââ -->
+<!-- ══ MODAL QR CODE NFC-e ══ -->
 <div id="qrModalOverlay" class="modal-overlay" onclick="closeQRModal(event)" style="display:none;">
   <div class="modal modal-wide">
-    <h3>&#x1F4F7; LER QR CODE DA NOTA</h3>
-    <div class="modal-sub">Aponte a câmera para o QR Code da NFC-e â o sistema extrai valor, estabelecimento e data</div>
+    <h3>📷 LER QR CODE DA NOTA</h3>
+    <div class="modal-sub">Aponte a câmera para o QR Code da NFC-e — o sistema extrai valor, estabelecimento e data</div>
 
     <div class="form-group">
       <label>Mês de referência</label>
       <select class="form-input" id="qrMes"></select>
     </div>
 
-    <!-- Área câmera -->
+    <!-- Área câmera -->
     <div id="qrCameraArea">
       <div id="qrReader" style="width:100%;border-radius:12px;overflow:hidden;margin-bottom:12px;"></div>
       <div id="qrStatus" style="text-align:center;padding:12px;background:var(--card-bg);border-radius:8px;font-size:13px;color:var(--text-secondary);">
-        &#x1F4F7; Iniciando câmera...
+        📷 Iniciando câmera...
       </div>
     </div>
 
@@ -2916,24 +2915,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- Loading -->
     <div id="qrLoading" style="display:none;text-align:center;padding:20px;">
-      <div style="font-size:2rem;animation:spin 1s linear infinite;">â³</div>
+      <div style="font-size:2rem;animation:spin 1s linear infinite;">⏳</div>
       <p style="margin-top:8px;font-size:13px;color:var(--text-secondary);">Buscando dados da nota fiscal...</p>
     </div>
 
     <div style="display:flex;gap:12px;margin-top:20px;justify-content:flex-end;">
       <button class="btn-secondary" onclick="closeQRModalBtn()">Cancelar</button>
-      <button id="qrSaveBtn" class="btn-primary" onclick="salvarQR()" style="display:none;">â SALVAR DESPESA</button>
+      <button id="qrSaveBtn" class="btn-primary" onclick="salvarQR()" style="display:none;">✓ SALVAR DESPESA</button>
     </div>
   </div>
 </div>
 
-<!-- ââ MODAL ESQUECI SENHA ââ -->
+<!-- ── MODAL ESQUECI SENHA ── -->
 <div id="esqueciModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);
      z-index:10000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;
               padding:32px;width:100%;max-width:380px;">
     <h3 style="font-family:var(--font-display);letter-spacing:1px;margin-bottom:16px;">
-      &#x1F511; ESQUECI MINHA SENHA
+      🔑 ESQUECI MINHA SENHA
     </h3>
     <p style="color:var(--muted);font-size:0.85rem;margin-bottom:20px;">
       Digite seu email cadastrado. Enviaremos um link para redefinir sua senha.
@@ -2961,14 +2960,14 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-<!-- ââ MODAL REDEFINIR SENHA ââ -->
+<!-- ── MODAL REDEFINIR SENHA ── -->
 <div id="resetModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;
      background:#0a0e17;z-index:10001;padding:20px;
      justify-content:center;align-items:center;">
   <div style="background:#111827;border:1px solid #1f2d42;border-radius:16px;
               padding:32px;width:100%;max-width:400px;margin:auto;">
     <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-size:48px;">&#x1F511;</div>
+      <div style="font-size:48px;">🔑</div>
       <h2 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
                  font-size:1.8rem;margin:8px 0;color:#e2e8f0;">
         NOVA SENHA
@@ -2984,7 +2983,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Nova senha
       </label>
       <div style="position:relative;">
-        <input type="password" id="novaSenha" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"
+        <input type="password" id="novaSenha" placeholder="••••••••"
                style="width:100%;padding:10px 44px 10px 14px;background:#0a0e17;
                       border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
                       font-size:0.95rem;outline:none;box-sizing:border-box;"
@@ -2993,7 +2992,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 id="olhoReset"
                 style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
                        background:none;border:none;cursor:pointer;font-size:18px;
-                       color:#64748b;padding:0;">&#x1F441;</button>
+                       color:#64748b;padding:0;">👁</button>
       </div>
       <div id="forcaSenha2" style="margin-top:6px;font-size:11px;"></div>
     </div>
@@ -3004,7 +3003,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Confirmar senha
       </label>
       <div style="position:relative;">
-        <input type="password" id="confirmarSenha" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"
+        <input type="password" id="confirmarSenha" placeholder="••••••••"
                style="width:100%;padding:10px 44px 10px 14px;background:#0a0e17;
                       border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
                       font-size:0.95rem;outline:none;box-sizing:border-box;"
@@ -3013,7 +3012,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 id="olhoConfirm"
                 style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
                        background:none;border:none;cursor:pointer;font-size:18px;
-                       color:#64748b;padding:0;">&#x1F441;</button>
+                       color:#64748b;padding:0;">👁</button>
       </div>
     </div>
 
@@ -3029,13 +3028,13 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-<!-- ââ TELA VERIFICAÁÁO DE EMAIL ââââââââââââââââââââââââââââââââââââââââââ -->
+<!-- ══ TELA VERIFICAÇÃO DE EMAIL ══════════════════════════════════════════ -->
 <div id="verificacaoScreen" style="display:none;position:fixed;inset:0;
      background:#0a0e17;z-index:9999;align-items:center;justify-content:center;
      padding:20px;">
   <div style="background:#111827;border:1px solid #1f2d42;border-radius:20px;
               padding:36px;width:100%;max-width:420px;text-align:center;">
-    <div style="font-size:56px;margin-bottom:12px;">&#x1F4E7;</div>
+    <div style="font-size:56px;margin-bottom:12px;">📧</div>
     <h2 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
                font-size:1.8rem;color:#f59e0b;margin:0 0 12px;">
       VERIFIQUE SEU EMAIL
@@ -3057,18 +3056,18 @@ document.addEventListener('DOMContentLoaded', function() {
             style="width:100%;padding:12px;background:#1e3a5f;color:#60a5fa;
                    border:1px solid #2d5a8f;border-radius:10px;cursor:pointer;
                    font-size:0.9rem;margin-bottom:10px;">
-      &#x1F504; Reenviar email de verificação
+      🔄 Reenviar email de verificação
     </button>
     <button onclick="voltarParaLogin()"
             style="width:100%;padding:10px;background:transparent;
                    border:1px solid #334155;border-radius:10px;
                    color:#64748b;cursor:pointer;font-size:0.85rem;">
-      â Voltar para o login
+      ← Voltar para o login
     </button>
   </div>
 </div>
 
-<!-- ââ MODAL PERFIL âââââââââââââââââââââââââââââââââââââââââââââââââââââââ -->
+<!-- ══ MODAL PERFIL ═══════════════════════════════════════════════════════ -->
 <div id="perfilModal" style="display:none;position:fixed;inset:0;
      background:rgba(0,0,0,0.7);z-index:9000;align-items:center;
      justify-content:center;padding:20px;overflow-y:auto;">
@@ -3082,7 +3081,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  font-size:1.4rem;margin:0;">MEU PERFIL</h3>
       <button onclick="fecharPerfil()"
               style="background:none;border:none;color:#64748b;
-                     font-size:1.5rem;cursor:pointer;">â</button>
+                     font-size:1.5rem;cursor:pointer;">✕</button>
     </div>
 
     <!-- Foto de perfil -->
@@ -3092,7 +3091,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   border:3px solid #f59e0b;margin:0 auto 12px;cursor:pointer;
                   overflow:hidden;display:flex;align-items:center;justify-content:center;
                   font-size:3.2rem;">
-        &#x1F464;
+        👤
       </div>
       <input type="file" id="perfilFotoInput" accept="image/*"
              style="display:none" onchange="processarFotoPerfil(event)">
