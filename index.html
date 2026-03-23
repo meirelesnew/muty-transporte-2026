@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Roteiro — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
-<meta name="theme-color" content="#0ea5e9">
+<meta name="theme-color" content="#0c0a09">
 <title>Roteiro — Transporte Escolar Organizado</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0e17;--surface:#111827;--surface2:#1a2332;--border:#1f2d42;--accent:#0ea5e9;--accent2:#6366f1;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--purple:#a78bfa;--text:#e2e8f0;--muted:#64748b;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+:root{--bg:#0c0a09;--surface:#1c1917;--surface2:#292524;--border:#44403c;--accent:#d97706;--accent2:#f59e0b;--green:#10b981;--red:#ef4444;--yellow:#fbbf24;--purple:#a78bfa;--text:#fafaf9;--muted:#78716c;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
@@ -71,7 +71,7 @@ td{padding:12px 16px;font-size:0.875rem;vertical-align:middle;}
 .badge.pendente{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3);}
 .badge.parcial{background:rgba(245,158,11,0.15);color:var(--yellow);border:1px solid rgba(245,158,11,0.3);}
 .badge.saiu{background:rgba(100,116,139,0.15);color:var(--muted);border:1px solid rgba(100,116,139,0.3);}
-.badge.trimestral{background:rgba(59,130,246,0.15);color:var(--accent2);border:1px solid rgba(59,130,246,0.3);}
+.badge.trimestral{background:rgba(217,119,6,0.15);color:var(--accent2);border:1px solid rgba(217,119,6,0.3);}
 .badge.cartao{background:rgba(167,139,250,0.15);color:var(--purple);border:1px solid rgba(167,139,250,0.3);}
 .badge:hover{filter:brightness(1.2);transform:scale(1.03);}
 .months-row{display:flex;gap:4px;flex-wrap:wrap;}
@@ -80,7 +80,7 @@ td{padding:12px 16px;font-size:0.875rem;vertical-align:middle;}
 .month-dot.pago{background:rgba(16,185,129,0.2);border-color:var(--green);color:var(--green);}
 .month-dot.pendente{background:rgba(239,68,68,0.2);border-color:var(--red);color:var(--red);}
 .month-dot.parcial{background:rgba(245,158,11,0.2);border-color:var(--yellow);color:var(--yellow);}
-.month-dot.trimestral{background:rgba(59,130,246,0.2);border-color:var(--accent2);color:var(--accent2);}
+.month-dot.trimestral{background:rgba(217,119,6,0.2);border-color:var(--accent2);color:var(--accent2);}
 .month-dot.inativo{opacity:0.3;cursor:default;}
 .month-dot[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:110%;left:50%;transform:translateX(-50%);background:#000;color:var(--text);padding:4px 8px;border-radius:4px;font-size:0.7rem;white-space:nowrap;pointer-events:none;z-index:10;}
 .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
@@ -89,7 +89,7 @@ td{padding:12px 16px;font-size:0.875rem;vertical-align:middle;}
 .chart-card h3{font-family:var(--font-display);font-size:1.1rem;letter-spacing:1px;margin-bottom:16px;color:var(--muted);}
 .bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;}
 .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.bar{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--accent2),rgba(59,130,246,0.4));min-height:4px;transition:height 0.5s cubic-bezier(.4,0,.2,1);}
+.bar{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--accent2),rgba(245,158,11,0.4));min-height:4px;transition:height 0.5s cubic-bezier(.4,0,.2,1);}
 .bar.has-value{background:linear-gradient(180deg,var(--green),rgba(16,185,129,0.4));}
 .bar.despesa-bar{background:linear-gradient(180deg,var(--red),rgba(239,68,68,0.4));}
 .bar-label{font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);}
@@ -163,7 +163,7 @@ td{padding:12px 16px;font-size:0.875rem;vertical-align:middle;}
 .modal-month-btn.pago{background:rgba(16,185,129,0.2);border-color:var(--green);color:var(--green);}
 .modal-month-btn.pendente{background:rgba(239,68,68,0.2);border-color:var(--red);color:var(--red);}
 .modal-month-btn.parcial{background:rgba(245,158,11,0.2);border-color:var(--yellow);color:var(--yellow);}
-.modal-month-btn.trimestral{background:rgba(59,130,246,0.2);border-color:var(--accent2);color:var(--accent2);}
+.modal-month-btn.trimestral{background:rgba(217,119,6,0.2);border-color:var(--accent2);color:var(--accent2);}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px;}
 .btn{padding:9px 20px;border-radius:8px;border:none;cursor:pointer;font-family:var(--font-body);font-size:0.875rem;font-weight:500;transition:all 0.15s;}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
@@ -434,7 +434,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
                       flex-shrink:0;">👤</div>
           <div>
             <div style="font-size:0.85rem;font-weight:600;" id="userNome"></div>
-            <div style="font-size:0.7rem;color:#64748b;" id="userEmpresa"></div>
+            <div style="font-size:0.7rem;color:#78716c;" id="userEmpresa"></div>
           </div>
         </div>
         <button class="logout-btn" onclick="fazerLogout()">SAIR</button>
@@ -944,7 +944,7 @@ function updateSyncBadge(ok, msg) {
     document.body.appendChild(badge);
   }
   badge.textContent = msg || (ok ? '☁ Sincronizado' : '📴 Offline');
-  badge.style.background = ok ? '#16a34a' : '#f59e0b';
+  badge.style.background = ok ? '#10b981' : '#d97706';
   badge.style.color = '#fff';
   // Auto-esconder após 4s se sincronizado
   if(ok) setTimeout(() => { badge.style.opacity='0'; }, 4000);
@@ -1324,7 +1324,7 @@ function renderResultado(){
     w.innerHTML=`<div style="display:flex;align-items:flex-end;gap:2px;height:110px"><div class="bar has-value" style="height:${hr}px;flex:1" title="Receita ${m}: ${fmt(recVals[mi])}"></div><div class="bar despesa-bar" style="height:${hd}px;flex:1" title="Despesa ${m}: ${fmt(despVals[mi])}"></div></div><div class="bar-label">${m}</div>`;
     chart.appendChild(w);
   });
-  const catColors=['#f59e0b','#3b82f6','#a78bfa','#64748b','#ec4899'];
+  const catColors=['#f59e0b','#3b82f6','#a78bfa','#78716c','#ec4899'];
   const catVals=CATEGORIAS.map((cat,i)=>({val:despesas.reduce((s,d)=>d.cat===cat.id?s+d.valor:s,0),color:catColors[i],label:cat.nome}));
   drawPie('pieChartDesp','pieLegendDesp',catVals,Math.max(catVals.reduce((s,c)=>s+c.val,0),1));
   const tbody=document.getElementById('resTable');tbody.innerHTML='';
@@ -1794,7 +1794,7 @@ function checarForcaSenha(senha) {
   const cores  = ['#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981'];
   const textos = ['Muito fraca','Fraca','Média','Boa','Forte ✅'];
 
-  el.innerHTML = `<span style="color:${cores[pontos-1] || '#64748b'}">
+  el.innerHTML = `<span style="color:${cores[pontos-1] || '#78716c'}">
     ${textos[pontos-1] || 'Digite a senha'} —
     ${checks.filter(c=>!c.ok).map(c=>`<span style="opacity:.7">${c.txt}</span>`).join(' ')}
   </span>`;
@@ -1879,7 +1879,7 @@ function checarForcaSenha2(senha) {
   const cores  = ['#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981'];
   const textos = ['Muito fraca','Fraca','Média','Boa','Forte ✅'];
   const faltam = checks.filter(c=>!c.ok).map(c=>c.txt).join(' · ');
-  el.innerHTML = `<span style="color:${cores[pontos-1]||'#64748b'}">
+  el.innerHTML = `<span style="color:${cores[pontos-1]||'#78716c'}">
     ${textos[pontos-1]||'Digite a senha'}${faltam ? ' — falta: '+faltam : ''}
   </span>`;
 }
@@ -2987,57 +2987,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- ── MODAL REDEFINIR SENHA ── -->
 <div id="resetModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;
-     background:#0a0e17;z-index:10001;padding:20px;
+     background:#0c0a09;z-index:10001;padding:20px;
      justify-content:center;align-items:center;">
-  <div style="background:#111827;border:1px solid #1f2d42;border-radius:16px;
+  <div style="background:#1c1917;border:1px solid #44403c;border-radius:16px;
               padding:32px;width:100%;max-width:400px;margin:auto;">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-size:48px;">🔑</div>
       <h2 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
-                 font-size:1.8rem;margin:8px 0;color:#e2e8f0;">
+                 font-size:1.8rem;margin:8px 0;color:#fafaf9;">
         NOVA SENHA
       </h2>
-      <p style="color:#64748b;font-size:0.85rem;">
+      <p style="color:#78716c;font-size:0.85rem;">
         Digite e confirme sua nova senha
       </p>
     </div>
 
     <div style="margin-bottom:16px;">
       <label style="display:block;font-size:0.75rem;text-transform:uppercase;
-                    letter-spacing:1.5px;color:#64748b;margin-bottom:6px;">
+                    letter-spacing:1.5px;color:#78716c;margin-bottom:6px;">
         Nova senha
       </label>
       <div style="position:relative;">
         <input type="password" id="novaSenha" placeholder="••••••••"
-               style="width:100%;padding:10px 44px 10px 14px;background:#0a0e17;
-                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+               style="width:100%;padding:10px 44px 10px 14px;background:#0c0a09;
+                      border:1px solid #44403c;border-radius:10px;color:#fafaf9;
                       font-size:0.95rem;outline:none;box-sizing:border-box;"
                oninput="checarForcaSenha2(this.value)">
         <button type="button" onclick="toggleSenha('novaSenha','olhoReset')"
                 id="olhoReset"
                 style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
                        background:none;border:none;cursor:pointer;font-size:18px;
-                       color:#64748b;padding:0;">👁</button>
+                       color:#78716c;padding:0;">👁</button>
       </div>
       <div id="forcaSenha2" style="margin-top:6px;font-size:11px;"></div>
     </div>
 
     <div style="margin-bottom:16px;">
       <label style="display:block;font-size:0.75rem;text-transform:uppercase;
-                    letter-spacing:1.5px;color:#64748b;margin-bottom:6px;">
+                    letter-spacing:1.5px;color:#78716c;margin-bottom:6px;">
         Confirmar senha
       </label>
       <div style="position:relative;">
         <input type="password" id="confirmarSenha" placeholder="••••••••"
-               style="width:100%;padding:10px 44px 10px 14px;background:#0a0e17;
-                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+               style="width:100%;padding:10px 44px 10px 14px;background:#0c0a09;
+                      border:1px solid #44403c;border-radius:10px;color:#fafaf9;
                       font-size:0.95rem;outline:none;box-sizing:border-box;"
                onkeydown="if(event.key==='Enter') confirmarResetSenha()">
         <button type="button" onclick="toggleSenha('confirmarSenha','olhoConfirm')"
                 id="olhoConfirm"
                 style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
                        background:none;border:none;cursor:pointer;font-size:18px;
-                       color:#64748b;padding:0;">👁</button>
+                       color:#78716c;padding:0;">👁</button>
       </div>
     </div>
 
@@ -3055,9 +3055,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- ══ TELA VERIFICAÇÃO DE EMAIL ══════════════════════════════════════════ -->
 <div id="verificacaoScreen" style="display:none;position:fixed;inset:0;
-     background:#0a0e17;z-index:9999;align-items:center;justify-content:center;
+     background:#0c0a09;z-index:9999;align-items:center;justify-content:center;
      padding:20px;">
-  <div style="background:#111827;border:1px solid #1f2d42;border-radius:20px;
+  <div style="background:#1c1917;border:1px solid #44403c;border-radius:20px;
               padding:36px;width:100%;max-width:420px;text-align:center;">
     <div style="font-size:56px;margin-bottom:12px;">📧</div>
     <h2 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
@@ -3069,7 +3069,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </p>
     <p id="verificacaoEmail" style="color:#60a5fa;font-weight:600;
        font-size:1rem;margin-bottom:24px;word-break:break-all;"></p>
-    <p style="color:#64748b;font-size:0.82rem;margin-bottom:28px;">
+    <p style="color:#78716c;font-size:0.82rem;margin-bottom:28px;">
       Clique no link do email para ativar sua conta.<br>
       Verifique a caixa de spam se não encontrar.
     </p>
@@ -3086,7 +3086,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <button onclick="voltarParaLogin()"
             style="width:100%;padding:10px;background:transparent;
                    border:1px solid #334155;border-radius:10px;
-                   color:#64748b;cursor:pointer;font-size:0.85rem;">
+                   color:#78716c;cursor:pointer;font-size:0.85rem;">
       ← Voltar para o login
     </button>
   </div>
@@ -3096,7 +3096,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="perfilModal" style="display:none;position:fixed;inset:0;
      background:rgba(0,0,0,0.7);z-index:9000;align-items:center;
      justify-content:center;padding:20px;overflow-y:auto;">
-  <div style="background:#111827;border:1px solid #1f2d42;border-radius:20px;
+  <div style="background:#1c1917;border:1px solid #44403c;border-radius:20px;
               padding:28px;width:100%;max-width:420px;margin:auto;">
 
     <!-- Header modal -->
@@ -3105,7 +3105,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <h3 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;
                  font-size:1.4rem;margin:0;">MEU PERFIL</h3>
       <button onclick="fecharPerfil()"
-              style="background:none;border:none;color:#64748b;
+              style="background:none;border:none;color:#78716c;
                      font-size:1.5rem;cursor:pointer;">✕</button>
     </div>
 
@@ -3120,7 +3120,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <input type="file" id="perfilFotoInput" accept="image/*"
              style="display:none" onchange="processarFotoPerfil(event)">
-      <p style="color:#64748b;font-size:11px;margin:0;">
+      <p style="color:#78716c;font-size:11px;margin:0;">
         Toque para alterar a foto
       </p>
     </div>
@@ -3130,37 +3130,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
       <div>
         <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
-                      color:#64748b;display:block;margin-bottom:5px;">Nickname</label>
+                      color:#78716c;display:block;margin-bottom:5px;">Nickname</label>
         <input type="text" id="perfilNickname" maxlength="30" placeholder="@seunick"
-               style="width:100%;padding:10px 14px;background:#0a0e17;
-                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+               style="width:100%;padding:10px 14px;background:#0c0a09;
+                      border:1px solid #44403c;border-radius:10px;color:#fafaf9;
                       font-size:0.95rem;box-sizing:border-box;outline:none;">
       </div>
 
       <div>
         <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
-                      color:#64748b;display:block;margin-bottom:5px;">Nome completo</label>
+                      color:#78716c;display:block;margin-bottom:5px;">Nome completo</label>
         <input type="text" id="perfilNome" maxlength="80"
-               style="width:100%;padding:10px 14px;background:#0a0e17;
-                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+               style="width:100%;padding:10px 14px;background:#0c0a09;
+                      border:1px solid #44403c;border-radius:10px;color:#fafaf9;
                       font-size:0.95rem;box-sizing:border-box;outline:none;">
       </div>
 
       <div>
         <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
-                      color:#64748b;display:block;margin-bottom:5px;">Empresa</label>
+                      color:#78716c;display:block;margin-bottom:5px;">Empresa</label>
         <input type="text" id="perfilEmpresa" maxlength="80"
-               style="width:100%;padding:10px 14px;background:#0a0e17;
-                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+               style="width:100%;padding:10px 14px;background:#0c0a09;
+                      border:1px solid #44403c;border-radius:10px;color:#fafaf9;
                       font-size:0.95rem;box-sizing:border-box;outline:none;">
       </div>
 
       <div>
         <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;
-                      color:#64748b;display:block;margin-bottom:5px;">Telefone</label>
+                      color:#78716c;display:block;margin-bottom:5px;">Telefone</label>
         <input type="tel" id="perfilTelefone" maxlength="20" placeholder="(21) 99999-9999"
-               style="width:100%;padding:10px 14px;background:#0a0e17;
-                      border:1px solid #1f2d42;border-radius:10px;color:#e2e8f0;
+               style="width:100%;padding:10px 14px;background:#0c0a09;
+                      border:1px solid #44403c;border-radius:10px;color:#fafaf9;
                       font-size:0.95rem;box-sizing:border-box;outline:none;">
       </div>
 
@@ -3175,7 +3175,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <button onclick="fecharPerfil()"
               style="flex:1;padding:11px;background:transparent;
                      border:1px solid #334155;border-radius:10px;
-                     color:#64748b;cursor:pointer;">
+                     color:#78716c;cursor:pointer;">
         Cancelar
       </button>
       <button onclick="salvarPerfil()" id="btnSalvarPerfil"
