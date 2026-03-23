@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MUTY Transporte Escolar 2026</title>
+<meta name="description" content="Roteiro — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
+<meta name="theme-color" content="#0ea5e9">
+<title>Roteiro — Transporte Escolar Organizado</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0e17;--surface:#111827;--surface2:#1a2332;--border:#1f2d42;--accent:#f59e0b;--accent2:#3b82f6;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--purple:#a78bfa;--text:#e2e8f0;--muted:#64748b;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+:root{--bg:#0a0e17;--surface:#111827;--surface2:#1a2332;--border:#1f2d42;--accent:#0ea5e9;--accent2:#6366f1;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--purple:#a78bfa;--text:#e2e8f0;--muted:#64748b;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
@@ -343,8 +345,8 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   <div class="login-box">
     <div class="login-logo">
       <div class="brand-icon">🚌</div>
-      <h2>MUTY TRANSPORTE</h2>
-      <p>Controle Financeiro 2026</p>
+      <h2>Roteiro</h2>
+      <p>Transporte escolar organizado</p>
     </div>
 
     <div class="login-tabs">
@@ -441,8 +443,8 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="brand">
         <div class="brand-icon">🚌</div>
         <div class="brand-text">
-          <h1>MUTY TRANSPORTE</h1>
-          <p>Erondino Meireles Lima — Controle Financeiro 2026</p>
+          <h1>Roteiro</h1>
+          <p>Erondino Meireles Lima — Roteiro 2026</p>
         </div>
       </div>
       <div class="header-year">2026</div>
@@ -527,7 +529,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<footer><div class="container">MUTY TRANSPORTE ESCOLAR · 2026 · Duque de Caxias – RJ</div></footer>
+<footer><div class="container">Roteiro &copy; 2026 &middot; Transporte Escolar Organizado</div></footer>
 
 <!-- MODAL PAGAMENTO -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
@@ -792,11 +794,34 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 
 <!-- API Render + MongoDB -->
 <script>
-  const API_URL = 'https://muty-api.onrender.com';
+  
+  // MIGRAÇÃO: mover dados do localStorage de muty_ para roteiro_
+  // Garante que usuários que já usavam o app não percam seus dados
+  (function migrarLocalStorage() {
+    const map = {
+      'muty_auth_token':    'roteiro_auth_token',
+      'muty_auth_user':     'roteiro_auth_user',
+      'muty_pagamentos':    'roteiro_pagamentos',
+      'muty_despesas':      'roteiro_despesas',
+      'muty_clientes':      'roteiro_clientes',
+      'muty_nota_rascunho': 'roteiro_nota_rascunho',
+    };
+    let migrou = false;
+    for (const [antiga, nova] of Object.entries(map)) {
+      if (localStorage.getItem(antiga) !== null && localStorage.getItem(nova) === null) {
+        localStorage.setItem(nova, localStorage.getItem(antiga));
+        localStorage.removeItem(antiga);
+        migrou = true;
+      }
+    }
+    if (migrou) console.log('[Roteiro] Migração de dados concluída.');
+  })();
+
+  const API_URL = 'https://muty-api.onrender.com'; // TODO: trocar para roteiro-api.onrender.com após migrar o backend
 
   // Retorna headers com JWT do usuário logado
   function authHeaders() {
-    const token = localStorage.getItem('muty_auth_token');
+    const token = localStorage.getItem('roteiro_auth_token');
     return {
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': 'Bearer ' + token } : {})
@@ -898,7 +923,7 @@ function loadLS(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
 async function saveData(chave, valor) {
-  saveLS('muty_'+chave, valor); // sempre salva local também
+  saveLS('roteiro_'+chave, valor); // sempre salva local também
   if(window.fbReady && window.fbSave) {
     try {
       await window.fbSave(chave, valor);
@@ -928,9 +953,9 @@ function updateSyncBadge(ok, msg) {
 
 async function loadAllData() {
   // 1. Carregar localStorage IMEDIATAMENTE para UI responsiva
-  pagamentos = loadLS('muty_pagamentos', {});
-  despesas   = loadLS('muty_despesas', []);
-  clientes   = loadLS('muty_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
+  pagamentos = loadLS('roteiro_pagamentos', {});
+  despesas   = loadLS('roteiro_despesas', []);
+  clientes   = loadLS('roteiro_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
   dbPronto   = true;
   document.getElementById('loadingScreen').style.display = 'none';
   refresh();
@@ -949,13 +974,13 @@ async function sincronizarComAPI() {
 
       let changed = false;
       if(todos.pagamentos !== undefined) {
-        pagamentos = todos.pagamentos; saveLS('muty_pagamentos', pagamentos); changed = true;
+        pagamentos = todos.pagamentos; saveLS('roteiro_pagamentos', pagamentos); changed = true;
       }
       if(todos.despesas !== undefined) {
-        despesas = todos.despesas; saveLS('muty_despesas', despesas); changed = true;
+        despesas = todos.despesas; saveLS('roteiro_despesas', despesas); changed = true;
       }
       if(todos.clientes !== undefined) {
-        clientes = todos.clientes; saveLS('muty_clientes', clientes); changed = true;
+        clientes = todos.clientes; saveLS('roteiro_clientes', clientes); changed = true;
       }
       updateSyncBadge(true, '☁ Sincronizado');
       if(changed) refresh();
@@ -1458,7 +1483,7 @@ function salvarCupom(){
 
 
 // ══ QR CODE NFC-e ══════════════════════════════════════════════════════════
-const API_URL_QR = 'https://muty-api.onrender.com';
+const API_URL_QR = 'https://muty-api.onrender.com'; // TODO: trocar para roteiro-api.onrender.com
 let qrScanner = null;
 let qrCatSelecionada = 'outros';
 
@@ -1600,8 +1625,8 @@ function closeQRModalBtn() {
 
 
 // ══ AUTENTICAÇÃO ════════════════════════════════════════════════════════════
-const AUTH_KEY  = 'muty_auth_token';
-const USER_KEY  = 'muty_auth_user';
+const AUTH_KEY  = 'roteiro_auth_token';
+const USER_KEY  = 'roteiro_auth_user';
 
 // Recupera token salvo no localStorage
 function getToken()   { return localStorage.getItem(AUTH_KEY) || null; }
@@ -1920,7 +1945,7 @@ function mostrarResetMsg(texto, ok) {
 }
 
 // Detectar token de reset na URL ao carregar a página
-// Ex: https://meirelesnew.github.io/muty-transporte-2026?reset_token=XXXXX
+// Ex: https://roteiro.app?reset_token=XXXXX
 function verificarURLToken() {
   const params     = new URLSearchParams(window.location.search);
   const resetToken = params.get('reset_token');
@@ -1963,7 +1988,7 @@ let notaRascunho       = {};    // rascunho local
 // ── Abrir modal ──────────────────────────────────────────────────────────────
 function openNotaModal() {
   // Restaurar rascunho salvo localmente
-  notaRascunho = loadLS('muty_nota_rascunho', {});
+  notaRascunho = loadLS('roteiro_nota_rascunho', {});
 
   // Preencher meses
   document.getElementById('notaMes').innerHTML =
@@ -2086,7 +2111,7 @@ function _salvarRascunho() {
     cat:   notaCatSelecionada,
   };
   if(notaRascunho.estab || notaRascunho.valor) {
-    saveLS('muty_nota_rascunho', notaRascunho);
+    saveLS('roteiro_nota_rascunho', notaRascunho);
   }
 }
 
@@ -2630,7 +2655,7 @@ function salvarNota() {
   saveData('despesas', despesas);
 
   // Limpar rascunho
-  saveLS('muty_nota_rascunho', {});
+  saveLS('roteiro_nota_rascunho', {});
 
   closeNotaModalBtn();
   currentTab = 'despesas';
@@ -2721,7 +2746,7 @@ let _perfilFotoBase64 = null;
 
 // Abre o modal de perfil e preenche campos com dados atuais do usuário
 function abrirPerfil() {
-  const user = loadLS('muty_auth_user', null);
+  const user = loadLS('roteiro_auth_user', null);
   if(!user) return;
 
   // Preencher campos com dados atuais
@@ -2780,8 +2805,8 @@ async function salvarPerfil() {
   const msgEl  = document.getElementById('perfilMsg');
 
   // Ler token diretamente do localStorage com múltiplas chaves
-  let token = localStorage.getItem('muty_auth_token')
-           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'muty_auth_token');
+  let token = localStorage.getItem('roteiro_auth_token')
+           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'roteiro_auth_token');
 
   if(!token) {
     if(msgEl) { msgEl.textContent = '❌ Sessão expirada. Faça login novamente.';
@@ -2820,9 +2845,9 @@ async function salvarPerfil() {
 
     if(d.status === 'success') {
       // Atualizar dados locais
-      const userAtual  = JSON.parse(localStorage.getItem('muty_auth_user') || '{}');
+      const userAtual  = JSON.parse(localStorage.getItem('roteiro_auth_user') || '{}');
       const atualizado = {...userAtual, ...d.data};
-      localStorage.setItem('muty_auth_user', JSON.stringify(atualizado));
+      localStorage.setItem('roteiro_auth_user', JSON.stringify(atualizado));
 
       // Atualizar header
       if(typeof _atualizarHeader === 'function') _atualizarHeader(atualizado);
