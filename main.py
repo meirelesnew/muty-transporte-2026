@@ -305,7 +305,7 @@ def _html_email(titulo: str, nome: str, mensagem: str, link: str, btn_texto: str
     """
 
 
-def enviar_email(destino: str, assunto: str, html: str) -> bool:
+async def enviar_email(destino: str, assunto: str, html: str) -> bool:
     """
     Envia email via Resend API (HTTPS porta 443).
     Nunca lanca excecao — loga o erro e retorna False,
@@ -315,33 +315,33 @@ def enviar_email(destino: str, assunto: str, html: str) -> bool:
         print("[EMAIL] RESEND_API_KEY nao configurada — email nao enviado")
         return False
     try:
-        resp = httpx.post(
-            "https://api.resend.com/emails",
-            headers={
-                "Authorization": f"Bearer {RESEND_API_KEY}",
-                "Content-Type":  "application/json",
-            },
-            json={
-                "from":    "Trajeto <noreply@curysolucoestecnicas.com.br>",
-                "to":      [destino],
-                "subject": assunto,
-                "html":    html,
-            },
-            timeout=15,
-        )
-        if resp.status_code in (200, 201):
-            print(f"[EMAIL] Enviado — id={resp.json().get('id','?')} para={destino}")
-            return True
-        print(f"[EMAIL] Erro HTTP {resp.status_code}: {resp.text[:200]}")
-        return False
+        async with httpx.AsyncClient(timeout=15) as client:
+            resp = await client.post(
+                "https://api.resend.com/emails",
+                headers={
+                    "Authorization": f"Bearer {RESEND_API_KEY}",
+                    "Content-Type":  "application/json",
+                },
+                json={
+                    "from":    "Trajeto <noreply@curysolucoestecnicas.com.br>",
+                    "to":      [destino],
+                    "subject": assunto,
+                    "html":    html,
+                },
+            )
+            if resp.status_code in (200, 201):
+                print(f"[EMAIL] Enviado — id={resp.json().get('id','?')} para={destino}")
+                return True
+            print(f"[EMAIL] Erro HTTP {resp.status_code}: {resp.text[:200]}")
+            return False
     except Exception as e:
         print(f"[EMAIL] Excecao: {repr(e)}")
         return False
 
 
-def _email_verificacao(email: str, nome: str, token: str) -> bool:
+async def _email_verificacao(email: str, nome: str, token: str) -> bool:
     """Envia email de confirmacao de cadastro com link de verificacao."""
-    link = f"https://muty-api.onrender.com/v2/verify-email?token={token}"
+    link = f"{FRONTEND_URL}?verify_token={token}"
     html = _html_email(
         titulo    = f"Ola, {nome}! Confirme seu cadastro",
         nome      = nome,
@@ -349,10 +349,10 @@ def _email_verificacao(email: str, nome: str, token: str) -> bool:
         link      = link,
         btn_texto = "CONFIRMAR EMAIL",
     )
-    return enviar_email(email, "Confirme seu cadastro — Trajeto", html)
+    return await enviar_email(email, "Confirme seu cadastro — Trajeto", html)
 
 
-def _email_reset_senha(email: str, nome: str, token: str) -> bool:
+async def _email_reset_senha(email: str, nome: str, token: str) -> bool:
     """Envia email de redefinição de senha com link temporário."""
     link = f"{FRONTEND_URL}?reset_token={token}"
     html = _html_email(
@@ -362,7 +362,7 @@ def _email_reset_senha(email: str, nome: str, token: str) -> bool:
         link      = link,
         btn_texto = "REDEFINIR SENHA",
     )
-    return enviar_email(email, "Redefinir senha — Trajeto", html)
+    return await enviar_email(email, "Redefinir senha — Trajeto", html)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -884,7 +884,7 @@ async def register(request: Request):
         except DuplicateKeyError:
             return {"status": "error", "message": "Email ja cadastrado"}
 
-        email_enviado = _email_verificacao(email, nome, verify_token)
+        email_enviado = await _email_verificacao(email, nome, verify_token)
         print(f"[AUTH] Cadastro: {email} | perfil={perfil} | email_enviado={email_enviado}")
         return {
             "status": "success",
@@ -1111,7 +1111,7 @@ async def forgot_password(request: Request):
             {"$set": {"reset_token": reset_token, "reset_expira": reset_expira}}
         )
 
-        enviado = _email_reset_senha(resultado, user.get("nome", ""), reset_token)
+        enviado = await _email_reset_senha(resultado, user.get("nome", ""), reset_token)
         print(f"[AUTH] Reset solicitado: {resultado} | enviado={enviado}")
         return {"status": "success", "message": MSG}
 
@@ -1631,10 +1631,10 @@ async def test_email(request: Request, user=Depends(get_current_user)):
         para = str(body.get("email", "")).strip()
         if not para:
             return {"status": "error", "message": "Email obrigatorio"}
-        ok = enviar_email(
+        ok = await enviar_email(
             destino = para,
-            assunto = "Teste MUTY — Email funcionando",
-            html    = "<h2>MUTY Transporte</h2><p>Email de teste enviado com sucesso via Resend!</p>",
+            assunto = "Teste Trajeto — Email funcionando",
+            html    = "<h2>Trajeto SaaS</h2><p>Email de teste enviado com sucesso via Resend!</p>",
         )
         return {"status": "success" if ok else "error", "enviado": ok, "para": para}
     except Exception as e:

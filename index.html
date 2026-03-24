@@ -817,7 +817,9 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     if (migrou) console.log('[Roteiro] Migração de dados concluída.');
   })();
 
-  const API_URL = 'https://muty-api.onrender.com'; // TODO: trocar para roteiro-api.onrender.com após migrar o backend
+  const API_URL = 'https://muty-api.onrender.com';
+  const AUTH_KEY = 'Trajeto_auth_token';
+  const USER_KEY = 'Trajeto_auth_user';
 
 // ── CONTROLE DE PLANO ────────────────────────────────────────────────────────
 // userPlano é carregado do /v2/plano após login e atualizado dinamicamente.
@@ -845,7 +847,7 @@ function aplicarRestricoesDePlano() {
 
   // Retorna headers com JWT do usuário logado
   function authHeaders() {
-    const token = localStorage.getItem('roteiro_auth_token');
+    const token = localStorage.getItem(AUTH_KEY);
     return {
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': 'Bearer ' + token } : {})
@@ -860,8 +862,8 @@ function aplicarRestricoesDePlano() {
         headers: authHeaders(),
         body:    JSON.stringify(dados)
       });
-      // Se token expirou, redireciona para login
-      if(r.status === 401) { fazerLogout(); return false; }
+      // Se token expirou, redireciona para login de forma silenciosa
+      if(r.status === 401) { fazerLogout(false); return false; }
       const j = await r.json();
       return j.status === 'success';
     } catch(e) {
@@ -876,7 +878,7 @@ function aplicarRestricoesDePlano() {
       const r = await fetch(`${API_URL}/v2/todos`, {
         headers: authHeaders()
       });
-      if(r.status === 401) { fazerLogout(); return null; }
+      if(r.status === 401) { fazerLogout(false); return null; }
       if(!r.ok) return null;
       const j = await r.json();
       // v2 retorna { status, data: { pagamentos, despesas, clientes } }
@@ -908,6 +910,8 @@ const CATEGORIAS=[
   {id:'combustivel',nome:'Combustível',icon:'⛽'},
   {id:'manutencao', nome:'Manutenção',  icon:'🔧'},
   {id:'impostos',   nome:'Impostos',    icon:'📋'},
+  {id:'pedagio',    nome:'Pedágio',     icon:'🛣️'},
+  {id:'alimentacao',nome:'Alimentação', icon:'🍴'},
   {id:'outros',     nome:'Outros',      icon:'📦'},
   {id:'cartao',     nome:'Cartão',      icon:'💳'},
 ];
@@ -1611,7 +1615,7 @@ function preencherQRResultado(nota) {
   CATEGORIAS.filter(c => c.id !== 'cartao').forEach(cat => {
     const btn = document.createElement('div');
     btn.className = 'cat-opt' + (cat.id === qrCatSelecionada ? ' selected' : '');
-    btn.innerHTML = `${cat.icon}${cat.nome}`;
+    btn.innerHTML = `${cat.nome}`;
     btn.onclick = () => {
       qrCatSelecionada = cat.id;
       document.querySelectorAll('#qrCatSelector .cat-opt').forEach(b => b.classList.remove('selected'));
@@ -1654,9 +1658,13 @@ function closeQRModalBtn() {
 // ══ FIM QR CODE ═════════════════════════════════════════════════════════════
 
 
+
 // ══ AUTENTICAÇÃO ════════════════════════════════════════════════════════════
-const AUTH_KEY  = 'roteiro_auth_token';
-const USER_KEY  = 'roteiro_auth_user';
+
+
+
+// ══ AUTENTICAÇìO ══════════════════════════════════════════════════════════════
+
 
 // Recupera token salvo no localStorage
 function getToken()   { return localStorage.getItem(AUTH_KEY) || null; }
@@ -1668,8 +1676,14 @@ function salvarAuth(token, user) {
 }
 
 function limparAuth() {
+  // Limpa token e dados de perfil
   localStorage.removeItem(AUTH_KEY);
   localStorage.removeItem(USER_KEY);
+  // Limpa dados sensíveis do usuário para evitar vazamento entre sessões
+  localStorage.removeItem('Trajeto_pagamentos');
+  localStorage.removeItem('Trajeto_despesas');
+  localStorage.removeItem('Trajeto_clientes');
+  localStorage.removeItem('Trajeto_nota_rascunho');
 }
 
 // Alterna entre aba "Entrar" e "Cadastrar"
@@ -1698,8 +1712,9 @@ function mostrarDashboard(user) {
 }
 
 // Logout — limpa token e recarrega a página
-function fazerLogout() {
-  if(!confirm('Deseja sair da sua conta?')) return;
+// Se confirmar=false, faz logout silencioso (ex: erro 401)
+function fazerLogout(confirmar = true) {
+  if(confirmar && !confirm('Deseja sair da sua conta?')) return;
   limparAuth();
   location.reload();
 }
