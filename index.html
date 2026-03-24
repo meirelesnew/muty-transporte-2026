@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Trajeto — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
+<meta name="description" content="Roteiro — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
 <meta name="theme-color" content="#0c0a09">
-<title>Trajeto — Transporte Escolar Organizado</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DMÊSans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Roteiro — Transporte Escolar Organizado</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0c0a09;--surface:#1c1917;--surface2:#292524;--border:#44403c;--accent:#d97706;--accent2:#f59e0b;--green:#10b981;--red:#ef4444;--yellow:#fbbf24;--purple:#a78bfa;--text:#fafaf9;--muted:#78716c;--font-display:'Bebas Neue',sans-serif;--font-body:'DMÊSans',sans-serif;--font-mono:'DM Mono',monospace;}
+:root{--bg:#0c0a09;--surface:#1c1917;--surface2:#292524;--border:#44403c;--accent:#d97706;--accent2:#f59e0b;--green:#10b981;--red:#ef4444;--yellow:#fbbf24;--purple:#a78bfa;--text:#fafaf9;--muted:#78716c;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
@@ -226,7 +226,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 @media(max-width:900px){.header-year{display:none;} thead th:nth-child(n+5){display:none;} td:nth-child(n+5){display:none;}}
 @media(max-width:600px){.brand-text h1{font-size:1.8rem;} .balance-bar{grid-template-columns:1fr;}}
 
-/* â”€â”€ TELA DE LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── TELA DE LOGIN ─────────────────────────────────────────── */
 #loginScreen{
   position:fixed;inset:0;background:var(--bg);z-index:9999;
   display:flex;align-items:center;justify-content:center;
@@ -281,7 +281,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   cursor:pointer;font-size:0.8rem;transition:all 0.2s;}
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
 
-/* â”€â”€ MODAL NOTA FISCAL UNIFICADO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── MODAL NOTA FISCAL UNIFICADO ─────────────────────────── */
 .nota-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;
   padding:4px;margin-bottom:20px;}
 .nota-tab{flex:1;padding:8px;border:none;background:transparent;
@@ -330,7 +330,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 .timeout-fill{height:100%;background:var(--accent);border-radius:2px;
   transition:width linear;}
 
-/* â”€â”€ Campos baixa confiança â”€â”€â”€ */
+/* ── Campos baixa confiança ─── */
 .nota-campo input.ai-filled.baixa {
   border-color: rgba(245,158,11,0.5);
   background: rgba(245,158,11,0.05);
@@ -340,12 +340,12 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
-<!-- ══════ TELA DE LOGIN ══════ -->
+<!-- ── TELA DE LOGIN ── -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
       <div class="brand-icon">🚌</div>
-      <h2>Trajeto</h2>
+      <h2>Roteiro</h2>
       <p>Transporte escolar organizado</p>
     </div>
 
@@ -369,7 +369,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
           <button type="button" onclick="toggleSenha('loginSenha','olhoLogin')"
                   style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
                          background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
-                  id="olhoLogin">👁️</button>
+                  id="olhoLogin">👁</button>
         </div>
       </div>
       <div style="text-align:right;margin-bottom:12px;">
@@ -404,7 +404,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
           <button type="button" onclick="toggleSenha('cadSenha','olhoCad')"
                   style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
                          background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);"
-                  id="olhoCad">👁️</button>
+                  id="olhoCad">👁</button>
         </div>
         <div id="forçaSenha" style="margin-top:6px;font-size:11px;color:var(--muted);"></div>
       </div>
@@ -432,12 +432,9 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
                       border:2px solid #f59e0b;overflow:hidden;display:flex;
                       align-items:center;justify-content:center;font-size:1.3rem;
                       flex-shrink:0;">👤</div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span id="userBadge" class="plan-badge free" style="display:none;">FREE</span>
-            <div>
-              <div style="font-size:0.85rem;font-weight:600;" id="userNome"></div>
-              <div style="font-size:0.7rem;color:#78716c;" id="userEmpresa"></div>
-            </div>
+          <div>
+            <div style="font-size:0.85rem;font-weight:600;" id="userNome"></div>
+            <div style="font-size:0.7rem;color:#78716c;" id="userEmpresa"></div>
           </div>
         </div>
         <button class="logout-btn" onclick="fazerLogout()">SAIR</button>
@@ -446,8 +443,8 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="brand">
         <div class="brand-icon">🚌</div>
         <div class="brand-text">
-          <h1>Trajeto</h1>
-          <p>Erondino Meireles Lima — Trajeto 2026</p>
+          <h1>Roteiro</h1>
+          <p>Erondino Meireles Lima &nbsp;<span id="planoBadge" style="background:rgba(120,113,108,0.2);color:#78716c;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600;letter-spacing:1px;">FREE</span></p>
         </div>
       </div>
       <div class="header-year">2026</div>
@@ -461,7 +458,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     <button class="nav-tab" onclick="switchTab('clientes')">👥 CLIENTES</button>
   </div>
 
-  <!-- ═══ PAGAMENTOS ═══ -->
+  <!-- ═══ PAGAMENTOS ═══ -->
   <div class="section active" id="tab-pagamentos">
     <div class="month-bar" id="monthBar"></div>
     <div class="summary-grid">
@@ -489,7 +486,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     </div>
   </div>
 
-  <!-- ═══ DESPESAS ═══ -->
+  <!-- ═══ DESPESAS ═══ -->
   <div class="section" id="tab-despesas">
     <div class="month-bar" id="monthBarDesp"></div>
     <div class="cat-grid" id="catGrid"></div>
@@ -504,7 +501,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
     <div class="desp-list" id="despList"></div>
   </div>
 
-  <!-- ═══ RESULTADO ═══ -->
+  <!-- ═══ RESULTADO ═══ -->
   <div class="section" id="tab-resultado">
     <div class="month-bar" id="monthBarRes"></div>
     <div class="balance-bar">
@@ -516,11 +513,11 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="chart-card"><h3>RECEITA VS DESPESA (ANO)</h3><div class="bar-chart" id="barChartRes" style="height:120px"></div></div>
       <div class="chart-card"><h3>DESPESAS POR CATEGORIA</h3><div class="pie-wrap"><svg class="pie-svg" width="100" height="100" viewBox="0 0 100 100" id="pieChartDesp"><circle cx="50" cy="50" r="40" fill="var(--border)"/></svg><div class="pie-legend" id="pieLegendDesp"></div></div></div>
     </div>
-    <div class="table-header"><h2>RESULTADO MÊSAL</h2></div>
+    <div class="table-header"><h2>RESULTADO MENSAL</h2></div>
     <div class="table-wrap"><table><thead><tr><th>Mês</th><th>Receita</th><th>Despesas</th><th>Lucro</th><th>Margem</th></tr></thead><tbody id="resTable"></tbody></table></div>
   </div>
 
-  <!-- ═══ CLIENTES ═══ -->
+  <!-- ═══ CLIENTES ═══ -->
   <div class="section" id="tab-clientes">
     <div class="table-header">
       <h2>GESTÃO DE CLIENTES</h2>
@@ -532,7 +529,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<footer><div class="container">Trajeto &copy; 2026 &middot; Transporte Escolar Organizado</div></footer>
+<footer><div class="container">Roteiro &copy; 2026 &middot; Transporte Escolar Organizado</div></footer>
 
 <!-- MODAL PAGAMENTO -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
@@ -654,7 +651,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 
 <!-- MODAL CUPOM FISCAL -->
 
-<!-- ══ MODAL NOTA FISCAL UNIFICADO ══════════════════════════════════════════ -->
+<!-- ══ MODAL NOTA FISCAL UNIFICADO ══════════════════════════════════════════ -->
 <div id="notaModalOverlay" class="modal-overlay" onclick="closeNotaModal(event)" style="display:none;">
   <div class="modal modal-wide">
     <h3>📄 LANÇAR DESPESA</h3>
@@ -672,7 +669,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <button class="nota-tab" id="tabQR"   onclick="notaSwitchTab('qr')">📱 QR CODE</button>
     </div>
 
-    <!-- â”€â”€ ABA FOTO â”€â”€ -->
+    <!-- ── ABA FOTO ── -->
     <div id="notaAbaFoto">
       <div class="nota-drop" id="notaDropZone">
         <input type="file" id="notaFotoInput" accept="image/*" capture="environment"
@@ -702,7 +699,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
     </div>
 
-    <!-- â”€â”€ ABA QR â”€â”€ -->
+    <!-- ── ABA QR ── -->
     <div id="notaAbaQR" style="display:none;">
       <div class="qr-area" id="notaQrReader"></div>
       <div id="notaQrStatus" style="text-align:center;font-size:13px;color:var(--muted);
@@ -711,18 +708,18 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
     </div>
 
-    <!-- â”€â”€ AVISO â”€â”€ -->
+    <!-- ── AVISO ── -->
     <div class="nota-aviso" id="notaAviso"></div>
 
-    <!-- â”€â”€ RESULTADO (campos sempre visíveis após leitura) â”€â”€ -->
+    <!-- ── RESULTADO (campos sempre visíveis após leitura) ── -->
     <div class="nota-resultado" id="notaResultado">
       <div class="nota-campo">
-        <label>Estabelecimento <span class="ai-tag" id="tagEstab" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagEstabManual" style="display:none;">âœï¸ manual</span></label>
+        <label>Estabelecimento <span class="ai-tag" id="tagEstab" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagEstabManual" style="display:none;">✏️ manual</span></label>
         <input type="text" id="notaEstab" placeholder="Nome do estabelecimento"
                oninput="marcarEditado(this,'tagEstab','tagEstabManual')">
       </div>
       <div class="nota-campo">
-        <label>Valor Total (R$) <span class="ai-tag" id="tagValor" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagValorManual" style="display:none;">âœï¸ manual</span></label>
+        <label>Valor Total (R$) <span class="ai-tag" id="tagValor" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagValorManual" style="display:none;">✏️ manual</span></label>
         <input type="number" id="notaValor" placeholder="0,00" step="0.01" min="0"
                oninput="marcarEditado(this,'tagValor','tagValorManual')">
       </div>
@@ -732,7 +729,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
     </div>
 
-    <!-- â”€â”€ BOTì•ES â”€â”€ -->
+    <!-- ── BOTÕES ── -->
     <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
       <button class="btn-secondary" onclick="closeNotaModalBtn()">Cancelar</button>
       <button class="btn-primary" id="notaSaveBtn" onclick="salvarNota()"
@@ -751,7 +748,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <select class="form-input" id="cupomMes"></select>
     </div>
 
-    <!-- ìrea de foto -->
+    <!-- Área de foto -->
     <div id="cupomFotoArea">
       <div style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;margin-bottom:12px;transition:all 0.2s;" 
            id="cupomDropZone" onclick="document.getElementById('cupomFotoInput').click()">
@@ -798,16 +795,16 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 <!-- API Render + MongoDB -->
 <script>
   
-  // MIGRAÇìO: mover dados do localStorage de muty_ para Trajeto_
+  // MIGRAÇÃO: mover dados do localStorage de muty_ para roteiro_
   // Garante que usuários que já usavam o app não percam seus dados
   (function migrarLocalStorage() {
     const map = {
-      'muty_auth_token':    'Trajeto_auth_token',
-      'muty_auth_user':     'Trajeto_auth_user',
-      'muty_pagamentos':    'Trajeto_pagamentos',
-      'muty_despesas':      'Trajeto_despesas',
-      'muty_clientes':      'Trajeto_clientes',
-      'muty_nota_rascunho': 'Trajeto_nota_rascunho',
+      'muty_auth_token':    'roteiro_auth_token',
+      'muty_auth_user':     'roteiro_auth_user',
+      'muty_pagamentos':    'roteiro_pagamentos',
+      'muty_despesas':      'roteiro_despesas',
+      'muty_clientes':      'roteiro_clientes',
+      'muty_nota_rascunho': 'roteiro_nota_rascunho',
     };
     let migrou = false;
     for (const [antiga, nova] of Object.entries(map)) {
@@ -817,14 +814,38 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
         migrou = true;
       }
     }
-    if (migrou) console.log('[Trajeto] Migração de dados concluída.');
+    if (migrou) console.log('[Roteiro] Migração de dados concluída.');
   })();
 
-  const API_URL = 'https://muty-api.onrender.com';
+  const API_URL = 'https://muty-api.onrender.com'; // TODO: trocar para roteiro-api.onrender.com após migrar o backend
+
+// ── CONTROLE DE PLANO ────────────────────────────────────────────────────────
+// userPlano é carregado do /v2/plano após login e atualizado dinamicamente.
+// Sempre usar isPro() para verificar — nunca comparar diretamente.
+let userPlano = 'free';
+const isPro = () => userPlano === 'pro';
+
+// Aplica restrições visuais conforme o plano
+function aplicarRestricoesDePlano() {
+  const badge = document.getElementById('planoBadge');
+  if(badge) {
+    badge.textContent   = isPro() ? 'PRO' : 'FREE';
+    badge.style.cssText = isPro()
+      ? 'background:rgba(217,119,6,0.25);color:#d97706;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600;letter-spacing:1px;'
+      : 'background:rgba(120,113,108,0.2);color:#78716c;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600;letter-spacing:1px;';
+  }
+  // Botão ESCANEAR NOTA — cadeado para free
+  const btnNota = document.querySelector('[onclick="openNotaModal()"]');
+  if(btnNota) {
+    btnNota.innerHTML = isPro()
+      ? '&#x1F4F7; ESCANEAR NOTA'
+      : '&#x1F512; ESCANEAR NOTA <span style="font-size:10px;opacity:0.6">PRO</span>';
+  }
+}
 
   // Retorna headers com JWT do usuário logado
   function authHeaders() {
-    const token = localStorage.getItem('Trajeto_auth_token');
+    const token = localStorage.getItem('roteiro_auth_token');
     return {
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': 'Bearer ' + token } : {})
@@ -909,7 +930,7 @@ const CLIENTES_DEFAULT=[
   {id:16,nome:'Carlos Diego Jamila',                   valor:1000,tipo:'trimestral',mesesAtivos:[2,4,7]},
 ];
 
-// â”€â”€ STATE â”€â”€
+// ── STATE ──
 let currentMonth=new Date().getMonth();
 let currentTab='pagamentos';
 let pagamentos={};
@@ -921,12 +942,12 @@ let editingClienteId=null;
 let cartaoItems=[];
 let dbPronto=false;
 
-// â”€â”€ STORAGE: Firebase + localStorage como backup â”€â”€
+// ── STORAGE: Firebase + localStorage como backup ──
 function loadLS(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
 async function saveData(chave, valor) {
-  saveLS('Trajeto_'+chave, valor); // sempre salva local também
+  saveLS('roteiro_'+chave, valor); // sempre salva local também
   if(window.fbReady && window.fbSave) {
     try {
       await window.fbSave(chave, valor);
@@ -946,7 +967,7 @@ function updateSyncBadge(ok, msg) {
     badge.style.cssText = 'position:fixed;bottom:12px;right:12px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;z-index:9999;transition:all 0.3s;';
     document.body.appendChild(badge);
   }
-  badge.textContent = msg || (ok ? 'â˜ Sincronizado' : 'ðŸ“´ Offline');
+  badge.textContent = msg || (ok ? '☁ Sincronizado' : '📴 Offline');
   badge.style.background = ok ? '#10b981' : '#d97706';
   badge.style.color = '#fff';
   // Auto-esconder após 4s se sincronizado
@@ -956,9 +977,9 @@ function updateSyncBadge(ok, msg) {
 
 async function loadAllData() {
   // 1. Carregar localStorage IMEDIATAMENTE para UI responsiva
-  pagamentos = loadLS('Trajeto_pagamentos', {});
-  despesas   = loadLS('Trajeto_despesas', []);
-  clientes   = loadLS('Trajeto_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
+  pagamentos = loadLS('roteiro_pagamentos', {});
+  despesas   = loadLS('roteiro_despesas', []);
+  clientes   = loadLS('roteiro_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
   dbPronto   = true;
   document.getElementById('loadingScreen').style.display = 'none';
   refresh();
@@ -967,7 +988,7 @@ async function loadAllData() {
 }
 
 async function sincronizarComAPI() {
-  updateSyncBadge(false, 'â³ Conectando...');
+  updateSyncBadge(false, '⏳ Conectando...');
   // Tenta até 3 vezes com intervalo (Render pode estar dormindo)
   for(let tentativa = 1; tentativa <= 3; tentativa++) {
     try {
@@ -977,25 +998,25 @@ async function sincronizarComAPI() {
 
       let changed = false;
       if(todos.pagamentos !== undefined) {
-        pagamentos = todos.pagamentos; saveLS('Trajeto_pagamentos', pagamentos); changed = true;
+        pagamentos = todos.pagamentos; saveLS('roteiro_pagamentos', pagamentos); changed = true;
       }
       if(todos.despesas !== undefined) {
-        despesas = todos.despesas; saveLS('Trajeto_despesas', despesas); changed = true;
+        despesas = todos.despesas; saveLS('roteiro_despesas', despesas); changed = true;
       }
       if(todos.clientes !== undefined) {
-        clientes = todos.clientes; saveLS('Trajeto_clientes', clientes); changed = true;
+        clientes = todos.clientes; saveLS('roteiro_clientes', clientes); changed = true;
       }
-      updateSyncBadge(true, 'â˜ Sincronizado');
+      updateSyncBadge(true, '☁ Sincronizado');
       if(changed) refresh();
-      console.log('â˜ MongoDB v2 sincronizado! Tentativa:', tentativa);
+      console.log('☁ MongoDB v2 sincronizado! Tentativa:', tentativa);
       return;
     } catch(e) {
       console.warn(`Tentativa ${tentativa}/3 falhou:`, e.message);
-      updateSyncBadge(false, `â³ Aguardando API (${tentativa}/3)...`);
+      updateSyncBadge(false, `⏳ Aguardando API (${tentativa}/3)...`);
       if(tentativa < 3) await new Promise(res => setTimeout(res, 8000));
     }
   }
-  updateSyncBadge(false, '⚠️ Offline');
+  updateSyncBadge(false, '⚠️ Offline');
   console.warn('API indisponível — usando dados locais');
 }
 
@@ -1022,12 +1043,12 @@ function refresh(){
   if(currentTab==='clientes'){renderClientesTable();}
 }
 
-// â”€â”€ HELPERS â”€â”€
+// ── HELPERS ──
 function recebidoNoMes(mes){let r=0;clientes.forEach(c=>{if(!c.mesesAtivos.includes(mes))return;const st=getStatus(c.id,mes);if(st==='pago')r+=c.valor;if(st==='parcial')r+=c.valor/2;});return r;}
 function totalDespMes(mes,cat){return despesas.filter(d=>d.mes===mes&&(!cat||d.cat===cat)).reduce((s,d)=>s+d.valor,0);}
 function fmt(v){return'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 
-// â”€â”€ PAGAMENTOS â”€â”€
+// ── PAGAMENTOS ──
 function updateCards(){
   const ativos=clientes.filter(c=>c.mesesAtivos.includes(currentMonth));
   const totalEsp=ativos.reduce((s,c)=>s+c.valor,0);
@@ -1077,7 +1098,7 @@ function renderPieChart(){
   drawPie('pieChart','pieLegend',[{val:nP,color:'#10b981',label:'Pago'},{val:nPc,color:'#f59e0b',label:'Parcial'},{val:nPd,color:'#ef4444',label:'Pendente'}],ativos.length||1);
 }
 
-// â”€â”€ DESPESAS â”€â”€
+// ── DESPESAS ──
 function renderDespesas(){
   document.getElementById('despMesLabel').textContent=MESES_FULL[currentMonth];
   const cg=document.getElementById('catGrid');cg.innerHTML='';
@@ -1095,7 +1116,7 @@ function renderDespesas(){
     const cat=CATEGORIAS.find(c=>c.id===d.cat)||CATEGORIAS[3];
     const isCard=d.fonte==='cartao'; const isCupom=d.fonte==='cupom';
     const div=document.createElement('div');div.className='desp-item';
-    div.innerHTML=`<div class="desp-cat-icon">${cat.icon}</div><div class="desp-info"><div class="desp-desc">${d.desc||cat.nome}${isCard?' <span class="badge cartao" style="font-size:0.65rem;padding:2px 6px;cursor:default">💳 CARTÃO</span>':''}${isCupom?' <span class="badge pago" style="font-size:0.65rem;padding:2px 6px;cursor:default">🧾 CUPOM</span>':''}</div><div class="desp-meta">${cat.nome} · ${MESES_FULL[d.mes]} 2026</div></div><div class="desp-valor">− ${fmt(d.valor)}</div><button class="desp-del" onclick="deleteDespesa(${d.id})">✖</button>`;
+    div.innerHTML=`<div class="desp-cat-icon">${cat.icon}</div><div class="desp-info"><div class="desp-desc">${d.desc||cat.nome}${isCard?' <span class="badge cartao" style="font-size:0.65rem;padding:2px 6px;cursor:default">💳 CARTÃO</span>':''}${isCupom?' <span class="badge pago" style="font-size:0.65rem;padding:2px 6px;cursor:default">🧾 CUPOM</span>':''}</div><div class="desp-meta">${cat.nome} · ${MESES_FULL[d.mes]} 2026</div></div><div class="desp-valor">− ${fmt(d.valor)}</div><button class="desp-del" onclick="deleteDespesa(${d.id})">✕</button>`;
     list.appendChild(div);
   });
 }
@@ -1124,7 +1145,7 @@ function deleteDespesa(id){if(!confirm('Remover esta despesa?'))return;despesas=
 function closeDespModal(e){if(e.target===document.getElementById('despModalOverlay'))closeDespModalBtn();}
 function closeDespModalBtn(){document.getElementById('despModalOverlay').classList.remove('open');}
 
-// â”€â”€ CARTÃO â”€â”€
+// ── CARTÃO ──
 function openCartaoModal(){
   cartaoItems=[];
   document.getElementById('cartaoMes').innerHTML=MESES_FULL.map((m,i)=>`<option value="${i}" ${i===currentMonth?'selected':''}>${m}</option>`).join('');
@@ -1199,7 +1220,7 @@ function renderCartaoPreview(){
           ${CATEGORIAS.filter(c=>c.id!=='cartao').map(c=>`<option value="${c.id}" ${c.id===item.cat?'selected':''}>${c.icon} ${c.nome}</option>`).join('')}
         </select>
       </span>
-      <button class="desp-del" style="flex-shrink:0" onclick="cartaoItems.splice(${i},1);renderCartaoPreview()">✖</button>`;
+      <button class="desp-del" style="flex-shrink:0" onclick="cartaoItems.splice(${i},1);renderCartaoPreview()">✕</button>`;
     container.appendChild(row);
   });
   updateCartaoTotal();
@@ -1232,7 +1253,7 @@ function importarCartao(){
   alert(`✓ ${selecionados.length} lançamento${selecionados.length!==1?'s':''} importado${selecionados.length!==1?'s':''}!`);
 }
 
-// â”€â”€ GESTÃO DE CLIENTES â”€â”€
+// ── GESTÃO DE CLIENTES ──
 function renderClientesTable(){
   const tbody=document.getElementById('clientesTableBody');tbody.innerHTML='';
   clientes.forEach((c,idx)=>{
@@ -1244,8 +1265,8 @@ function renderClientesTable(){
       <td><span class="badge ${c.tipo==='trimestral'?'trimestral':'pago'}" style="cursor:default">${c.tipo.toUpperCase()}</span></td>
       <td style="color:var(--muted);font-size:0.78rem;font-family:var(--font-mono)">${mesesStr}</td>
       <td><div class="cli-actions">
-        <button class="cli-btn" onclick="openClienteModal(${c.id})">âœï¸ Editar</button>
-        <button class="cli-btn del" onclick="removeCliente(${c.id})">🗑️ Remover</button>
+        <button class="cli-btn" onclick="openClienteModal(${c.id})">✏️ Editar</button>
+        <button class="cli-btn del" onclick="removeCliente(${c.id})">🗑 Remover</button>
       </div></td>`;
     tbody.appendChild(tr);
   });
@@ -1285,6 +1306,12 @@ function saveCliente(){
     const idx=clientes.findIndex(c=>c.id===editingClienteId);
     if(idx>=0)clientes[idx]={...clientes[idx],nome,valor,tipo,mesesAtivos};
   } else {
+    // Limite de 10 clientes para usuários free
+    if(!isPro() && clientes.length >= 10) {
+      closeClienteModalBtn();
+      mostrarUpgradeModal('Clientes ilimitados');
+      return;
+    }
     const newId=Math.max(0,...clientes.map(c=>c.id))+1;
     clientes.push({id:newId,nome,valor,tipo,mesesAtivos});
   }
@@ -1311,7 +1338,7 @@ function removeCliente(id){
 function closeClienteModal(e){if(e.target===document.getElementById('clienteModalOverlay'))closeClienteModalBtn();}
 function closeClienteModalBtn(){document.getElementById('clienteModalOverlay').classList.remove('open');editingClienteId=null;}
 
-// â”€â”€ RESULTADO â”€â”€
+// ── RESULTADO ──
 function renderResultado(){
   const rec=recebidoNoMes(currentMonth);const desp=totalDespMes(currentMonth,null);const sald=rec-desp;
   document.getElementById('resReceita').textContent=fmt(rec);
@@ -1344,7 +1371,7 @@ function renderResultado(){
   tbody.appendChild(tr);
 }
 
-// â”€â”€ MODAL PAGAMENTO â”€â”€
+// ── MODAL PAGAMENTO ──
 function openModal(cid,mes){
   modalClienteId=cid;modalMes=mes;const c=clientes.find(x=>x.id===cid);const st=getStatus(cid,mes)||'pendente';modalSelectedStatus=st;
   document.getElementById('modalName').textContent=c.nome;
@@ -1365,7 +1392,7 @@ function saveModal(){if(modalClienteId===null||modalMes===null)return;setStatus(
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalBtn();}
 function closeModalBtn(){document.getElementById('modalOverlay').classList.remove('open');modalClienteId=null;modalMes=null;}
 
-// â”€â”€ PIE â”€â”€
+// ── PIE ──
 function drawPie(svgId,legendId,slices,total){
   const svg=document.getElementById(svgId);const legend=document.getElementById(legendId);
   let html='<circle cx="50" cy="50" r="40" fill="var(--border)"/>';let startAngle=-90;
@@ -1380,7 +1407,7 @@ function drawPie(svgId,legendId,slices,total){
   legend.innerHTML=slices.filter(s=>s.val>0).map(s=>`<div class="legend-item"><div class="legend-dot" style="background:${s.color}"></div><span style="color:var(--muted);font-size:0.78rem">${s.label}: <strong style="color:var(--text)">${fmt(s.val)}</strong></span></div>`).join('');
 }
 
-// â”€â”€ CUPOM FISCAL (Foto + Gemini) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CUPOM FISCAL (Foto + Gemini) ────────────────────────────────────────────
 // GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
 let cupomCatSelecionada = 'combustivel';
 
@@ -1405,11 +1432,7 @@ function closeCupomModalBtn(){ document.getElementById('cupomModalOverlay').clas
 function pararQR(){ if(qrStream){qrStream.getTracks().forEach(t=>t.stop());qrStream=null;} }
 
 async function processarFotoCupom(event) {
-  if(infoPlano.plano === 'free') {
-    showUpgradeModal('ocr');
-    event.target.value = '';
-    return;
-  }
+  // Função legada — agora usa o backend seguro
   const file = event.target.files[0];
   if(!file) return;
   event.target.value = '';
@@ -1470,7 +1493,7 @@ async function processarFotoCupom(event) {
       document.getElementById('cupomLoadingGemini').style.display = 'none';
       document.getElementById('cupomResultado').style.display  = 'block';
       document.getElementById('cupomSaveBtn').style.display    = 'flex';
-      document.getElementById('cupomAiInfo').textContent = '⚠️ OCR indisponível. Preencha manualmente.';
+      document.getElementById('cupomAiInfo').textContent = '⚠️ OCR indisponível. Preencha manualmente.';
       document.getElementById('cupomDesc').value = 'Nota Fiscal';
     }
   };
@@ -1489,8 +1512,8 @@ function salvarCupom(){
 }
 
 
-// ══ QR CODE NFC-e ══════════════════════════════════════════════════════════
-const API_URL_QR = 'https://trajeto-api.onrender.com';
+// ══ QR CODE NFC-e ══════════════════════════════════════════════════════════
+const API_URL_QR = 'https://muty-api.onrender.com'; // TODO: trocar para roteiro-api.onrender.com
 let qrScanner = null;
 let qrCatSelecionada = 'outros';
 
@@ -1525,10 +1548,6 @@ function iniciarQRScanner() {
 }
 
 async function onQRDetectado(url) {
-  if(infoPlano.plano === 'free') {
-    showUpgradeModal('nfc');
-    return;
-  }
   // Parar câmera
   if(qrScanner) { await qrScanner.stop(); qrScanner = null; }
   document.getElementById('qrCameraArea').style.display = 'none';
@@ -1632,12 +1651,12 @@ function closeQRModalBtn() {
   document.getElementById('qrModalOverlay').style.display = 'none';
   document.getElementById('qrCameraArea').style.display = 'block';
 }
-// ══ FIM QR CODE ═══════════════════════════════════════════════════════════════
+// ══ FIM QR CODE ═════════════════════════════════════════════════════════════
 
 
-// ══ AUTENTICAÇìO ══════════════════════════════════════════════════════════════
-const AUTH_KEY  = 'Trajeto_auth_token';
-const USER_KEY  = 'Trajeto_auth_user';
+// ══ AUTENTICAÇÃO ════════════════════════════════════════════════════════════
+const AUTH_KEY  = 'roteiro_auth_token';
+const USER_KEY  = 'roteiro_auth_user';
 
 // Recupera token salvo no localStorage
 function getToken()   { return localStorage.getItem(AUTH_KEY) || null; }
@@ -1707,10 +1726,12 @@ async function fazerLogin() {
 
     if(data.status === 'success') {
       salvarAuth(data.data.token, data.data);
-      // Carregar infos estendidas de plano e perfil
-      await carregarInfoPlano();
+      // Carregar e aplicar plano do usuário
+      userPlano = data.data.plano || 'free';
+      aplicarRestricoesDePlano();
+      carregarPlano(); // sincronizar com servidor em background
       mostrarDashboard(data.data);
-      loadAllData();
+      loadAllData(); // carrega dados do usuário
     } else {
       loginMsg(data.message || 'Erro ao entrar.', 'erro');
     }
@@ -1765,18 +1786,17 @@ function verificarSessao() {
   const token = getToken();
   const user  = getUser();
   if(token && user) {
-    carregarInfoPlano(); // Carrega em background
     mostrarDashboard(user);
-    return true;
+    return true; // já logado
   }
   // Mostrar tela de login
   document.getElementById('loginScreen').style.display = 'flex';
   return false;
 }
-// ══ FIM AUTENTICAÇìO ══════════════════════════════════════════════════════════════
+// ══ FIM AUTENTICAÇÃO ════════════════════════════════════════════════════════
 
 
-// â”€â”€ TOGGLE MÊSTRAR/OCULTAR SENHA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TOGGLE MOSTRAR/OCULTAR SENHA ─────────────────────────────────────────────
 function toggleSenha(inputId, btnId) {
   const input = document.getElementById(inputId);
   const btn   = document.getElementById(btnId);
@@ -1785,11 +1805,11 @@ function toggleSenha(inputId, btnId) {
     btn.textContent = '🙈';  // ícone muda para indicar que está visível
   } else {
     input.type = 'password';
-    btn.textContent = '👁️';
+    btn.textContent = '👁';
   }
 }
 
-// â”€â”€ INDICADOR DE FORÇA DA SENHA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── INDICADOR DE FORÇA DA SENHA ───────────────────────────────────────────────
 function checarForcaSenha(senha) {
   const el = document.getElementById('forçaSenha');
   if(!el || !senha) { if(el) el.textContent = ''; return; }
@@ -1820,7 +1840,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(cadSenha) cadSenha.addEventListener('input', e => checarForcaSenha(e.target.value));
 });
 
-// â”€â”€ ESQUECI MINHA SENHA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ESQUECI MINHA SENHA ───────────────────────────────────────────────────────
 function abrirEsqueciSenha() {
   // Pré-preenche com email que foi digitado
   const email = document.getElementById('loginEmail')?.value || '';
@@ -1874,10 +1894,10 @@ async function enviarResetSenha() {
     btn.textContent = 'ENVIAR LINK';
   }
 }
-// â”€â”€ FIMÊSQUECI SENHA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FIM ESQUECI SENHA ─────────────────────────────────────────────────────────
 
 
-// â”€â”€ REDEFINIR SENHA (via link do email) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── REDEFINIR SENHA (via link do email) ──────────────────────────────────────
 function checarForcaSenha2(senha) {
   const el = document.getElementById('forcaSenha2');
   if(!el || !senha) { if(el) el.textContent=''; return; }
@@ -1959,7 +1979,7 @@ function mostrarResetMsg(texto, ok) {
 }
 
 // Detectar token de reset na URL ao carregar a página
-// Ex: https://Trajeto.app?reset_token=XXXXX
+// Ex: https://roteiro.app?reset_token=XXXXX
 function verificarURLToken() {
   const params     = new URLSearchParams(window.location.search);
   const resetToken = params.get('reset_token');
@@ -1983,10 +2003,10 @@ function verificarURLToken() {
   }
   return false;
 }
-// â”€â”€ FIM REDEFINIR SENHA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FIM REDEFINIR SENHA ───────────────────────────────────────────────────────
 
-// ══ MODAL NOTA FISCAL UNIFICADO ═══════════════════════════════════════════════════════════
-// Arquitetura: OCR principal â†’ QR alternativo â†’ manual sempre disponível
+// ══ MODAL NOTA FISCAL UNIFICADO ═════════════════════════════════════════════
+// Arquitetura: OCR principal → QR alternativo → manual sempre disponível
 
 // GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
 const GEMINI_TIMEOUT  = 15000; // 15s timeout OCR (backend tem 10s + rede)
@@ -1999,10 +2019,15 @@ let notaOCRRodando     = false; // trava múltiplas execuções
 let notaTimeoutTimer   = null;  // timer da barra de progresso
 let notaRascunho       = {};    // rascunho local
 
-// â”€â”€ Abrir modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Abrir modal ──────────────────────────────────────────────────────────────
 function openNotaModal() {
+  // Bloquear para usuários free — OCR é exclusivo do Pro
+  if(!isPro()) {
+    mostrarUpgradeModal('OCR de nota fiscal com IA');
+    return;
+  }
   // Restaurar rascunho salvo localmente
-  notaRascunho = loadLS('Trajeto_nota_rascunho', {});
+  notaRascunho = loadLS('roteiro_nota_rascunho', {});
 
   // Preencher meses
   document.getElementById('notaMes').innerHTML =
@@ -2025,7 +2050,7 @@ function openNotaModal() {
   notaSwitchTab('foto');
 }
 
-// â”€â”€ Fechar modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Fechar modal ─────────────────────────────────────────────────────────────
 function closeNotaModal(e) {
   if(e.target === document.getElementById('notaModalOverlay')) closeNotaModalBtn();
 }
@@ -2035,7 +2060,7 @@ function closeNotaModalBtn() {
   document.getElementById('notaModalOverlay').style.display = 'none';
 }
 
-// â”€â”€ Alternar abas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Alternar abas ─────────────────────────────────────────────────────────────
 function notaSwitchTab(tab) {
   const isFoto = tab === 'foto';
 
@@ -2052,7 +2077,7 @@ function notaSwitchTab(tab) {
   }
 }
 
-// â”€â”€ Reset estado do modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Reset estado do modal ─────────────────────────────────────────────────────
 function _notaReset() {
   notaOCRRodando = false;
   notaOCRController = null;
@@ -2080,7 +2105,7 @@ function _notaReset() {
   _buildCatSelector('outros');
 }
 
-// â”€â”€ Mostrar aviso â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Mostrar aviso ─────────────────────────────────────────────────────────────
 function _notaAviso(msg, tipo) {
   const el = document.getElementById('notaAviso');
   el.textContent = msg;
@@ -2088,7 +2113,7 @@ function _notaAviso(msg, tipo) {
   el.style.display = msg ? 'block' : 'none';
 }
 
-// â”€â”€ Seletor de categoria â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Seletor de categoria ──────────────────────────────────────────────────────
 function _buildCatSelector(catAtiva) {
   notaCatSelecionada = catAtiva || 'outros';
   const cs = document.getElementById('notaCatSelector');
@@ -2107,7 +2132,7 @@ function _buildCatSelector(catAtiva) {
   });
 }
 
-// â”€â”€ Marcar campo como editado manualmente â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Marcar campo como editado manualmente ─────────────────────────────────────
 function marcarEditado(input, aiTagId, manualTagId) {
   input.classList.add('editado');
   const ai = document.getElementById(aiTagId);
@@ -2117,7 +2142,7 @@ function marcarEditado(input, aiTagId, manualTagId) {
   _salvarRascunho();
 }
 
-// â”€â”€ Salvar rascunho local â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Salvar rascunho local ─────────────────────────────────────────────────────
 function _salvarRascunho() {
   notaRascunho = {
     estab: document.getElementById('notaEstab')?.value || '',
@@ -2125,11 +2150,11 @@ function _salvarRascunho() {
     cat:   notaCatSelecionada,
   };
   if(notaRascunho.estab || notaRascunho.valor) {
-    saveLS('Trajeto_nota_rascunho', notaRascunho);
+    saveLS('roteiro_nota_rascunho', notaRascunho);
   }
 }
 
-// â”€â”€ Preencher campos com dados extraídos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Preencher campos com dados extraídos ─────────────────────────────────────
 function _preencherCampos(dados, viaIA = true) {
   const { estabelecimento, valor, categoria } = dados;
 
@@ -2159,7 +2184,7 @@ function _preencherCampos(dados, viaIA = true) {
   _salvarRascunho();
 }
 
-// â”€â”€ Cancelar OCR (manual ou timeout) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Cancelar OCR (manual ou timeout) ─────────────────────────────────────────
 // Cancela processamento OCR em andamento
 function cancelarOCR() {
   if(notaOCRController) { notaOCRController.abort(); notaOCRController = null; }
@@ -2175,7 +2200,7 @@ function cancelarOCR() {
   _notaAviso('⚠️ Preencha os campos manualmente.', 'warn');
 }
 
-// â”€â”€ Barra de timeout visual â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Barra de timeout visual ───────────────────────────────────────────────────
 function _iniciarTimeoutBar(duracaoMs) {
   const bar = document.getElementById('notaTimeoutBar');
   const fill = document.getElementById('notaTimeoutFill');
@@ -2188,7 +2213,7 @@ function _iniciarTimeoutBar(duracaoMs) {
   fill.style.width = '0%';
 }
 
-// â”€â”€ PROCESSAMENTO OCR (foto) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PROCESSAMENTO OCR (foto) ──────────────────────────────────────────────────
 async function processarFotoNota(event) {
   const file = event.target.files[0];
   if(!file) return;
@@ -2217,7 +2242,7 @@ async function processarFotoNota(event) {
   _iniciarTimeoutBar(GEMINI_TIMEOUT);
   _notaAviso('', '');
 
-  // Timeout — após 15s libera modo manual mas NìO aborta o fetch
+  // Timeout — após 15s libera modo manual mas NÃO aborta o fetch
   notaTimeoutTimer = setTimeout(() => {
     if(notaOCRRodando) {
       notaOCRRodando = false;
@@ -2225,7 +2250,7 @@ async function processarFotoNota(event) {
       document.getElementById('notaTimeoutBar').style.display = 'none';
       document.getElementById('notaResultado').style.display  = 'block';
       document.getElementById('notaSaveBtn').style.display    = 'flex';
-      _notaAviso('🕒 OCR demorou mais de 15s. Preencha manualmente ou aguarde.', 'warn');
+      _notaAviso('⏱ OCR demorou mais de 15s. Preencha manualmente ou aguarde.', 'warn');
     }
   }, GEMINI_TIMEOUT);
 
@@ -2303,7 +2328,7 @@ async function processarFotoNota(event) {
   }
 }
 
-// â”€â”€ Camada 1: Tentar parsear JSON do Gemini â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Camada 1: Tentar parsear JSON do Gemini ──────────────────────────────────
 function _processarRespostaGemini(rawText) {
   if(!rawText || rawText.trim() === '') {
     return { fonte: 'vazio' };
@@ -2328,7 +2353,7 @@ function _processarRespostaGemini(rawText) {
   return _fallbackRegex(rawText);
 }
 
-// â”€â”€ Camada 2: Validar e normalizar campos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Camada 2: Validar e normalizar campos ─────────────────────────────────────
 function _validarDadosGemini(dados, fonte) {
   const resultado = { fonte, campos: {}, confianca: dados.confianca || 0, avisos: [] };
 
@@ -2363,7 +2388,7 @@ function _validarDadosGemini(dados, fonte) {
   return resultado;
 }
 
-// â”€â”€ Camada 3: Regex fallback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Camada 3: Regex fallback ──────────────────────────────────────────────────
 function _fallbackRegex(texto) {
   const resultado = { fonte: 'regex', campos: {}, confianca: 0.3, avisos: [] };
 
@@ -2393,7 +2418,7 @@ function _fallbackRegex(texto) {
   return resultado;
 }
 
-// â”€â”€ Sugerir categoria pelo nome â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Sugerir categoria pelo nome ───────────────────────────────────────────────
 function _sugerirCategoria(nome) {
   const n = (nome || '').toLowerCase();
   if(/posto|gnv|combusti|gasolina|etanol|ipiranga|shell|petrobras/.test(n)) return 'combustivel';
@@ -2402,15 +2427,15 @@ function _sugerirCategoria(nome) {
   return 'outros';
 }
 
-// â”€â”€ Aplicar resultado na UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Aplicar resultado na UI ───────────────────────────────────────────────────
 function _aplicarResultado(resultado) {
   document.getElementById('notaResultado').style.display = 'block';
   document.getElementById('notaSaveBtn').style.display   = 'flex';
 
   const { fonte, campos = {}, confianca = 0, avisos = [], motivo } = resultado;
   const altaConfianca = confianca >= 0.7;
-  // ìcone por fonte
-  const icones = { gemini: '🤖', regex: 'ðŸ§ ', qr: '📱', backend: '🤖', manual: 'âœï¸' };
+  // Ícone por fonte
+  const icones = { gemini: '🤖', regex: '🧠', qr: '📱', backend: '🤖', manual: '✏️' };
   const icone  = icones[fonte] || '🤖';
 
   // Mesclar com dados QR pré-existentes nos campos (sem sobrescrever)
@@ -2425,12 +2450,12 @@ function _aplicarResultado(resultado) {
     campos.estabelecimento = estabExistente; // preservar estab do QR
   }
 
-  // Erro ou vazio â†’ modo manual puro
+  // Erro ou vazio → modo manual puro
   if(fonte === 'erro' || fonte === 'vazio') {
     _notaAviso(
       fonte === 'erro'
-        ? `⚠️ OCR indisponível (${motivo || 'erro'}). Preencha manualmente.`
-        : '⚠️ Não foi possível ler o cupom. Preencha manualmente.',
+        ? `⚠️ OCR indisponível (${motivo || 'erro'}). Preencha manualmente.`
+        : '⚠️ Não foi possível ler o cupom. Preencha manualmente.',
       'warn'
     );
     _buildCatSelector('outros');
@@ -2443,7 +2468,7 @@ function _aplicarResultado(resultado) {
     input.value     = campos.estabelecimento;
     input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
     _mostrarTag('tagEstab',
-      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
+      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
       altaConfianca ? '#10b981' : '#f59e0b');
   }
 
@@ -2453,7 +2478,7 @@ function _aplicarResultado(resultado) {
     input.value     = campos.valor_total;
     input.className = altaConfianca ? 'ai-filled' : 'ai-filled baixa';
     _mostrarTag('tagValor',
-      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
+      altaConfianca ? `${icone} ${fonte}` : `⚠️ ${fonte}`,
       altaConfianca ? '#10b981' : '#f59e0b');
   }
 
@@ -2466,9 +2491,9 @@ function _aplicarResultado(resultado) {
   // Aviso geral
   const temDados = campos.estabelecimento || campos.valor_total;
   if(!temDados) {
-    _notaAviso('⚠️ Não foi possível extrair dados. Preencha manualmente.', 'warn');
+    _notaAviso('⚠️ Não foi possível extrair dados. Preencha manualmente.', 'warn');
   } else if(!altaConfianca) {
-    _notaAviso('⚠️ Dados extraídos com baixa confiança — verifique antes de salvar.', 'warn');
+    _notaAviso('⚠️ Dados extraídos com baixa confiança — verifique antes de salvar.', 'warn');
   } else if(avisos.length > 0) {
     _notaAviso(`🤖 Alguns campos não foram encontrados: ${avisos.join(', ')}. Complete manualmente.`, 'warn');
   } else {
@@ -2478,7 +2503,7 @@ function _aplicarResultado(resultado) {
   _salvarRascunho();
 }
 
-// â”€â”€ Mostrar tag colorida no label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Mostrar tag colorida no label ─────────────────────────────────────────────
 function _mostrarTag(id, texto, cor) {
   const el = document.getElementById(id);
   if(!el) return;
@@ -2489,7 +2514,7 @@ function _mostrarTag(id, texto, cor) {
   el.style.border     = `1px solid ${cor}44`;
 }
 
-// â”€â”€ QR CODE — iniciar scanner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── QR CODE — iniciar scanner ─────────────────────────────────────────────────
 function _iniciarQRScanner() {
   if(notaQRScanner) { notaQRScanner.clear(); notaQRScanner = null; }
   notaQRScanner = new Html5Qrcode('notaQrReader');
@@ -2513,7 +2538,7 @@ function _pararQRScanner() {
   }
 }
 
-// â”€â”€ QR detectado — tenta SEFAZ em background (timeout 3s) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── QR detectado — tenta SEFAZ em background (timeout 3s) ────────────────────
 async function _onQRDetectado(url) {
   _pararQRScanner();
 
@@ -2542,7 +2567,7 @@ async function _onQRDetectado(url) {
     return;
   }
 
-  // 3. QR incompleto â†’ ativar OCR automaticamente
+  // 3. QR incompleto → ativar OCR automaticamente
   notaSwitchTab('foto');
 
   // Preencher o que o QR já tem (parcial)
@@ -2645,14 +2670,14 @@ function _parsearURLQR(url) {
   return resultado;
 }
 
-// â”€â”€ Salvar despesa â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Salvar despesa ────────────────────────────────────────────────────────────
 function salvarNota() {
   const valor = parseFloat(document.getElementById('notaValor').value);
   const desc  = document.getElementById('notaEstab').value.trim() || 'Nota Fiscal';
   const mes   = parseInt(document.getElementById('notaMes').value);
 
   if(!valor || valor <= 0) {
-    _notaAviso('⚠️ Informe o valor da despesa.', 'warn');
+    _notaAviso('⚠️ Informe o valor da despesa.', 'warn');
     document.getElementById('notaValor').focus();
     return;
   }
@@ -2669,17 +2694,17 @@ function salvarNota() {
   saveData('despesas', despesas);
 
   // Limpar rascunho
-  saveLS('Trajeto_nota_rascunho', {});
+  saveLS('roteiro_nota_rascunho', {});
 
   closeNotaModalBtn();
   currentTab = 'despesas';
   switchTab('despesas');
 }
-// ══ FIM MODAL NOTA FISCAL ════════════════════════════════════════════════════
+// ══ FIM MODAL NOTA FISCAL ════════════════════════════════════════════════════
 
 
 
-// â”€â”€ Compressor de imagem via Canvas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Compressor de imagem via Canvas ──────────────────────────────────────────
 // Comprime imagem via Canvas para reduzir tamanho antes do OCR
 function _comprimirImagem(file, maxLado, qualidade) {
   return new Promise((resolve) => {
@@ -2702,10 +2727,10 @@ function _comprimirImagem(file, maxLado, qualidade) {
     img.src = url;
   });
 }
-// â”€â”€ FIM Compressor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FIM Compressor ────────────────────────────────────────────────────────────
 
 
-// â”€â”€ VERIFICAÇìO DE EMAIL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── VERIFICAÇÃO DE EMAIL ──────────────────────────────────────────────────────
 let _emailCadastrado = '';
 
 // Exibe tela pedindo confirmação de email após cadastro
@@ -2729,11 +2754,11 @@ async function reenviarEmailVerificacao() {
   const email = _emailCadastrado;
   if(!email) return;
 
-  aviso.textContent   = 'â³ Reenviando...';
+  aviso.textContent   = '⏳ Reenviando...';
   aviso.style.cssText = 'display:block;background:rgba(96,165,250,0.1);color:#60a5fa;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
 
   try {
-    // CORRIGIDO: /v2/resend-verify não existe â†’ usar /v2/forgot-password
+    // CORRIGIDO: /v2/resend-verify não existe → usar /v2/forgot-password
     const r = await fetch(`${API_URL}/v2/forgot-password`, {
       method:  'POST',
       headers: {'Content-Type': 'application/json'},
@@ -2752,15 +2777,15 @@ async function reenviarEmailVerificacao() {
     aviso.style.cssText = 'display:block;background:rgba(239,68,68,0.1);color:#ef4444;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
   }
 }
-// â”€â”€ FIM VERIFICAÇìO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FIM VERIFICAÇÃO ───────────────────────────────────────────────────────────
 
 
-// â”€â”€ PERFIL DO USUìRIO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PERFIL DO USUÁRIO ─────────────────────────────────────────────────────────
 let _perfilFotoBase64 = null;
 
 // Abre o modal de perfil e preenche campos com dados atuais do usuário
 function abrirPerfil() {
-  const user = loadLS('Trajeto_auth_user', null);
+  const user = loadLS('roteiro_auth_user', null);
   if(!user) return;
 
   // Preencher campos com dados atuais
@@ -2819,8 +2844,8 @@ async function salvarPerfil() {
   const msgEl  = document.getElementById('perfilMsg');
 
   // Ler token diretamente do localStorage com múltiplas chaves
-  let token = localStorage.getItem('Trajeto_auth_token')
-           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'Trajeto_auth_token');
+  let token = localStorage.getItem('roteiro_auth_token')
+           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'roteiro_auth_token');
 
   if(!token) {
     if(msgEl) { msgEl.textContent = '❌ Sessão expirada. Faça login novamente.';
@@ -2859,9 +2884,9 @@ async function salvarPerfil() {
 
     if(d.status === 'success') {
       // Atualizar dados locais
-      const userAtual  = JSON.parse(localStorage.getItem('Trajeto_auth_user') || '{}');
+      const userAtual  = JSON.parse(localStorage.getItem('roteiro_auth_user') || '{}');
       const atualizado = {...userAtual, ...d.data};
-      localStorage.setItem('Trajeto_auth_user', JSON.stringify(atualizado));
+      localStorage.setItem('roteiro_auth_user', JSON.stringify(atualizado));
 
       // Atualizar header
       if(typeof _atualizarHeader === 'function') _atualizarHeader(atualizado);
@@ -2897,14 +2922,58 @@ function _atualizarHeader(user) {
     }
   }
 }
-// â”€â”€ FIM PERFIL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FIM PERFIL ────────────────────────────────────────────────────────────────
 
-// â”€â”€ INIT: aguardar Firebase ou iniciar com localStorage â”€â”€
+
+// ── UPGRADE MODAL ────────────────────────────────────────────────────────────
+function mostrarUpgradeModal(recurso = 'este recurso') {
+  document.getElementById('upgradeRecurso').textContent =
+    `"${recurso}" é exclusivo do plano Pro`;
+  document.getElementById('upgradeModalOverlay').style.display = 'flex';
+}
+
+function fecharUpgradeModal() {
+  document.getElementById('upgradeModalOverlay').style.display = 'none';
+}
+
+function irParaUpgrade() {
+  // TODO: redirecionar para página de pagamento Mercado Pago
+  // Por enquanto mostra alerta informativo
+  fecharUpgradeModal();
+  alert('Em breve! O pagamento via Mercado Pago será integrado na próxima versão.');
+}
+
+// Carrega plano do servidor e atualiza variável global
+async function carregarPlano() {
+  const token = localStorage.getItem(AUTH_KEY);
+  if(!token) return;
+  try {
+    const r = await fetch(`${API_URL}/v2/plano`, {
+      headers: authHeaders()
+    });
+    if(r.ok) {
+      const d = await r.json();
+      if(d.status === 'success') {
+        userPlano = d.data.plano || 'free';
+        aplicarRestricoesDePlano();
+        console.log('[PLANO] Plano carregado:', userPlano);
+      }
+    }
+  } catch(e) {
+    console.warn('[PLANO] Erro ao carregar plano:', e.message);
+  }
+}
+// ── FIM UPGRADE MODAL ────────────────────────────────────────────────────────
+
+// ── INIT: aguardar Firebase ou iniciar com localStorage ──
 // Aguardar DOM completo antes de verificar tokens e sessão
 document.addEventListener('DOMContentLoaded', function() {
   // 1. Verificar se tem token de reset na URL (link do email)
   if(!verificarURLToken()) {
-    // 2. Verificar sessão — se logado carrega dados, senão mostra login
+    // 2. Carregar plano do servidor
+  await carregarPlano();
+
+  // 3. Verificar sessão — se logado carrega dados, senão mostra login
     if(verificarSessao()) {
       loadAllData();
     }
@@ -2912,7 +2981,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- ══ MODAL QR CODE NFC-e ══ -->
+<!-- ══ MODAL QR CODE NFC-e ══ -->
 <div id="qrModalOverlay" class="modal-overlay" onclick="closeQRModal(event)" style="display:none;">
   <div class="modal modal-wide">
     <h3>📷 LER QR CODE DA NOTA</h3>
@@ -2923,7 +2992,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <select class="form-input" id="qrMes"></select>
     </div>
 
-    <!-- ìrea câmera -->
+    <!-- Área câmera -->
     <div id="qrCameraArea">
       <div id="qrReader" style="width:100%;border-radius:12px;overflow:hidden;margin-bottom:12px;"></div>
       <div id="qrStatus" style="text-align:center;padding:12px;background:var(--card-bg);border-radius:8px;font-size:13px;color:var(--text-secondary);">
@@ -2954,7 +3023,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- Loading -->
     <div id="qrLoading" style="display:none;text-align:center;padding:20px;">
-      <div style="font-size:2rem;animation:spin 1s linear infinite;">â³</div>
+      <div style="font-size:2rem;animation:spin 1s linear infinite;">⏳</div>
       <p style="margin-top:8px;font-size:13px;color:var(--text-secondary);">Buscando dados da nota fiscal...</p>
     </div>
 
@@ -2965,7 +3034,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-<!-- â”€â”€ MODAL ESQUECI SENHA â”€â”€ -->
+<!-- ── MODAL ESQUECI SENHA ── -->
 <div id="esqueciModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);
      z-index:10000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;
@@ -2999,7 +3068,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-<!-- â”€â”€ MODAL REDEFINIR SENHA â”€â”€ -->
+<!-- ── MODAL REDEFINIR SENHA ── -->
 <div id="resetModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;
      background:#0c0a09;z-index:10001;padding:20px;
      justify-content:center;align-items:center;">
@@ -3031,7 +3100,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 id="olhoReset"
                 style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
                        background:none;border:none;cursor:pointer;font-size:18px;
-                       color:#78716c;padding:0;">ðŸ‘</button>
+                       color:#78716c;padding:0;">👁</button>
       </div>
       <div id="forcaSenha2" style="margin-top:6px;font-size:11px;"></div>
     </div>
@@ -3051,7 +3120,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 id="olhoConfirm"
                 style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
                        background:none;border:none;cursor:pointer;font-size:18px;
-                       color:#78716c;padding:0;">ðŸ‘</button>
+                       color:#78716c;padding:0;">👁</button>
       </div>
     </div>
 
@@ -3067,7 +3136,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-<!-- ══ TELA VERIFICAÇìO DE EMAIL ══════════════════════════════════════════ -->
+<!-- ══ TELA VERIFICAÇÃO DE EMAIL ══════════════════════════════════════════ -->
 <div id="verificacaoScreen" style="display:none;position:fixed;inset:0;
      background:#0c0a09;z-index:9999;align-items:center;justify-content:center;
      padding:20px;">
@@ -3101,12 +3170,12 @@ document.addEventListener('DOMContentLoaded', function() {
             style="width:100%;padding:10px;background:transparent;
                    border:1px solid #334155;border-radius:10px;
                    color:#78716c;cursor:pointer;font-size:0.85rem;">
-      â† Voltar para o login
+      ← Voltar para o login
     </button>
   </div>
 </div>
 
-<!-- ══ MODAL PERFIL ═══════════════════════════════════════════════════════ -->
+<!-- ══ MODAL PERFIL ═══════════════════════════════════════════════════════ -->
 <div id="perfilModal" style="display:none;position:fixed;inset:0;
      background:rgba(0,0,0,0.7);z-index:9000;align-items:center;
      justify-content:center;padding:20px;overflow-y:auto;">
@@ -3120,7 +3189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  font-size:1.4rem;margin:0;">MEU PERFIL</h3>
       <button onclick="fecharPerfil()"
               style="background:none;border:none;color:#78716c;
-                     font-size:1.5rem;cursor:pointer;">✖</button>
+                     font-size:1.5rem;cursor:pointer;">✕</button>
     </div>
 
     <!-- Foto de perfil -->
@@ -3204,181 +3273,27 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-  <!-- TELA DE ONBOARDING: ESCOLHA DE PERFIL -->
-  <div id="onboardingOverlay" class="modal-overlay" style="display:none; z-index: 9999;">
-    <div class="modal-card" style="max-width: 500px; text-align: center;">
-      <h2 style="color: #f59e0b;">Bem-vindo ao Trajeto! 🚀</h2>
-      <p>Para personalizar sua experiência, escolha seu perfil de uso:</p>
-      
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0;">
-        <button class="btn-perfil" onclick="definirPerfil('escolar')">
-          <div style="font-size: 24px;">🚌</div>
-          <div style="font-weight: bold;">Transporte Escolar</div>
-          <div style="font-size: 11px; opacity: 0.7;">Gestão de alunos e mensalidades</div>
-        </button>
-        <button class="btn-perfil" onclick="definirPerfil('taxi')">
-          <div style="font-size: 24px;">🚕</div>
-          <div style="font-weight: bold;">Taxi / App</div>
-          <div style="font-size: 11px; opacity: 0.7;">Controle de corridas diárias</div>
-        </button>
-        <button class="btn-perfil" onclick="definirPerfil('frota')">
-          <div style="font-size: 24px;">🚛</div>
-          <div style="font-weight: bold;">Pequena Frota</div>
-          <div style="font-size: 11px; opacity: 0.7;">Gestão de veículos e fretes</div>
-        </button>
-        <button class="btn-perfil" onclick="definirPerfil('autonomo')">
-          <div style="font-size: 24px;">🔧</div>
-          <div style="font-weight: bold;">Autônomo Geral</div>
-          <div style="font-size: 11px; opacity: 0.7;">Serviços e controle financeiro</div>
-        </button>
-      </div>
-      <p style="font-size: 12px; opacity: 0.6;">Você poderá alterar isso nas configurações depois.</p>
-    </div>
-  </div>
-
-  <!-- MODAL DE UPGRADE -->
-  <div id="upgradeModalOverlay" class="modal-overlay" style="display:none; z-index: 10000;">
-    <div class="modal-card" style="max-width: 450px; text-align: center;">
-      <div style="font-size: 48px; margin-bottom: 16px;">✨</div>
-      <h2 style="color: #f59e0b; margin-bottom: 8px;">Mude para o Trajeto Plus</h2>
-      <p id="upgradeReason">Esta funcionalidade é exclusiva para assinantes Plus.</p>
-      
-      <div class="plus-benefits" style="text-align: left; margin: 20px 0; background: rgba(245, 158, 11, 0.1); padding: 16px; border-radius: 8px;">
-        <div style="margin-bottom: 8px;">✅ <b>Tudo do Free</b></div>
-        <div style="margin-bottom: 8px;">✅ <b>OCR:</b> Leitura automática de cupons</div>
-        <div style="margin-bottom: 8px;">✅ <b>NFC-e:</b> Importação via QR Code</div>
-        <div style="margin-bottom: 8px;">✅ <b>Sem Anúncios:</b> Tela 100% limpa</div>
-        <div style="margin-bottom: 8px;">✅ <b>Extratos:</b> Importação de banco (CSV)</div>
-      </div>
-
-      <div id="mpStatusMsg" style="margin-bottom: 16px; font-weight: bold;"></div>
-      
-      <div style="display: flex; gap: 12px;">
-        <button class="btn-secundario" onclick="document.getElementById('upgradeModalOverlay').style.display='none'">DEPOIS</button>
-        <button class="btn-primario" id="btnIrParaUpgrade" onclick="irParaUpgrade()">QUERO O PLUS</button>
+<!-- MODAL UPGRADE — aparece quando free tenta usar recurso Pro -->
+<div id="upgradeModalOverlay" class="modal-overlay" style="display:none;z-index:10010" onclick="if(event.target===this)fecharUpgradeModal()">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px 24px;max-width:360px;width:90%;text-align:center">
+    <div style="font-size:40px;margin-bottom:12px">&#x1F512;</div>
+    <h2 style="font-family:var(--font-display);letter-spacing:2px;color:var(--text);font-size:1.4rem;margin-bottom:8px">ROTEIRO PRO</h2>
+    <p id="upgradeRecurso" style="color:var(--muted);font-size:13px;margin-bottom:20px">Funcionalidade exclusiva do plano Pro</p>
+    <div style="background:var(--surface2);border-radius:12px;padding:16px;margin-bottom:20px;text-align:left">
+      <div style="font-size:12px;color:var(--muted);line-height:2">
+        <div>&#x2713; OCR de nota fiscal com IA</div>
+        <div>&#x2713; Clientes ilimitados</div>
+        <div>&#x2713; Exportar relatório PDF</div>
+        <div>&#x2713; Backup automático</div>
+        <div>&#x2713; Sem anúncios</div>
       </div>
     </div>
+    <div style="font-size:28px;font-weight:700;color:var(--accent);margin-bottom:4px">R$ 24,90<span style="font-size:13px;color:var(--muted);font-weight:400">/mês</span></div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:20px">Cancele quando quiser</p>
+    <button onclick="irParaUpgrade()" style="width:100%;padding:14px;background:var(--accent);color:#0c0a09;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;margin-bottom:10px">ASSINAR PRO</button>
+    <button onclick="fecharUpgradeModal()" style="width:100%;padding:10px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer">Continuar no Free</button>
   </div>
+</div>
 
-  <!-- BANNER DE ANÚNCIOS (FREE) -->
-  <div id="adsBanner" class="ads-banner" style="display:none;">
-    <div class="ads-content">
-      <span>Anúncio: Conheça o Trajeto Plus e remova esta barra!</span>
-      <button onclick="showUpgradeModal('ads')">SAIBAR MÊS</button>
-    </div>
-  </div>
-
-  </style>
-
-<script>
-// --- LOGICA DE PLANOS E PERFIS ---
-let infoPlano = { plano: 'free', perfil: 'escolar', is_plus: false };
-
-async function carregarInfoPlano() {
-  try {
-    const r = await fetch(`${API_URL}/v2/meu-plano`, { headers: authHeaders() });
-    const j = await r.json();
-    if(j.status === 'success') {
-      infoPlano = j.data;
-      _atualizarInterfacePlano();
-      
-      // Se não tiver perfil definido, mostra onboarding
-      if(!infoPlano.perfil) {
-        document.getElementById('onboardingOverlay').style.display = 'flex';
-      }
-    }
-  } catch(e) { console.error('Erro ao carregar plano:', e); }
-}
-
-function _atualizarInterfacePlano() {
-  const badge = document.getElementById('userBadge');
-  if(badge) {
-    badge.textContent = infoPlano.plano.toUpperCase();
-    badge.className = 'plan-badge ' + infoPlano.plano;
-    badge.style.display = 'inline-block';
-  }
-  
-  // Anúncios
-  const ads = document.getElementById('adsBanner');
-  if(ads) {
-    ads.style.display = infoPlano.plano === 'free' ? 'flex' : 'none';
-    document.body.style.paddingBottom = infoPlano.plano === 'free' ? '40px' : '0';
-  }
-  
-  // Atualizar nomes dos módulos dinamicamente
-  if(infoPlano.labels) {
-    const l = infoPlano.labels;
-    _substituirTextosModulo(l.clientes, l.cliente);
-  }
-}
-
-function _substituirTextosModulo(plur, sing) {
-  const abaClientes = document.querySelector('[onclick="showTab(\'clientes\')"]');
-  if(abaClientes) abaClientes.innerHTML = `${infoPlano.labels.icone} ${plur}`;
-  
-  const h2Clientes = document.querySelector('#clientesTab h2');
-  if(h2Clientes) h2Clientes.textContent = plur;
-  
-  const btnAdd = document.querySelector('#clientesTab .btn-primario');
-  if(btnAdd && btnAdd.textContent.includes('CLIENTE')) {
-    btnAdd.textContent = `NOVO ${sing.toUpperCase()}`;
-  }
-}
-
-async function definirPerfil(perfil) {
-  try {
-    const r = await fetch(`${API_URL}/v2/me`, {
-      method: 'PUT',
-      headers: authHeaders(),
-      body: JSON.stringify({ perfil })
-    });
-    const j = await r.json();
-    if(j.status === 'success') {
-      document.getElementById('onboardingOverlay').style.display = 'none';
-      carregarInfoPlano();
-    }
-  } catch(e) { alert('Erro ao salvar perfil.'); }
-}
-
-function showUpgradeModal(motivo) {
-  const reasons = {
-    'ocr': 'Leitura de notas via IA (Gemini) exige o plano Plus.',
-    'nfc': 'Busca automática no portal SEFAZ exige o plano Plus.',
-    'ads': 'Remova anúncios e tenha mais produtividade com o Plus!',
-    'csv': 'Importação de extratos bancários exige o plano Plus.'
-  };
-  document.getElementById('upgradeReason').textContent = reasons[motivo] || reasons['ocr'];
-  
-  const msg = infoPlano.mp_ativo ? 
-    `Assine agora por apenas ${infoPlano.preco_plus}!` : 
-    'Pagamentos online em breve! Contate o suporte para upgrade manual.';
-    
-  document.getElementById('mpStatusMsg').textContent = msg;
-  document.getElementById('btnIrParaUpgrade').style.display = infoPlano.mp_ativo ? 'block' : 'none';
-  document.getElementById('upgradeModalOverlay').style.display = 'flex';
-}
-
-async function irParaUpgrade() {
-  if(!infoPlano.mp_ativo) return;
-  const btn = document.getElementById('btnIrParaUpgrade');
-  btn.disabled = true;
-  btn.textContent = 'GERANDO LINK...';
-  
-  try {
-    const r = await fetch(`${API_URL}/v2/upgrade`, { method: 'POST', headers: authHeaders() });
-    const j = await r.json();
-    if(j.status === 'success' && j.link) {
-      window.open(j.link, '_blank');
-    } else {
-      alert(j.message || 'Erro ao gerar link de pagamento.');
-    }
-  } catch(e) { alert('Erro de conexão ao gerar upgrade.'); }
-  finally {
-    btn.disabled = false;
-    btn.textContent = 'QUERO O PLUS';
-  }
-}
-</script>
 </body>
 </html>
-
