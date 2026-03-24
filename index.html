@@ -475,8 +475,8 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
     <div class="charts-grid">
-      <div class="chart-card"><h3>RECEBIMENTOS POR MìŠS</h3><div class="bar-chart" id="barChart"></div></div>
-      <div class="chart-card"><h3>STATUS DO MìŠS</h3><div class="pie-wrap"><svg class="pie-svg" width="100" height="100" viewBox="0 0 100 100" id="pieChart"><circle cx="50" cy="50" r="40" fill="var(--border)"/></svg><div class="pie-legend" id="pieLegend"></div></div></div>
+      <div class="chart-card"><h3>RECEBIMENTOS POR MÊS</h3><div class="bar-chart" id="barChart"></div></div>
+      <div class="chart-card"><h3>STATUS DO MÊS</h3><div class="pie-wrap"><svg class="pie-svg" width="100" height="100" viewBox="0 0 100 100" id="pieChart"><circle cx="50" cy="50" r="40" fill="var(--border)"/></svg><div class="pie-legend" id="pieLegend"></div></div></div>
     </div>
     <div class="table-header">
       <h2>CLIENTES</h2>
@@ -497,7 +497,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <h2>LANÇAMENTOS — <span id="despMesLabel">Janeiro</span></h2>
       <div class="desp-header-btns">
         <button class="btn-green" onclick="openNotaModal()">📷 ESCANEAR NOTA</button>
-        <button class="btn-card" onclick="openCartaoModal()">💳 IMPORTAR CARTìO</button>
+        <button class="btn-card" onclick="openCartaoModal()">💳 IMPORTAR CARTÃO</button>
         <button class="btn-add" onclick="openDespModal()">+ MANUAL</button>
       </div>
     </div>
@@ -523,7 +523,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   <!-- ═══ CLIENTES ═══ -->
   <div class="section" id="tab-clientes">
     <div class="table-header">
-      <h2>GESTìO DE CLIENTES</h2>
+      <h2>GESTÃO DE CLIENTES</h2>
       <button class="btn-add" onclick="openClienteModal(null)">+ NOVO CLIENTE</button>
     </div>
     <div class="table-wrap">
@@ -565,10 +565,10 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<!-- MODAL CARTìO -->
+<!-- MODAL CARTÃO -->
 <div class="modal-overlay" id="cartaoModalOverlay" onclick="closeCartaoModal(event)">
   <div class="modal modal-wide">
-    <h3>💳 IMPORTAR FATURA DO CARTìO</h3>
+    <h3>💳 IMPORTAR FATURA DO CARTÃO</h3>
     <div class="modal-sub">Cole o extrato ou faça upload do CSV da sua fatura</div>
 
     <div class="form-group">
