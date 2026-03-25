@@ -711,11 +711,14 @@ app = FastAPI(
     description = "API do sistema Trajeto — gestao financeira para motoristas e frotas",
 )
 
-# CORS aberto para o GitHub Pages do frontend.
-# Em producao, substituir allow_origins=["*"] pelo dominio exato do frontend.
+# CORS restrito para impedir conexões de aplicativos maliciosos de terceiros
 app.add_middleware(
     CORSMiddleware,
-    allow_origins  = ["*"],
+    allow_origins  = [
+        "https://meirelesnew.github.io",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080"
+    ],
     allow_methods  = ["*"],
     allow_headers  = ["*"],
 )

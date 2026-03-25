@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Política de Segurança de Conteúdo (Protege o LocalStorage de XSS) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://muty-api.onrender.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:;">
 <meta name="description" content="Trajeto — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
 <meta name="theme-color" content="#0c0a09">
 <title>Trajeto — Transporte Escolar Organizado</title>
