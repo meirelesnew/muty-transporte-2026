@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Roteiro — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
+<meta name="description" content="Trajeto — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
 <meta name="theme-color" content="#0c0a09">
-<title>Roteiro — Transporte Escolar Organizado</title>
+<title>Trajeto — Transporte Escolar Organizado</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0c0a09;--surface:#1c1917;--surface2:#292524;--border:#44403c;--accent:#d97706;--accent2:#f59e0b;--green:#10b981;--red:#ef4444;--yellow:#fbbf24;--purple:#a78bfa;--text:#fafaf9;--muted:#78716c;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
@@ -345,7 +345,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   <div class="login-box">
     <div class="login-logo">
       <div class="brand-icon">🚌</div>
-      <h2>Roteiro</h2>
+      <h2>Trajeto</h2>
       <p>Transporte escolar organizado</p>
     </div>
 
@@ -443,7 +443,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="brand">
         <div class="brand-icon">🚌</div>
         <div class="brand-text">
-          <h1>Roteiro</h1>
+          <h1>Trajeto</h1>
           <p>Erondino Meireles Lima &nbsp;<span id="planoBadge" style="background:rgba(120,113,108,0.2);color:#78716c;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600;letter-spacing:1px;">FREE</span></p>
         </div>
       </div>
@@ -529,7 +529,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<footer><div class="container">Roteiro &copy; 2026 &middot; Transporte Escolar Organizado</div></footer>
+<footer><div class="container">Trajeto &copy; 2026 &middot; Transporte Escolar Organizado</div></footer>
 
 <!-- MODAL PAGAMENTO -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
@@ -795,16 +795,16 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 <!-- API Render + MongoDB -->
 <script>
   
-  // MIGRAÇÃO: mover dados do localStorage de muty_ para roteiro_
+  // MIGRAÇÃO: mover dados do localStorage de muty_ para Trajeto_
   // Garante que usuários que já usavam o app não percam seus dados
   (function migrarLocalStorage() {
     const map = {
-      'muty_auth_token':    'roteiro_auth_token',
-      'muty_auth_user':     'roteiro_auth_user',
-      'muty_pagamentos':    'roteiro_pagamentos',
-      'muty_despesas':      'roteiro_despesas',
-      'muty_clientes':      'roteiro_clientes',
-      'muty_nota_rascunho': 'roteiro_nota_rascunho',
+      'muty_auth_token':    'Trajeto_auth_token',
+      'muty_auth_user':     'Trajeto_auth_user',
+      'muty_pagamentos':    'Trajeto_pagamentos',
+      'muty_despesas':      'Trajeto_despesas',
+      'muty_clientes':      'Trajeto_clientes',
+      'muty_nota_rascunho': 'Trajeto_nota_rascunho',
     };
     let migrou = false;
     for (const [antiga, nova] of Object.entries(map)) {
@@ -814,7 +814,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
         migrou = true;
       }
     }
-    if (migrou) console.log('[Roteiro] Migração de dados concluída.');
+    if (migrou) console.log('[Trajeto] Migração de dados concluída.');
   })();
 
   const API_URL = 'https://muty-api.onrender.com';
@@ -951,7 +951,7 @@ function loadLS(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
 async function saveData(chave, valor) {
-  saveLS('roteiro_'+chave, valor); // sempre salva local também
+  saveLS('Trajeto_'+chave, valor); // sempre salva local também
   if(window.fbReady && window.fbSave) {
     try {
       await window.fbSave(chave, valor);
@@ -981,9 +981,9 @@ function updateSyncBadge(ok, msg) {
 
 async function loadAllData() {
   // 1. Carregar localStorage IMEDIATAMENTE para UI responsiva
-  pagamentos = loadLS('roteiro_pagamentos', {});
-  despesas   = loadLS('roteiro_despesas', []);
-  clientes   = loadLS('roteiro_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
+  pagamentos = loadLS('Trajeto_pagamentos', {});
+  despesas   = loadLS('Trajeto_despesas', []);
+  clientes   = loadLS('Trajeto_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
   dbPronto   = true;
   document.getElementById('loadingScreen').style.display = 'none';
   refresh();
@@ -1002,13 +1002,13 @@ async function sincronizarComAPI() {
 
       let changed = false;
       if(todos.pagamentos !== undefined) {
-        pagamentos = todos.pagamentos; saveLS('roteiro_pagamentos', pagamentos); changed = true;
+        pagamentos = todos.pagamentos; saveLS('Trajeto_pagamentos', pagamentos); changed = true;
       }
       if(todos.despesas !== undefined) {
-        despesas = todos.despesas; saveLS('roteiro_despesas', despesas); changed = true;
+        despesas = todos.despesas; saveLS('Trajeto_despesas', despesas); changed = true;
       }
       if(todos.clientes !== undefined) {
-        clientes = todos.clientes; saveLS('roteiro_clientes', clientes); changed = true;
+        clientes = todos.clientes; saveLS('Trajeto_clientes', clientes); changed = true;
       }
       updateSyncBadge(true, '☁ Sincronizado');
       if(changed) refresh();
@@ -2042,7 +2042,7 @@ function openNotaModal() {
     return;
   }
   // Restaurar rascunho salvo localmente
-  notaRascunho = loadLS('roteiro_nota_rascunho', {});
+  notaRascunho = loadLS('Trajeto_nota_rascunho', {});
 
   // Preencher meses
   document.getElementById('notaMes').innerHTML =
@@ -2165,7 +2165,7 @@ function _salvarRascunho() {
     cat:   notaCatSelecionada,
   };
   if(notaRascunho.estab || notaRascunho.valor) {
-    saveLS('roteiro_nota_rascunho', notaRascunho);
+    saveLS('Trajeto_nota_rascunho', notaRascunho);
   }
 }
 
@@ -2709,7 +2709,7 @@ function salvarNota() {
   saveData('despesas', despesas);
 
   // Limpar rascunho
-  saveLS('roteiro_nota_rascunho', {});
+  saveLS('Trajeto_nota_rascunho', {});
 
   closeNotaModalBtn();
   currentTab = 'despesas';
@@ -2800,7 +2800,7 @@ let _perfilFotoBase64 = null;
 
 // Abre o modal de perfil e preenche campos com dados atuais do usuário
 function abrirPerfil() {
-  const user = loadLS('roteiro_auth_user', null);
+  const user = loadLS('Trajeto_auth_user', null);
   if(!user) return;
 
   // Preencher campos com dados atuais
@@ -2859,8 +2859,8 @@ async function salvarPerfil() {
   const msgEl  = document.getElementById('perfilMsg');
 
   // Ler token diretamente do localStorage com múltiplas chaves
-  let token = localStorage.getItem('roteiro_auth_token')
-           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'roteiro_auth_token');
+  let token = localStorage.getItem('Trajeto_auth_token')
+           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'Trajeto_auth_token');
 
   if(!token) {
     if(msgEl) { msgEl.textContent = '❌ Sessão expirada. Faça login novamente.';
@@ -2899,9 +2899,9 @@ async function salvarPerfil() {
 
     if(d.status === 'success') {
       // Atualizar dados locais
-      const userAtual  = JSON.parse(localStorage.getItem('roteiro_auth_user') || '{}');
+      const userAtual  = JSON.parse(localStorage.getItem('Trajeto_auth_user') || '{}');
       const atualizado = {...userAtual, ...d.data};
-      localStorage.setItem('roteiro_auth_user', JSON.stringify(atualizado));
+      localStorage.setItem('Trajeto_auth_user', JSON.stringify(atualizado));
 
       // Atualizar header
       if(typeof _atualizarHeader === 'function') _atualizarHeader(atualizado);
@@ -2982,7 +2982,7 @@ async function carregarPlano() {
 
 // ── INIT: aguardar Firebase ou iniciar com localStorage ──
 // Aguardar DOM completo antes de verificar tokens e sessão
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   // 1. Verificar se tem token de reset na URL (link do email)
   if(!verificarURLToken()) {
     // 2. Carregar plano do servidor
