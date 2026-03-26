@@ -3,11 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Política de Segurança de Conteúdo (Protege o LocalStorage de XSS) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://muty-api.onrender.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:;">
-<meta name="description" content="Trajeto — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
+<meta property="og:title" content="Roteiro — Transporte Escolar Organizado">
+<meta property="og:description" content="Controle seus clientes, pagamentos e despesas do transporte escolar em minutos. Grátis para começar.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meirelesnew.github.io/muty-transporte-2026">
+<meta property="og:image" content="https://meirelesnew.github.io/muty-transporte-2026/og-image.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Roteiro — Transporte Escolar Organizado">
+<meta name="twitter:description" content="Controle seus clientes, pagamentos e despesas. Grátis para começar.">
+<meta name="description" content="Roteiro — Organize seus clientes, pagamentos e despesas do transporte escolar em minutos.">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Roteiro">
 <meta name="theme-color" content="#0c0a09">
-<title>Trajeto — Transporte Escolar Organizado</title>
+<title>Roteiro — Transporte Escolar Organizado</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0c0a09;--surface:#1c1917;--surface2:#292524;--border:#44403c;--accent:#d97706;--accent2:#f59e0b;--green:#10b981;--red:#ef4444;--yellow:#fbbf24;--purple:#a78bfa;--text:#fafaf9;--muted:#78716c;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
@@ -129,7 +140,7 @@ td{padding:12px 16px;font-size:0.875rem;vertical-align:middle;}
 .desp-del{background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;padding:4px 8px;font-size:0.75rem;transition:all 0.15s;}
 .desp-del:hover{border-color:var(--red);color:var(--red);}
 .desp-empty{padding:32px;text-align:center;color:var(--muted);font-size:0.875rem;}
-/* CARTÃO CSV */
+/* CARTAO CSV */
 .csv-drop{border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;margin-bottom:20px;transition:all 0.2s;cursor:pointer;}
 .csv-drop:hover,.csv-drop.drag{border-color:var(--purple);background:rgba(167,139,250,0.05);}
 .csv-drop .drop-icon{font-size:2rem;margin-bottom:8px;}
@@ -228,7 +239,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 @media(max-width:900px){.header-year{display:none;} thead th:nth-child(n+5){display:none;} td:nth-child(n+5){display:none;}}
 @media(max-width:600px){.brand-text h1{font-size:1.8rem;} .balance-bar{grid-template-columns:1fr;}}
 
-/* ── TELA DE LOGIN ─────────────────────────────────────────── */
+/* -- TELA DE LOGIN ─────────────────────────────────────────── */
 #loginScreen{
   position:fixed;inset:0;background:var(--bg);z-index:9999;
   display:flex;align-items:center;justify-content:center;
@@ -283,7 +294,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   cursor:pointer;font-size:0.8rem;transition:all 0.2s;}
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
 
-/* ── MODAL NOTA FISCAL UNIFICADO ─────────────────────────── */
+/* -- MODAL NOTA FISCAL UNIFICADO ─────────────────────────── */
 .nota-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;
   padding:4px;margin-bottom:20px;}
 .nota-tab{flex:1;padding:8px;border:none;background:transparent;
@@ -332,22 +343,30 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 .timeout-fill{height:100%;background:var(--accent);border-radius:2px;
   transition:width linear;}
 
-/* ── Campos baixa confiança ─── */
+/* -- Campos baixa confianca ─── */
 .nota-campo input.ai-filled.baixa {
   border-color: rgba(245,158,11,0.5);
   background: rgba(245,158,11,0.05);
 }
+
+/* TOAST NOTIFICATIONS */
+#toastContainer{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:13px;color:var(--text);max-width:320px;text-align:center;animation:toastIn .25s ease;pointer-events:auto}
+.toast.ok{border-color:var(--green);color:var(--green)}
+.toast.err{border-color:var(--red);color:var(--red)}
+.toast.warn{border-color:var(--yellow);color:var(--yellow)}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 </style>
 <!-- html5-qrcode library -->
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
-<!-- ── TELA DE LOGIN ── -->
+<!-- TELA DE LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
       <div class="brand-icon">🚌</div>
-      <h2>Trajeto</h2>
+      <h2>Roteiro</h2>
       <p>Transporte escolar organizado</p>
     </div>
 
@@ -445,7 +464,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <div class="brand">
         <div class="brand-icon">🚌</div>
         <div class="brand-text">
-          <h1>Trajeto</h1>
+          <h1>Roteiro</h1>
           <p>Erondino Meireles Lima &nbsp;<span id="planoBadge" style="background:rgba(120,113,108,0.2);color:#78716c;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600;letter-spacing:1px;">FREE</span></p>
         </div>
       </div>
@@ -496,7 +515,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <h2>LANÇAMENTOS — <span id="despMesLabel">Janeiro</span></h2>
       <div class="desp-header-btns">
         <button class="btn-green" onclick="openNotaModal()">📷 ESCANEAR NOTA</button>
-        <button class="btn-card" onclick="openCartaoModal()">💳 IMPORTAR CARTÃO</button>
+        <button class="btn-card" onclick="openCartaoModal()">💳 IMPORTAR CART&Atilde;O</button>
         <button class="btn-add" onclick="openDespModal()">+ MANUAL</button>
       </div>
     </div>
@@ -522,7 +541,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   <!-- ═══ CLIENTES ═══ -->
   <div class="section" id="tab-clientes">
     <div class="table-header">
-      <h2>GESTÃO DE CLIENTES</h2>
+      <h2>GEST&Atilde;O DE CLIENTES</h2>
       <button class="btn-add" onclick="openClienteModal(null)">+ NOVO CLIENTE</button>
     </div>
     <div class="table-wrap">
@@ -531,7 +550,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<footer><div class="container">Trajeto &copy; 2026 &middot; Transporte Escolar Organizado</div></footer>
+<footer><div class="container">Roteiro &copy; 2026 &middot; Transporte Escolar Organizado</div></footer>
 
 <!-- MODAL PAGAMENTO -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
@@ -564,10 +583,10 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
   </div>
 </div>
 
-<!-- MODAL CARTÃO -->
+<!-- MODAL CARTAO -->
 <div class="modal-overlay" id="cartaoModalOverlay" onclick="closeCartaoModal(event)">
   <div class="modal modal-wide">
-    <h3>💳 IMPORTAR FATURA DO CARTÃO</h3>
+    <h3>💳 IMPORTAR FATURA DO CART&Atilde;O</h3>
     <div class="modal-sub">Cole o extrato ou faça upload do CSV da sua fatura</div>
 
     <div class="form-group">
@@ -671,7 +690,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       <button class="nota-tab" id="tabQR"   onclick="notaSwitchTab('qr')">📱 QR CODE</button>
     </div>
 
-    <!-- ── ABA FOTO ── -->
+    <!-- -- ABA FOTO -- -->
     <div id="notaAbaFoto">
       <div class="nota-drop" id="notaDropZone">
         <input type="file" id="notaFotoInput" accept="image/*" capture="environment"
@@ -701,7 +720,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
     </div>
 
-    <!-- ── ABA QR ── -->
+    <!-- -- ABA QR -- -->
     <div id="notaAbaQR" style="display:none;">
       <div class="qr-area" id="notaQrReader"></div>
       <div id="notaQrStatus" style="text-align:center;font-size:13px;color:var(--muted);
@@ -710,10 +729,10 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
     </div>
 
-    <!-- ── AVISO ── -->
+    <!-- -- AVISO -- -->
     <div class="nota-aviso" id="notaAviso"></div>
 
-    <!-- ── RESULTADO (campos sempre visíveis após leitura) ── -->
+    <!-- -- RESULTADO (campos sempre visíveis após leitura) -- -->
     <div class="nota-resultado" id="notaResultado">
       <div class="nota-campo">
         <label>Estabelecimento <span class="ai-tag" id="tagEstab" style="display:none;">🤖 IA</span><span class="manual-tag" id="tagEstabManual" style="display:none;">✏️ manual</span></label>
@@ -731,7 +750,7 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
       </div>
     </div>
 
-    <!-- ── BOTÕES ── -->
+    <!-- -- BOTÕES -- -->
     <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
       <button class="btn-secondary" onclick="closeNotaModalBtn()">Cancelar</button>
       <button class="btn-primary" id="notaSaveBtn" onclick="salvarNota()"
@@ -797,16 +816,16 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
 <!-- API Render + MongoDB -->
 <script>
   
-  // MIGRAÇÃO: mover dados do localStorage de muty_ para Trajeto_
+  // MIGRACAO: mover dados do localStorage de muty_ para roteiro_
   // Garante que usuários que já usavam o app não percam seus dados
   (function migrarLocalStorage() {
     const map = {
-      'muty_auth_token':    'Trajeto_auth_token',
-      'muty_auth_user':     'Trajeto_auth_user',
-      'muty_pagamentos':    'Trajeto_pagamentos',
-      'muty_despesas':      'Trajeto_despesas',
-      'muty_clientes':      'Trajeto_clientes',
-      'muty_nota_rascunho': 'Trajeto_nota_rascunho',
+      'muty_auth_token':    'roteiro_auth_token',
+      'muty_auth_user':     'roteiro_auth_user',
+      'muty_pagamentos':    'roteiro_pagamentos',
+      'muty_despesas':      'roteiro_despesas',
+      'muty_clientes':      'roteiro_clientes',
+      'muty_nota_rascunho': 'roteiro_nota_rascunho',
     };
     let migrou = false;
     for (const [antiga, nova] of Object.entries(map)) {
@@ -816,14 +835,61 @@ footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;color
         migrou = true;
       }
     }
-    if (migrou) console.log('[Trajeto] Migração de dados concluída.');
+    if (migrou) console.log('[Roteiro] Migração de dados concluída.');
   })();
 
-  const API_URL = 'https://muty-api.onrender.com';
-  const AUTH_KEY = 'Trajeto_auth_token';
-  const USER_KEY = 'Trajeto_auth_user';
+  const API_URL = 'https://muty-api.onrender.com'; // TODO: trocar para roteiro-api.onrender.com após migrar o backend
 
-// ── CONTROLE DE PLANO ────────────────────────────────────────────────────────
+
+
+// -- SANITIZACAO XSS (protege innerHTML contra codigo malicioso) ---------------
+// Converte caracteres perigosos em HTML entities antes de inserir no DOM.
+// Usar sempre que dados do usuario forem para innerHTML.
+function sanitizar(str) {
+  if(str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g,  '&#x27;');
+}
+// -- FIM SANITIZACAO -----------------------------------------------------------
+
+// -- TOAST NOTIFICATIONS (substitui alert() — UX mobile) ─────────────────────
+function toast(msg, tipo, duracao) {
+  tipo    = tipo    || 'info';
+  duracao = duracao || 3000;
+  const c = document.getElementById('toastContainer');
+  if(!c) { console.warn('[TOAST]', msg); return; }
+  const t = document.createElement('div');
+  t.className   = 'toast ' + tipo;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => {
+    t.style.animation = 'toastIn .2s ease reverse';
+    setTimeout(() => t.remove(), 200);
+  }, duracao);
+}
+// -- FIM TOAST ────────────────────────────────────────────────────────────────
+
+
+// -- LOCALSTORAGE SEGURO (funciona em modo privado do Safari) ─────────────────
+const _lsMemoria = {}; // fallback em memória quando localStorage bloqueado
+function _lsSafe(op, key, val) {
+  try {
+    if(op === 'get') { const v = localStorage.getItem(key); return v !== null ? v : undefined; }
+    if(op === 'set') { localStorage.setItem(key, val); return true; }
+    if(op === 'del') { localStorage.removeItem(key); return true; }
+  } catch(e) {
+    // localStorage bloqueado (modo privado Safari) — usar memória
+    if(op === 'get') return _lsMemoria[key];
+    if(op === 'set') { _lsMemoria[key] = val; return true; }
+    if(op === 'del') { delete _lsMemoria[key]; return true; }
+  }
+}
+// -- FIM LOCALSTORAGE SEGURO ──────────────────────────────────────────────────
+// -- CONTROLE DE PLANO ────────────────────────────────────────────────────────
 // userPlano é carregado do /v2/plano após login e atualizado dinamicamente.
 // Sempre usar isPro() para verificar — nunca comparar diretamente.
 let userPlano = 'free';
@@ -849,7 +915,7 @@ function aplicarRestricoesDePlano() {
 
   // Retorna headers com JWT do usuário logado
   function authHeaders() {
-    const token = localStorage.getItem(AUTH_KEY);
+    const token = localStorage.getItem('roteiro_auth_token');
     return {
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': 'Bearer ' + token } : {})
@@ -864,8 +930,8 @@ function aplicarRestricoesDePlano() {
         headers: authHeaders(),
         body:    JSON.stringify(dados)
       });
-      // Se token expirou, redireciona para login de forma silenciosa
-      if(r.status === 401) { fazerLogout(false); return false; }
+      // Se token expirou, redireciona para login
+      if(r.status === 401) { fazerLogout(); return false; }
       const j = await r.json();
       return j.status === 'success';
     } catch(e) {
@@ -880,7 +946,7 @@ function aplicarRestricoesDePlano() {
       const r = await fetch(`${API_URL}/v2/todos`, {
         headers: authHeaders()
       });
-      if(r.status === 401) { fazerLogout(false); return null; }
+      if(r.status === 401) { fazerLogout(); return null; }
       if(!r.ok) return null;
       const j = await r.json();
       // v2 retorna { status, data: { pagamentos, despesas, clientes } }
@@ -912,8 +978,6 @@ const CATEGORIAS=[
   {id:'combustivel',nome:'Combustível',icon:'⛽'},
   {id:'manutencao', nome:'Manutenção',  icon:'🔧'},
   {id:'impostos',   nome:'Impostos',    icon:'📋'},
-  {id:'pedagio',    nome:'Pedágio',     icon:'🛣️'},
-  {id:'alimentacao',nome:'Alimentação', icon:'🍴'},
   {id:'outros',     nome:'Outros',      icon:'📦'},
   {id:'cartao',     nome:'Cartão',      icon:'💳'},
 ];
@@ -936,7 +1000,7 @@ const CLIENTES_DEFAULT=[
   {id:16,nome:'Carlos Diego Jamila',                   valor:1000,tipo:'trimestral',mesesAtivos:[2,4,7]},
 ];
 
-// ── STATE ──
+// -- STATE --
 let currentMonth=new Date().getMonth();
 let currentTab='pagamentos';
 let pagamentos={};
@@ -948,12 +1012,12 @@ let editingClienteId=null;
 let cartaoItems=[];
 let dbPronto=false;
 
-// ── STORAGE: Firebase + localStorage como backup ──
+// -- STORAGE: Firebase + localStorage como backup --
 function loadLS(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
 async function saveData(chave, valor) {
-  saveLS('Trajeto_'+chave, valor); // sempre salva local também
+  saveLS('roteiro_'+chave, valor); // sempre salva local também
   if(window.fbReady && window.fbSave) {
     try {
       await window.fbSave(chave, valor);
@@ -983,9 +1047,9 @@ function updateSyncBadge(ok, msg) {
 
 async function loadAllData() {
   // 1. Carregar localStorage IMEDIATAMENTE para UI responsiva
-  pagamentos = loadLS('Trajeto_pagamentos', {});
-  despesas   = loadLS('Trajeto_despesas', []);
-  clientes   = loadLS('Trajeto_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
+  pagamentos = loadLS('roteiro_pagamentos', {});
+  despesas   = loadLS('roteiro_despesas', []);
+  clientes   = loadLS('roteiro_clientes', null) ?? JSON.parse(JSON.stringify(CLIENTES_DEFAULT));
   dbPronto   = true;
   document.getElementById('loadingScreen').style.display = 'none';
   refresh();
@@ -1004,13 +1068,13 @@ async function sincronizarComAPI() {
 
       let changed = false;
       if(todos.pagamentos !== undefined) {
-        pagamentos = todos.pagamentos; saveLS('Trajeto_pagamentos', pagamentos); changed = true;
+        pagamentos = todos.pagamentos; saveLS('roteiro_pagamentos', pagamentos); changed = true;
       }
       if(todos.despesas !== undefined) {
-        despesas = todos.despesas; saveLS('Trajeto_despesas', despesas); changed = true;
+        despesas = todos.despesas; saveLS('roteiro_despesas', despesas); changed = true;
       }
       if(todos.clientes !== undefined) {
-        clientes = todos.clientes; saveLS('Trajeto_clientes', clientes); changed = true;
+        clientes = todos.clientes; saveLS('roteiro_clientes', clientes); changed = true;
       }
       updateSyncBadge(true, '☁ Sincronizado');
       if(changed) refresh();
@@ -1049,12 +1113,12 @@ function refresh(){
   if(currentTab==='clientes'){renderClientesTable();}
 }
 
-// ── HELPERS ──
+// -- HELPERS --
 function recebidoNoMes(mes){let r=0;clientes.forEach(c=>{if(!c.mesesAtivos.includes(mes))return;const st=getStatus(c.id,mes);if(st==='pago')r+=c.valor;if(st==='parcial')r+=c.valor/2;});return r;}
 function totalDespMes(mes,cat){return despesas.filter(d=>d.mes===mes&&(!cat||d.cat===cat)).reduce((s,d)=>s+d.valor,0);}
 function fmt(v){return'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 
-// ── PAGAMENTOS ──
+// -- PAGAMENTOS --
 function updateCards(){
   const ativos=clientes.filter(c=>c.mesesAtivos.includes(currentMonth));
   const totalEsp=ativos.reduce((s,c)=>s+c.valor,0);
@@ -1088,7 +1152,7 @@ function renderTable(){
     const stAtual=getStatus(c.id,currentMonth);const ativoMes=c.mesesAtivos.includes(currentMonth);
     let badgeHtml=!ativoMes?`<span class="badge saiu">Inativo</span>`:stAtual?`<button class="badge ${stAtual}" onclick="openModal(${c.id},${currentMonth})">${stAtual.toUpperCase()}</button>`:`<button class="badge pendente" onclick="openModal(${c.id},${currentMonth})">PENDENTE</button>`;
     let totalPago=0;c.mesesAtivos.forEach(mi=>{const s=getStatus(c.id,mi);if(s==='pago')totalPago+=c.valor;if(s==='parcial')totalPago+=c.valor/2;});
-    tr.innerHTML=`<td style="color:var(--muted);font-family:var(--font-mono);font-size:0.75rem">${String(idx+1).padStart(2,'0')}</td><td class="name-cell">${c.nome}<small>${c.tipo==='trimestral'?'📅 Trimestral':'📆 Mensal'}</small></td><td class="value-cell">${fmt(c.valor)}</td><td><span class="badge ${c.tipo==='trimestral'?'trimestral':'pago'}" style="cursor:default">${c.tipo.toUpperCase()}</span></td><td>${dotsHtml}</td><td>${badgeHtml}</td><td class="value-cell" style="color:var(--green)">${fmt(totalPago)}</td>`;
+    tr.innerHTML=`<td style="color:var(--muted);font-family:var(--font-mono);font-size:0.75rem">${String(idx+1).padStart(2,'0')}</td><td class="name-cell">${c.nome}<small>${c.tipo==='trimestral'?'📅 Trimestral':'📆 Mensal'}</small></td><td class="value-cell">${fmt(c.valor)}</td><td><span class="badge ${c.tipo==='trimestral'?'trimestral':'pago'}" style="cursor:default">${sanitizar(c.tipo).toUpperCase()}</span></td><td>${dotsHtml}</td><td>${badgeHtml}</td><td class="value-cell" style="color:var(--green)">${fmt(totalPago)}</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1104,7 +1168,7 @@ function renderPieChart(){
   drawPie('pieChart','pieLegend',[{val:nP,color:'#10b981',label:'Pago'},{val:nPc,color:'#f59e0b',label:'Parcial'},{val:nPd,color:'#ef4444',label:'Pendente'}],ativos.length||1);
 }
 
-// ── DESPESAS ──
+// -- DESPESAS --
 function renderDespesas(){
   document.getElementById('despMesLabel').textContent=MESES_FULL[currentMonth];
   const cg=document.getElementById('catGrid');cg.innerHTML='';
@@ -1122,7 +1186,7 @@ function renderDespesas(){
     const cat=CATEGORIAS.find(c=>c.id===d.cat)||CATEGORIAS[3];
     const isCard=d.fonte==='cartao'; const isCupom=d.fonte==='cupom';
     const div=document.createElement('div');div.className='desp-item';
-    div.innerHTML=`<div class="desp-cat-icon">${cat.icon}</div><div class="desp-info"><div class="desp-desc">${d.desc||cat.nome}${isCard?' <span class="badge cartao" style="font-size:0.65rem;padding:2px 6px;cursor:default">💳 CARTÃO</span>':''}${isCupom?' <span class="badge pago" style="font-size:0.65rem;padding:2px 6px;cursor:default">🧾 CUPOM</span>':''}</div><div class="desp-meta">${cat.nome} · ${MESES_FULL[d.mes]} 2026</div></div><div class="desp-valor">− ${fmt(d.valor)}</div><button class="desp-del" onclick="deleteDespesa(${d.id})">✕</button>`;
+    div.innerHTML=`<div class="desp-cat-icon">${cat.icon}</div><div class="desp-info"><div class="desp-desc">${sanitizar(d.desc)||cat.nome}${isCard?' <span class="badge cartao" style="font-size:0.65rem;padding:2px 6px;cursor:default">💳 CARTÃO</span>':''}${isCupom?' <span class="badge pago" style="font-size:0.65rem;padding:2px 6px;cursor:default">🧾 CUPOM</span>':''}</div><div class="desp-meta">${cat.nome} · ${MESES_FULL[d.mes]} 2026</div></div><div class="desp-valor">− ${fmt(d.valor)}</div><button class="desp-del" onclick="deleteDespesa(${d.id})">✕</button>`;
     list.appendChild(div);
   });
 }
@@ -1143,7 +1207,7 @@ function saveDespesa(){
   const desc=document.getElementById('despDesc').value.trim();
   const valor=parseFloat(document.getElementById('despValor').value);
   const mes=parseInt(document.getElementById('despMes').value);
-  if(!valor||valor<=0){alert('Informe um valor válido.');return;}
+  if(!valor||valor<=0){toast('Informe um valor válido.', 'warn');return;}
   despesas.push({id:Date.now(),cat:selectedCatDesp,desc,valor,mes,fonte:'manual'});
   saveData('despesas',despesas);closeDespModalBtn();refresh();
 }
@@ -1151,7 +1215,7 @@ function deleteDespesa(id){if(!confirm('Remover esta despesa?'))return;despesas=
 function closeDespModal(e){if(e.target===document.getElementById('despModalOverlay'))closeDespModalBtn();}
 function closeDespModalBtn(){document.getElementById('despModalOverlay').classList.remove('open');}
 
-// ── CARTÃO ──
+// -- CARTAO --
 function openCartaoModal(){
   cartaoItems=[];
   document.getElementById('cartaoMes').innerHTML=MESES_FULL.map((m,i)=>`<option value="${i}" ${i===currentMonth?'selected':''}>${m}</option>`).join('');
@@ -1193,7 +1257,7 @@ function parseCSVFile(file){
         added++;
       }
     });
-    if(added===0){alert('Nenhum lançamento encontrado. Verifique o formato do arquivo.');}
+    if(added===0){toast('Nenhum lançamento encontrado. Verifique o formato.', 'err');}
     else{renderCartaoPreview();}
   };
   reader.readAsText(file,'UTF-8');
@@ -1203,7 +1267,7 @@ function addCartaoManual(){
   const desc=document.getElementById('cartaoDesc').value.trim();
   const valor=parseFloat(document.getElementById('cartaoVal').value);
   const cat=document.getElementById('cartaoCat').value;
-  if(!valor||valor<=0||!desc){alert('Informe descrição e valor.');return;}
+  if(!valor||valor<=0||!desc){toast('Informe descrição e valor.', 'warn');return;}
   cartaoItems.push({id:Date.now(),desc,valor,cat,sel:true});
   document.getElementById('cartaoDesc').value='';
   document.getElementById('cartaoVal').value='';
@@ -1248,7 +1312,7 @@ function clearCartaoItems(){cartaoItems=[];renderCartaoPreview();}
 function importarCartao(){
   const mes=parseInt(document.getElementById('cartaoMes').value);
   const selecionados=cartaoItems.filter(i=>i.sel);
-  if(!selecionados.length){alert('Selecione ao menos um item.');return;}
+  if(!selecionados.length){toast('Selecione ao menos um item.', 'warn');return;}
   selecionados.forEach(item=>{
     despesas.push({id:Date.now()+Math.random(),cat:item.cat,desc:item.desc,valor:item.valor,mes,fonte:'cartao'});
   });
@@ -1256,10 +1320,10 @@ function importarCartao(){
   closeCartaoModalBtn();
   currentTab='despesas';
   switchTab('despesas');
-  alert(`✓ ${selecionados.length} lançamento${selecionados.length!==1?'s':''} importado${selecionados.length!==1?'s':''}!`);
+  toast(`✓ ${selecionados.length} lançamento${selecionados.length!==1?'s':''} importado${selecionados.length!==1?'s':''}!`, 'ok');
 }
 
-// ── GESTÃO DE CLIENTES ──
+// -- GESTAO DE CLIENTES --
 function renderClientesTable(){
   const tbody=document.getElementById('clientesTableBody');tbody.innerHTML='';
   clientes.forEach((c,idx)=>{
@@ -1305,9 +1369,9 @@ function saveCliente(){
   const valor=parseFloat(document.getElementById('cliValor').value);
   const tipo=document.getElementById('cliTipo').value;
   const mesesAtivos=[...document.querySelectorAll('.mes-check-btn.on')].map(b=>parseInt(b.dataset.mes));
-  if(!nome){alert('Informe o nome do cliente.');return;}
-  if(!valor||valor<=0){alert('Informe um valor válido.');return;}
-  if(!mesesAtivos.length){alert('Selecione ao menos um mês.');return;}
+  if(!nome){toast('Informe o nome do cliente.', 'warn');return;}
+  if(!valor||valor<=0){toast('Informe um valor válido.', 'warn');return;}
+  if(!mesesAtivos.length){toast('Selecione ao menos um mês.', 'warn');return;}
   if(editingClienteId){
     const idx=clientes.findIndex(c=>c.id===editingClienteId);
     if(idx>=0)clientes[idx]={...clientes[idx],nome,valor,tipo,mesesAtivos};
@@ -1344,7 +1408,7 @@ function removeCliente(id){
 function closeClienteModal(e){if(e.target===document.getElementById('clienteModalOverlay'))closeClienteModalBtn();}
 function closeClienteModalBtn(){document.getElementById('clienteModalOverlay').classList.remove('open');editingClienteId=null;}
 
-// ── RESULTADO ──
+// -- RESULTADO --
 function renderResultado(){
   const rec=recebidoNoMes(currentMonth);const desp=totalDespMes(currentMonth,null);const sald=rec-desp;
   document.getElementById('resReceita').textContent=fmt(rec);
@@ -1377,7 +1441,7 @@ function renderResultado(){
   tbody.appendChild(tr);
 }
 
-// ── MODAL PAGAMENTO ──
+// -- MODAL PAGAMENTO --
 function openModal(cid,mes){
   modalClienteId=cid;modalMes=mes;const c=clientes.find(x=>x.id===cid);const st=getStatus(cid,mes)||'pendente';modalSelectedStatus=st;
   document.getElementById('modalName').textContent=c.nome;
@@ -1398,7 +1462,7 @@ function saveModal(){if(modalClienteId===null||modalMes===null)return;setStatus(
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalBtn();}
 function closeModalBtn(){document.getElementById('modalOverlay').classList.remove('open');modalClienteId=null;modalMes=null;}
 
-// ── PIE ──
+// -- PIE --
 function drawPie(svgId,legendId,slices,total){
   const svg=document.getElementById(svgId);const legend=document.getElementById(legendId);
   let html='<circle cx="50" cy="50" r="40" fill="var(--border)"/>';let startAngle=-90;
@@ -1413,7 +1477,7 @@ function drawPie(svgId,legendId,slices,total){
   legend.innerHTML=slices.filter(s=>s.val>0).map(s=>`<div class="legend-item"><div class="legend-dot" style="background:${s.color}"></div><span style="color:var(--muted);font-size:0.78rem">${s.label}: <strong style="color:var(--text)">${fmt(s.val)}</strong></span></div>`).join('');
 }
 
-// ── CUPOM FISCAL (Foto + Gemini) ────────────────────────────────────────────
+// -- CUPOM FISCAL (Foto + Gemini) ────────────────────────────────────────────
 // GEMINI_KEY removida — OCR agora é feito pelo backend (/v2/ocr)
 let cupomCatSelecionada = 'combustivel';
 
@@ -1474,7 +1538,7 @@ async function processarFotoCupom(event) {
         document.getElementById('cupomDesc').value  = d.estabelecimento || 'Nota Fiscal';
         document.getElementById('cupomValor').value = d.valor_total > 0 ? d.valor_total : '';
         document.getElementById('cupomAiInfo').textContent =
-          `🤖 Backend identificou: ${d.estabelecimento || '?'}${d.valor_total > 0 ? ' — R$ ' + d.valor_total.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ' — informe o valor'}`;
+          `🤖 Backend identificou: ${sanitizar(d.estabelecimento) || '?'}${d.valor_total > 0 ? ' — R$ ' + d.valor_total.toLocaleString('pt-BR',{minimumFractionDigits:2}) : ' — informe o valor'}`;
         cupomCatSelecionada = d.categoria || 'outros';
       } else {
         document.getElementById('cupomAiInfo').textContent = '⚠️ Não foi possível ler. Preencha manualmente.';
@@ -1510,7 +1574,7 @@ function salvarCupom(){
   const valor = parseFloat(document.getElementById('cupomValor').value);
   const desc  = document.getElementById('cupomDesc').value.trim() || 'Nota Fiscal';
   const mes   = parseInt(document.getElementById('cupomMes').value);
-  if(!valor || valor <= 0){ alert('Informe o valor da despesa.'); return; }
+  if(!valor || valor <= 0){ toast('Informe o valor da despesa.', 'warn'); return; }
   despesas.push({ id:Date.now(), cat:cupomCatSelecionada, desc, valor, mes, fonte:'cupom' });
   saveData('despesas', despesas);
   closeCupomModalBtn();
@@ -1554,7 +1618,7 @@ function iniciarQRScanner() {
 }
 
 async function onQRDetectado(url) {
-  // Parar câmera
+  // Parar camera
   if(qrScanner) { await qrScanner.stop(); qrScanner = null; }
   document.getElementById('qrCameraArea').style.display = 'none';
   document.getElementById('qrLoading').style.display = 'block';
@@ -1617,7 +1681,7 @@ function preencherQRResultado(nota) {
   CATEGORIAS.filter(c => c.id !== 'cartao').forEach(cat => {
     const btn = document.createElement('div');
     btn.className = 'cat-opt' + (cat.id === qrCatSelecionada ? ' selected' : '');
-    btn.innerHTML = `${cat.nome}`;
+    btn.innerHTML = `${cat.icon}${cat.nome}`;
     btn.onclick = () => {
       qrCatSelecionada = cat.id;
       document.querySelectorAll('#qrCatSelector .cat-opt').forEach(b => b.classList.remove('selected'));
@@ -1641,7 +1705,7 @@ function salvarQR() {
   const valor = parseFloat(document.getElementById('qrValor').value);
   const desc = document.getElementById('qrDesc').value.trim() || 'Nota Fiscal';
   const mes = parseInt(document.getElementById('qrMes').value);
-  if(!valor || valor <= 0) { alert('Informe o valor da despesa.'); return; }
+  if(!valor || valor <= 0) { toast('Informe o valor da despesa.', 'warn'); return; }
   despesas.push({ id:Date.now(), cat:qrCatSelecionada, desc, valor, mes, fonte:'qrcode' });
   saveData('despesas', despesas);
   closeQRModalBtn();
@@ -1660,13 +1724,9 @@ function closeQRModalBtn() {
 // ══ FIM QR CODE ═════════════════════════════════════════════════════════════
 
 
-
-// ══ AUTENTICAÇÃO ════════════════════════════════════════════════════════════
-
-
-
-// ══ AUTENTICAÇìO ══════════════════════════════════════════════════════════════
-
+// == AUTENTICACAO ════════════════════════════════════════════════════════════
+const AUTH_KEY  = 'roteiro_auth_token';
+const USER_KEY  = 'roteiro_auth_user';
 
 // Recupera token salvo no localStorage
 function getToken()   { return localStorage.getItem(AUTH_KEY) || null; }
@@ -1678,14 +1738,8 @@ function salvarAuth(token, user) {
 }
 
 function limparAuth() {
-  // Limpa token e dados de perfil
   localStorage.removeItem(AUTH_KEY);
   localStorage.removeItem(USER_KEY);
-  // Limpa dados sensíveis do usuário para evitar vazamento entre sessões
-  localStorage.removeItem('Trajeto_pagamentos');
-  localStorage.removeItem('Trajeto_despesas');
-  localStorage.removeItem('Trajeto_clientes');
-  localStorage.removeItem('Trajeto_nota_rascunho');
 }
 
 // Alterna entre aba "Entrar" e "Cadastrar"
@@ -1714,9 +1768,8 @@ function mostrarDashboard(user) {
 }
 
 // Logout — limpa token e recarrega a página
-// Se confirmar=false, faz logout silencioso (ex: erro 401)
-function fazerLogout(confirmar = true) {
-  if(confirmar && !confirm('Deseja sair da sua conta?')) return;
+function fazerLogout() {
+  if(!confirm('Deseja sair da sua conta?')) return;
   limparAuth();
   location.reload();
 }
@@ -1810,10 +1863,10 @@ function verificarSessao() {
   document.getElementById('loginScreen').style.display = 'flex';
   return false;
 }
-// ══ FIM AUTENTICAÇÃO ════════════════════════════════════════════════════════
+// == FIM AUTENTICACAO ════════════════════════════════════════════════════════
 
 
-// ── TOGGLE MOSTRAR/OCULTAR SENHA ─────────────────────────────────────────────
+// -- TOGGLE MOSTRAR/OCULTAR SENHA ─────────────────────────────────────────────
 function toggleSenha(inputId, btnId) {
   const input = document.getElementById(inputId);
   const btn   = document.getElementById(btnId);
@@ -1826,7 +1879,7 @@ function toggleSenha(inputId, btnId) {
   }
 }
 
-// ── INDICADOR DE FORÇA DA SENHA ───────────────────────────────────────────────
+// -- INDICADOR DE FORÇA DA SENHA ───────────────────────────────────────────────
 function checarForcaSenha(senha) {
   const el = document.getElementById('forçaSenha');
   if(!el || !senha) { if(el) el.textContent = ''; return; }
@@ -1857,7 +1910,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(cadSenha) cadSenha.addEventListener('input', e => checarForcaSenha(e.target.value));
 });
 
-// ── ESQUECI MINHA SENHA ───────────────────────────────────────────────────────
+// -- ESQUECI MINHA SENHA ───────────────────────────────────────────────────────
 function abrirEsqueciSenha() {
   // Pré-preenche com email que foi digitado
   const email = document.getElementById('loginEmail')?.value || '';
@@ -1911,10 +1964,10 @@ async function enviarResetSenha() {
     btn.textContent = 'ENVIAR LINK';
   }
 }
-// ── FIM ESQUECI SENHA ─────────────────────────────────────────────────────────
+// -- FIM ESQUECI SENHA ─────────────────────────────────────────────────────────
 
 
-// ── REDEFINIR SENHA (via link do email) ──────────────────────────────────────
+// -- REDEFINIR SENHA (via link do email) ──────────────────────────────────────
 function checarForcaSenha2(senha) {
   const el = document.getElementById('forcaSenha2');
   if(!el || !senha) { if(el) el.textContent=''; return; }
@@ -2020,7 +2073,7 @@ function verificarURLToken() {
   }
   return false;
 }
-// ── FIM REDEFINIR SENHA ───────────────────────────────────────────────────────
+// -- FIM REDEFINIR SENHA ───────────────────────────────────────────────────────
 
 // ══ MODAL NOTA FISCAL UNIFICADO ═════════════════════════════════════════════
 // Arquitetura: OCR principal → QR alternativo → manual sempre disponível
@@ -2036,7 +2089,7 @@ let notaOCRRodando     = false; // trava múltiplas execuções
 let notaTimeoutTimer   = null;  // timer da barra de progresso
 let notaRascunho       = {};    // rascunho local
 
-// ── Abrir modal ──────────────────────────────────────────────────────────────
+// -- Abrir modal ──────────────────────────────────────────────────────────────
 function openNotaModal() {
   // Bloquear para usuários free — OCR é exclusivo do Pro
   if(!isPro()) {
@@ -2044,7 +2097,7 @@ function openNotaModal() {
     return;
   }
   // Restaurar rascunho salvo localmente
-  notaRascunho = loadLS('Trajeto_nota_rascunho', {});
+  notaRascunho = loadLS('roteiro_nota_rascunho', {});
 
   // Preencher meses
   document.getElementById('notaMes').innerHTML =
@@ -2067,7 +2120,7 @@ function openNotaModal() {
   notaSwitchTab('foto');
 }
 
-// ── Fechar modal ─────────────────────────────────────────────────────────────
+// -- Fechar modal ─────────────────────────────────────────────────────────────
 function closeNotaModal(e) {
   if(e.target === document.getElementById('notaModalOverlay')) closeNotaModalBtn();
 }
@@ -2077,7 +2130,7 @@ function closeNotaModalBtn() {
   document.getElementById('notaModalOverlay').style.display = 'none';
 }
 
-// ── Alternar abas ─────────────────────────────────────────────────────────────
+// -- Alternar abas ─────────────────────────────────────────────────────────────
 function notaSwitchTab(tab) {
   const isFoto = tab === 'foto';
 
@@ -2094,7 +2147,7 @@ function notaSwitchTab(tab) {
   }
 }
 
-// ── Reset estado do modal ─────────────────────────────────────────────────────
+// -- Reset estado do modal ─────────────────────────────────────────────────────
 function _notaReset() {
   notaOCRRodando = false;
   notaOCRController = null;
@@ -2122,7 +2175,7 @@ function _notaReset() {
   _buildCatSelector('outros');
 }
 
-// ── Mostrar aviso ─────────────────────────────────────────────────────────────
+// -- Mostrar aviso ─────────────────────────────────────────────────────────────
 function _notaAviso(msg, tipo) {
   const el = document.getElementById('notaAviso');
   el.textContent = msg;
@@ -2130,7 +2183,7 @@ function _notaAviso(msg, tipo) {
   el.style.display = msg ? 'block' : 'none';
 }
 
-// ── Seletor de categoria ──────────────────────────────────────────────────────
+// -- Seletor de categoria ──────────────────────────────────────────────────────
 function _buildCatSelector(catAtiva) {
   notaCatSelecionada = catAtiva || 'outros';
   const cs = document.getElementById('notaCatSelector');
@@ -2149,7 +2202,7 @@ function _buildCatSelector(catAtiva) {
   });
 }
 
-// ── Marcar campo como editado manualmente ─────────────────────────────────────
+// -- Marcar campo como editado manualmente ─────────────────────────────────────
 function marcarEditado(input, aiTagId, manualTagId) {
   input.classList.add('editado');
   const ai = document.getElementById(aiTagId);
@@ -2159,7 +2212,7 @@ function marcarEditado(input, aiTagId, manualTagId) {
   _salvarRascunho();
 }
 
-// ── Salvar rascunho local ─────────────────────────────────────────────────────
+// -- Salvar rascunho local ─────────────────────────────────────────────────────
 function _salvarRascunho() {
   notaRascunho = {
     estab: document.getElementById('notaEstab')?.value || '',
@@ -2167,11 +2220,11 @@ function _salvarRascunho() {
     cat:   notaCatSelecionada,
   };
   if(notaRascunho.estab || notaRascunho.valor) {
-    saveLS('Trajeto_nota_rascunho', notaRascunho);
+    saveLS('roteiro_nota_rascunho', notaRascunho);
   }
 }
 
-// ── Preencher campos com dados extraídos ─────────────────────────────────────
+// -- Preencher campos com dados extraídos ─────────────────────────────────────
 function _preencherCampos(dados, viaIA = true) {
   const { estabelecimento, valor, categoria } = dados;
 
@@ -2201,7 +2254,7 @@ function _preencherCampos(dados, viaIA = true) {
   _salvarRascunho();
 }
 
-// ── Cancelar OCR (manual ou timeout) ─────────────────────────────────────────
+// -- Cancelar OCR (manual ou timeout) ─────────────────────────────────────────
 // Cancela processamento OCR em andamento
 function cancelarOCR() {
   if(notaOCRController) { notaOCRController.abort(); notaOCRController = null; }
@@ -2217,7 +2270,7 @@ function cancelarOCR() {
   _notaAviso('⚠️ Preencha os campos manualmente.', 'warn');
 }
 
-// ── Barra de timeout visual ───────────────────────────────────────────────────
+// -- Barra de timeout visual ───────────────────────────────────────────────────
 function _iniciarTimeoutBar(duracaoMs) {
   const bar = document.getElementById('notaTimeoutBar');
   const fill = document.getElementById('notaTimeoutFill');
@@ -2230,7 +2283,7 @@ function _iniciarTimeoutBar(duracaoMs) {
   fill.style.width = '0%';
 }
 
-// ── PROCESSAMENTO OCR (foto) ──────────────────────────────────────────────────
+// -- PROCESSAMENTO OCR (foto) ──────────────────────────────────────────────────
 async function processarFotoNota(event) {
   const file = event.target.files[0];
   if(!file) return;
@@ -2345,7 +2398,7 @@ async function processarFotoNota(event) {
   }
 }
 
-// ── Camada 1: Tentar parsear JSON do Gemini ──────────────────────────────────
+// -- Camada 1: Tentar parsear JSON do Gemini ──────────────────────────────────
 function _processarRespostaGemini(rawText) {
   if(!rawText || rawText.trim() === '') {
     return { fonte: 'vazio' };
@@ -2370,7 +2423,7 @@ function _processarRespostaGemini(rawText) {
   return _fallbackRegex(rawText);
 }
 
-// ── Camada 2: Validar e normalizar campos ─────────────────────────────────────
+// -- Camada 2: Validar e normalizar campos ─────────────────────────────────────
 function _validarDadosGemini(dados, fonte) {
   const resultado = { fonte, campos: {}, confianca: dados.confianca || 0, avisos: [] };
 
@@ -2405,7 +2458,7 @@ function _validarDadosGemini(dados, fonte) {
   return resultado;
 }
 
-// ── Camada 3: Regex fallback ──────────────────────────────────────────────────
+// -- Camada 3: Regex fallback ──────────────────────────────────────────────────
 function _fallbackRegex(texto) {
   const resultado = { fonte: 'regex', campos: {}, confianca: 0.3, avisos: [] };
 
@@ -2435,7 +2488,7 @@ function _fallbackRegex(texto) {
   return resultado;
 }
 
-// ── Sugerir categoria pelo nome ───────────────────────────────────────────────
+// -- Sugerir categoria pelo nome ───────────────────────────────────────────────
 function _sugerirCategoria(nome) {
   const n = (nome || '').toLowerCase();
   if(/posto|gnv|combusti|gasolina|etanol|ipiranga|shell|petrobras/.test(n)) return 'combustivel';
@@ -2444,7 +2497,7 @@ function _sugerirCategoria(nome) {
   return 'outros';
 }
 
-// ── Aplicar resultado na UI ───────────────────────────────────────────────────
+// -- Aplicar resultado na UI ───────────────────────────────────────────────────
 function _aplicarResultado(resultado) {
   document.getElementById('notaResultado').style.display = 'block';
   document.getElementById('notaSaveBtn').style.display   = 'flex';
@@ -2520,7 +2573,7 @@ function _aplicarResultado(resultado) {
   _salvarRascunho();
 }
 
-// ── Mostrar tag colorida no label ─────────────────────────────────────────────
+// -- Mostrar tag colorida no label ─────────────────────────────────────────────
 function _mostrarTag(id, texto, cor) {
   const el = document.getElementById(id);
   if(!el) return;
@@ -2531,7 +2584,7 @@ function _mostrarTag(id, texto, cor) {
   el.style.border     = `1px solid ${cor}44`;
 }
 
-// ── QR CODE — iniciar scanner ─────────────────────────────────────────────────
+// -- QR CODE — iniciar scanner ─────────────────────────────────────────────────
 function _iniciarQRScanner() {
   if(notaQRScanner) { notaQRScanner.clear(); notaQRScanner = null; }
   notaQRScanner = new Html5Qrcode('notaQrReader');
@@ -2555,7 +2608,7 @@ function _pararQRScanner() {
   }
 }
 
-// ── QR detectado — tenta SEFAZ em background (timeout 3s) ────────────────────
+// -- QR detectado — tenta SEFAZ em background (timeout 3s) ────────────────────
 async function _onQRDetectado(url) {
   _pararQRScanner();
 
@@ -2568,7 +2621,7 @@ async function _onQRDetectado(url) {
   document.getElementById('notaQrStatus').textContent = '✅ QR lido — processando...';
   window._notaQRUrl = url; // salvar para enriquecer OCR
 
-  // 1. Extrair parâmetros direto da URL
+  // 1. Extrair parametros direto da URL
   const dadosQR = _parsearURLQR(url);
   const temValor = dadosQR.valor_total > 0;
   const temEstab = !!dadosQR.estabelecimento;
@@ -2642,7 +2695,7 @@ function _notaAvisoComBotao(msg, onClickFn) {
   if(btn && onClickFn) btn.addEventListener('click', onClickFn, {once: true});
 }
 
-// Extrai parâmetros diretamente da URL do QR sem depender da SEFAZ
+// Extrai parametros diretamente da URL do QR sem depender da SEFAZ
 function _parsearURLQR(url) {
   const resultado = { estabelecimento: null, valor_total: null, data: null, categoria: 'outros' };
   try {
@@ -2687,7 +2740,7 @@ function _parsearURLQR(url) {
   return resultado;
 }
 
-// ── Salvar despesa ────────────────────────────────────────────────────────────
+// -- Salvar despesa ────────────────────────────────────────────────────────────
 function salvarNota() {
   const valor = parseFloat(document.getElementById('notaValor').value);
   const desc  = document.getElementById('notaEstab').value.trim() || 'Nota Fiscal';
@@ -2711,7 +2764,7 @@ function salvarNota() {
   saveData('despesas', despesas);
 
   // Limpar rascunho
-  saveLS('Trajeto_nota_rascunho', {});
+  saveLS('roteiro_nota_rascunho', {});
 
   closeNotaModalBtn();
   currentTab = 'despesas';
@@ -2721,7 +2774,7 @@ function salvarNota() {
 
 
 
-// ── Compressor de imagem via Canvas ──────────────────────────────────────────
+// -- Compressor de imagem via Canvas ──────────────────────────────────────────
 // Comprime imagem via Canvas para reduzir tamanho antes do OCR
 function _comprimirImagem(file, maxLado, qualidade) {
   return new Promise((resolve) => {
@@ -2744,10 +2797,10 @@ function _comprimirImagem(file, maxLado, qualidade) {
     img.src = url;
   });
 }
-// ── FIM Compressor ────────────────────────────────────────────────────────────
+// -- FIM Compressor ────────────────────────────────────────────────────────────
 
 
-// ── VERIFICAÇÃO DE EMAIL ──────────────────────────────────────────────────────
+// -- VERIFICACAO DE EMAIL ──────────────────────────────────────────────────────
 let _emailCadastrado = '';
 
 // Exibe tela pedindo confirmação de email após cadastro
@@ -2794,15 +2847,15 @@ async function reenviarEmailVerificacao() {
     aviso.style.cssText = 'display:block;background:rgba(239,68,68,0.1);color:#ef4444;padding:10px 14px;border-radius:8px;font-size:0.85rem;';
   }
 }
-// ── FIM VERIFICAÇÃO ───────────────────────────────────────────────────────────
+// -- FIM VERIFICACAO ───────────────────────────────────────────────────────────
 
 
-// ── PERFIL DO USUÁRIO ─────────────────────────────────────────────────────────
+// -- PERFIL DO USUÁRIO ─────────────────────────────────────────────────────────
 let _perfilFotoBase64 = null;
 
 // Abre o modal de perfil e preenche campos com dados atuais do usuário
 function abrirPerfil() {
-  const user = loadLS('Trajeto_auth_user', null);
+  const user = loadLS('roteiro_auth_user', null);
   if(!user) return;
 
   // Preencher campos com dados atuais
@@ -2861,8 +2914,8 @@ async function salvarPerfil() {
   const msgEl  = document.getElementById('perfilMsg');
 
   // Ler token diretamente do localStorage com múltiplas chaves
-  let token = localStorage.getItem('Trajeto_auth_token')
-           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'Trajeto_auth_token');
+  let token = localStorage.getItem('roteiro_auth_token')
+           || localStorage.getItem(typeof AUTH_KEY !== 'undefined' ? AUTH_KEY : 'roteiro_auth_token');
 
   if(!token) {
     if(msgEl) { msgEl.textContent = '❌ Sessão expirada. Faça login novamente.';
@@ -2901,9 +2954,9 @@ async function salvarPerfil() {
 
     if(d.status === 'success') {
       // Atualizar dados locais
-      const userAtual  = JSON.parse(localStorage.getItem('Trajeto_auth_user') || '{}');
+      const userAtual  = JSON.parse(localStorage.getItem('roteiro_auth_user') || '{}');
       const atualizado = {...userAtual, ...d.data};
-      localStorage.setItem('Trajeto_auth_user', JSON.stringify(atualizado));
+      localStorage.setItem('roteiro_auth_user', JSON.stringify(atualizado));
 
       // Atualizar header
       if(typeof _atualizarHeader === 'function') _atualizarHeader(atualizado);
@@ -2939,10 +2992,10 @@ function _atualizarHeader(user) {
     }
   }
 }
-// ── FIM PERFIL ────────────────────────────────────────────────────────────────
+// -- FIM PERFIL ────────────────────────────────────────────────────────────────
 
 
-// ── UPGRADE MODAL ────────────────────────────────────────────────────────────
+// -- UPGRADE MODAL ────────────────────────────────────────────────────────────
 function mostrarUpgradeModal(recurso = 'este recurso') {
   document.getElementById('upgradeRecurso').textContent =
     `"${recurso}" é exclusivo do plano Pro`;
@@ -2957,7 +3010,7 @@ function irParaUpgrade() {
   // TODO: redirecionar para página de pagamento Mercado Pago
   // Por enquanto mostra alerta informativo
   fecharUpgradeModal();
-  alert('Em breve! O pagamento via Mercado Pago será integrado na próxima versão.');
+  toast('Em breve! Pagamento via Mercado Pago será integrado em breve.', 'info', 4000);
 }
 
 // Carrega plano do servidor e atualiza variável global
@@ -2980,11 +3033,11 @@ async function carregarPlano() {
     console.warn('[PLANO] Erro ao carregar plano:', e.message);
   }
 }
-// ── FIM UPGRADE MODAL ────────────────────────────────────────────────────────
+// -- FIM UPGRADE MODAL ────────────────────────────────────────────────────────
 
-// ── INIT: aguardar Firebase ou iniciar com localStorage ──
+// -- INIT: aguardar Firebase ou iniciar com localStorage --
 // Aguardar DOM completo antes de verificar tokens e sessão
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
   // 1. Verificar se tem token de reset na URL (link do email)
   if(!verificarURLToken()) {
     // 2. Carregar plano do servidor
@@ -3009,7 +3062,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       <select class="form-input" id="qrMes"></select>
     </div>
 
-    <!-- Área câmera -->
+    <!-- Area camera -->
     <div id="qrCameraArea">
       <div id="qrReader" style="width:100%;border-radius:12px;overflow:hidden;margin-bottom:12px;"></div>
       <div id="qrStatus" style="text-align:center;padding:12px;background:var(--card-bg);border-radius:8px;font-size:13px;color:var(--text-secondary);">
@@ -3051,7 +3104,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   </div>
 </div>
 
-<!-- ── MODAL ESQUECI SENHA ── -->
+<!-- -- MODAL ESQUECI SENHA -- -->
 <div id="esqueciModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);
      z-index:10000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;
@@ -3085,7 +3138,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   </div>
 </div>
 
-<!-- ── MODAL REDEFINIR SENHA ── -->
+<!-- -- MODAL REDEFINIR SENHA -- -->
 <div id="resetModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;
      background:#0c0a09;z-index:10001;padding:20px;
      justify-content:center;align-items:center;">
@@ -3153,7 +3206,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   </div>
 </div>
 
-<!-- ══ TELA VERIFICAÇÃO DE EMAIL ══════════════════════════════════════════ -->
+<!-- TELA VERIFICACAO DE EMAIL ══════════════════════════════════════════ -->
 <div id="verificacaoScreen" style="display:none;position:fixed;inset:0;
      background:#0c0a09;z-index:9999;align-items:center;justify-content:center;
      padding:20px;">
@@ -3312,5 +3365,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   </div>
 </div>
 
+
+<div id="toastContainer"></div>
 </body>
 </html>
