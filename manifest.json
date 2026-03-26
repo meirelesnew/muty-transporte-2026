@@ -1,0 +1,42 @@
+{
+  "name": "Roteiro — Transporte Escolar",
+  "short_name": "Roteiro",
+  "description": "Controle seus clientes, pagamentos e despesas do transporte escolar.",
+  "start_url": "/muty-transporte-2026/",
+  "scope": "/muty-transporte-2026/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c0a09",
+  "theme_color": "#d97706",
+  "lang": "pt-BR",
+  "categories": ["finance", "productivity", "business"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Pagamentos",
+      "short_name": "Pagamentos",
+      "description": "Ver pagamentos do mês",
+      "url": "/muty-transporte-2026/?tab=pagamentos"
+    },
+    {
+      "name": "Despesas",
+      "short_name": "Despesas",
+      "description": "Lançar despesa",
+      "url": "/muty-transporte-2026/?tab=despesas"
+    }
+  ]
+}
